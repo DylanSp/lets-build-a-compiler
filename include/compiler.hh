@@ -23,6 +23,8 @@ public:
 
 
 private:
+    void compile_start(std::istream &is, std::ostream &os) const;
+    void compile_end(std::istream &is, std::ostream &os) const;
     
 };
 
