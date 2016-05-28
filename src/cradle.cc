@@ -14,93 +14,90 @@
 #include <string>
 #include <cctype>
 
-namespace /*ds_compiler*/ {
+//empty namespace to ensure uniqueness when linking
+namespace { 
 
 
 const char ERR_CHAR = '\0';
-  
-std::istream *is_ptr = &std::cin;
-std::ostream *os_ptr = &std::cout;
-
 char lookahead;
-
-//utility function; allows use of stream syntax with pointers to streams
-std::istream& is() { 
-    return *is_ptr;
-}
-
-std::ostream& os() { 
-    return *os_ptr;
-}
 
 
 //compiler utility functions
-void report_error(const std::string err) {
+void report_error(const std::string err, std::ostream &os) {
     
-    os() << '\n';
-    os() << "Error: " << err << '\n';
+    os << '\n';
+    os << "Error: " << err << '\n';
     
 }
 
-void abort(const std::string err) {
+void abort(const std::string err, std::ostream &os) {
     
-    report_error(err);
+    report_error(err, os);
     //TODO - halt execution
 }
 
-void expected(const std::string expect) {
+void expected(const std::string expect, std::ostream &os) {
     
-    abort(expect + " expected.\n");
+    abort(expect + " expected.\n", os);
 }
 
-void expected(const char c) {
-    expected(std::string(1, c));
+//overload to handle single characters; 
+//prevents having to construct a string whenever calling expected()
+void expected(const char c, std::ostream &os) {
+    expected(std::string(1, c), os);
 }
     
 //lexing
 
 //get character from input, advance input
-void get_char() {
-    lookahead = is().get();
+void get_char(std::istream &is) {
+    lookahead = is.get();
 }
 
-void match(const char c) {
+void match(const char c, std::istream &is, std::ostream &os) {
     
-    if (is().peek() == c) {
-        get_char();
+    if (is.peek() == c) {
+        get_char(is);
     } else {
-        expected(c);
+        expected(c, os);
     }
     
     
 }
 
 // gets a valid identifier
-char get_name (const char c) {
+//TODO - decide whether this is passed c as input or examines lookahead
+
+char get_name (const char c, std::istream &is, std::ostream &os) {
     if (!std::isalpha(c)) {
-        expected("Name");
+        expected("Name", os);
         return ERR_CHAR;
     } else {
         
+        //placeholder
+        return 'N'; 
     }
     
 }
 
 //gets a number
-char get_num () {
+char get_num (std::istream &is, std::ostream &os) {
     
+    
+    //placeholder
+    return 'T'; 
 }
 
 
 //output a string 
-void emit (std::string s) {
-    os() << s;
+void emit (std::string s, std::ostream &os) {
+    os << s;
 }
 
 //output a string with newline 
-void emit_line (std::string s) {
-    emit(s);
-    emit("\n");
+void emit_line (std::string s, std::ostream &os) {
+    emit(s, os);
+    emit("\n", os);
 }
     
 

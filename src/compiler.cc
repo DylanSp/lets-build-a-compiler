@@ -8,9 +8,16 @@
 
 namespace ds_compiler {
     
-Compiler::Compiler(std::istream *is, std::ostream *os) 
-    : input (is), output (os)
-{
+//constructors
+
+
+
+void Compiler::compile_intermediate (std::istream &is, std::ostream &os) const {
+    os << "Test\n";
+}
+    
+void Compiler::compile_full (std::istream &is, std::ostream &os) const {
+    //TODO
 }
     
     
