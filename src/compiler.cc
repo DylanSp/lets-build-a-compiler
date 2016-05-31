@@ -33,7 +33,7 @@ void Compiler::compile_start (std::istream &is, std::ostream &os) const {
     
     //emit lines for necessary includes
     emit_line("#include <stack>", os);
-    emit_line("#include <vector", os);
+    emit_line("#include <vector>", os);
     
     //emit lines for int main() {
     emit_line("int main () {", os);
@@ -49,7 +49,8 @@ void Compiler::compile_start (std::istream &is, std::ostream &os) const {
 
 void Compiler::compile_end (std::istream &is, std::ostream &os) const {
     
-    //emit line for closing main
+    //emit lines for closing main
+    emit_line("return 0;", os);
     emit_line("}", os);
     
 }
