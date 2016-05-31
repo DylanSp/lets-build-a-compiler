@@ -4,11 +4,14 @@ CC = g++
 CFLAGS = -std=c++11 -Wall -Wextra
 
 SRCDIR = src
+TESTSRC = test
 BUILDDIR = build
-TARGET =bin/interactive_compiler
+TARGET = bin/interactive_compiler
 SRCEXT = cc
 SOURCES = $(wildcard $(SRCDIR)/*.$(SRCEXT))
+TESTSOURCES = $(wildcard $(TESTDIR)/*.$(SRCEXT))
 OBJECTS = $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
+TESTOBJS = $(patsubst $(TESTDIR)/%,$(BUILDDIR)/%,$(TESTSOURCES:.$(SRCEXT)=.o))
 LIB = 
 INC = -I include -I src
 
@@ -16,16 +19,17 @@ all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
 	@echo " Linking..."
-	@echo " $(CC) $^ -o $(TARGET) $(LIB)"; $(CC) $^ -o $(TARGET) $(LIB)
+	$(CC) $^ -o $(TARGET) $(LIB)
   
-$(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
+$(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT) 
 	@mkdir -p $(dir $@)
-	@echo " $(CC) $(CFLAGS) $(INC) -c -o $@ $<"; $(CC) $(CFLAGS) $(INC) -c -o $@ $<
+	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
   
 clean:
 	@echo " Cleaning..."; 
-	@echo " $(RM) -r $(BUILDDIR) $(TARGET)"; $(RM) -r $(BUILDDIR) $(TARGET)
+	$(RM) -r $(BUILDDIR) $(TARGET)
 
 # Tests
-tester:
-	$(CC) $(CFLAGS) test/tester.cc $(INC) $(LIB) -o bin/tester
+tester: build/compiler.o $(TESTOBJS)
+	$(CC) $(CFLAGS) $^ $(INC) $(LIB) -o bin/tester test/tester.cc 
+	

@@ -78,11 +78,17 @@ char get_name (const char c, std::istream &is, std::ostream &os) {
         return 'N'; 
     }
     
+    //suppress warnings
+    char d = is.peek();
+    
 }
 
 //gets a number
 char get_num (std::istream &is, std::ostream &os) {
     
+    //suppress warnings
+    char c = is.peek();
+    os << '\n';
     
     //placeholder
     return 'T'; 

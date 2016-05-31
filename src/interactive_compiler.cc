@@ -9,7 +9,7 @@
 int main () {
     
 
-    ds_compiler::Compiler my_compiler();
+    ds_compiler::Compiler my_compiler;
     
     
     
@@ -18,6 +18,7 @@ int main () {
     //then call compile_intermediate(stringstream, std::cout)
     //see http://www.cplusplus.com/reference/sstream/stringstream/stringstream/
     
+        
     
     return 0;
 }

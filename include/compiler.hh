@@ -23,6 +23,8 @@ public:
 
 
 private:
+    static size_t NUM_REGISTERS;    //number of registers available to the compiled code
+
     void compile_start(std::istream &is, std::ostream &os) const;
     void compile_end(std::istream &is, std::ostream &os) const;
     
