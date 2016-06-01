@@ -9,11 +9,21 @@
 
 namespace ds_compiler {
     
-size_t Compiler::NUM_REGISTERS = 8;
+const size_t Compiler::NUM_REGISTERS = 8;
+const char Compiler::ERR_CHAR = '\0';
     
 //constructors
-Compiler::Compiler () {
+Compiler::Compiler () 
+    : m_is (&std::cin), m_os (&std::cout)
+{
     
+}
+
+
+Compiler::Compiler (std::istream *new_is, std::ostream *new_os) 
+    : m_is (new_is), m_os (new_os) 
+{
+        
 }
 
 
@@ -55,5 +65,24 @@ void Compiler::compile_end (std::istream &is, std::ostream &os) const {
     
 }
     
+void Compiler::parse_expression () {
+    
+}   
+
+void Compiler::set_is (std::istream *new_is) {
+    m_is = new_is;
+}
+
+void Compiler::set_os (std::ostream *new_os) {
+    m_os = new_os;
+}
+
+std::istream& Compiler::is() const {
+    return *m_is;
+}
+
+std::ostream& Compiler::os() const {
+    return *m_os;
+}
     
 } //end namespace

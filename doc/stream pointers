@@ -1,0 +1,9 @@
+http://stackoverflow.com/questions/8446374/c-stream-as-a-member-variable 
+Source of member functions I'm using.
+
+http://stackoverflow.com/questions/14543363/c-output-stream-as-class-member
+Discussion of pros/cons of using references/pointers.
+
+
+Using references as members means I can only set when initialized, can't be changed after object has been constructed. This will make it difficult to run interactively.
+Using a raw pointer instead of a smart pointer for simplicity and because Compiler doesn't own I/O streams. The calling code will have to manage the streams' state.
