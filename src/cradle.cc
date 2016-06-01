@@ -19,7 +19,6 @@ namespace {
 
 
 const char ERR_CHAR = '\0';
-char lookahead;
 
 
 //compiler utility functions
@@ -49,15 +48,11 @@ void expected(const char c, std::ostream &os) {
     
 //lexing
 
-//get character from input, advance input
-void get_char(std::istream &is) {
-    lookahead = is.get();
-}
-
+//checks if next character matches; if so, consume that character
 void match(const char c, std::istream &is, std::ostream &os) {
     
     if (is.peek() == c) {
-        get_char(is);
+        is.get(); 
     } else {
         expected(c, os);
     }
@@ -65,33 +60,25 @@ void match(const char c, std::istream &is, std::ostream &os) {
     
 }
 
-// gets a valid identifier
-//TODO - decide whether this is passed c as input or examines lookahead
-
-char get_name (const char c, std::istream &is, std::ostream &os) {
-    if (!std::isalpha(c)) {
+// gets a valid identifier from input stream
+char get_name (std::istream &is, std::ostream &os) {
+    if (!std::isalpha(is.peek())) {
         expected("Name", os);
         return ERR_CHAR;
     } else {
-        
-        //placeholder
-        return 'N'; 
+        return std::toupper(is.get());
     }
-    
-    //suppress warnings
-    char d = is.peek();
     
 }
 
 //gets a number
 char get_num (std::istream &is, std::ostream &os) {
-    
-    //suppress warnings
-    char c = is.peek();
-    os << '\n';
-    
-    //placeholder
-    return 'T'; 
+    if (!std::isdigit(is.peek())) {
+        expected("Integer", os);
+        return ERR_CHAR;
+    } else {
+        return is.get();
+    }
 }
 
 
