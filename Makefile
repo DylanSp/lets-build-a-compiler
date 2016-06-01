@@ -1,7 +1,7 @@
 # from http://hiltmon.com/blog/2013/07/03/a-simple-c-plus-plus-project-structure/
 
 CC = g++
-CFLAGS = -std=c++11 -Wall -Wextra
+CFLAGS = -std=c++11 -Wall -Wextra -Wpedantic
 
 SRCDIR = src
 TESTSRC = test
@@ -12,6 +12,9 @@ SOURCES = $(wildcard $(SRCDIR)/*.$(SRCEXT))
 TESTSOURCES = $(wildcard $(TESTDIR)/*.$(SRCEXT))
 OBJECTS = $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 TESTOBJS = $(patsubst $(TESTDIR)/%,$(BUILDDIR)/%,$(TESTSOURCES:.$(SRCEXT)=.o))
+
+# artifacts from test program
+TEST_ARTS = test/src/compiled_out.cc test/bin/*
 LIB = 
 INC = -I include -I src
 
@@ -27,7 +30,7 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
   
 clean:
 	@echo " Cleaning..."; 
-	$(RM) -r $(BUILDDIR) $(TARGET)
+	$(RM) -r $(BUILDDIR) $(TARGET) $(TEST_ARTS)
 
 # Tests
 tester: build/compiler.o $(TESTOBJS)
