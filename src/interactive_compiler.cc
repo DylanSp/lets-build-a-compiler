@@ -18,9 +18,12 @@ int main () {
     
     
     std::string input_line = "";
-    while (std::cout << PROMPT                      //TODO - figure out why this needs two line breaks on first call.
-            && std::getline(std::cin, input_line)
-            && std::cin.peek() != QUIT_CHAR) {
+    while (std::cout << PROMPT                      
+            && std::getline(std::cin, input_line)) {
+                
+        if (input_line.at(0) == QUIT_CHAR) {
+            break;
+        }
         compiler_input << input_line;
         
         //std::cout << "DEBUG: " << "input_line contents = " << input_line << '\n';

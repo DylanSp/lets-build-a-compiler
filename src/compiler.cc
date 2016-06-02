@@ -44,8 +44,6 @@ void Compiler::compile_start () const {
     //emit lines for necessary includes
     emit_line("#include <stack>");
     emit_line("#include <vector>");
-    emit_line("#include <stack>", os());
-    emit_line("#include <vector>", os());
     
     //emit lines for int main() {
     emit_line("int main () {");
@@ -67,7 +65,15 @@ void Compiler::compile_end () const {
     
 }
     
-void Compiler::parse_expression () {
+void Compiler::expression () const {
+    char expr = get_num(is(), os());
+    
+    if (expr != ERR_CHAR) {
+        emit_line(
+        std::string("cpu_registers.at(0) = ") + expr + ";"
+        , os()
+        );
+    }
     
 }   
 

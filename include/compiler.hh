@@ -23,7 +23,7 @@ public:
     void compile_intermediate() const;  //compiles a single line of input
     void compile_full () const;         //compiles a full C++ program
     
-    void parse_expression();
+    void expression() const;
     
     void set_is(std::istream *new_is);
     void set_os(std::ostream *new_os);
