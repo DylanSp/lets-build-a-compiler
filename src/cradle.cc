@@ -18,7 +18,7 @@
 namespace { 
 
 
-const char ERR_CHAR = '\0';
+const char ERR_CHAR = 'E';
 
 
 //compiler utility functions

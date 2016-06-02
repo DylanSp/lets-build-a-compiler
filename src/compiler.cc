@@ -10,7 +10,7 @@
 namespace ds_compiler {
     
 const size_t Compiler::NUM_REGISTERS = 8;
-const char Compiler::ERR_CHAR = '\0';
+const char Compiler::ERR_CHAR = 'E';
     
 //constructors
 Compiler::Compiler () 
