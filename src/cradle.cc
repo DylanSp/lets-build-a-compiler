@@ -18,7 +18,7 @@
 namespace { 
 
 
-const char ERR_CHAR = '\0';
+const char ERR_CHAR = 'E';
 
 
 //compiler utility functions
@@ -29,10 +29,11 @@ void report_error(const std::string err, std::ostream &os) {
     
 }
 
+//Unlike in tutorial, does NOT halt execution
+//caller must check for ERR_CHAR and handle the issue
 void abort(const std::string err, std::ostream &os) {
     
     report_error(err, os);
-    //TODO - halt execution
 }
 
 void expected(const std::string expect, std::ostream &os) {
