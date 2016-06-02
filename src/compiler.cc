@@ -28,7 +28,7 @@ Compiler::Compiler (std::istream *new_is, std::ostream *new_os)
 
 
 void Compiler::compile_intermediate () const {
-    compile_expression();
+    expression();
 }
     
 void Compiler::compile_full () const {
@@ -65,7 +65,7 @@ void Compiler::compile_end () const {
     
 }
     
-void Compiler::compile_expression () const {
+void Compiler::expression () const {
     char expr = get_num(is(), os());
     
     if (expr != ERR_CHAR) {
