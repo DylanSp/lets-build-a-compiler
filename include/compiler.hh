@@ -7,7 +7,8 @@
 #define COMPILER_HH
 
 #include <iostream>
-#include "cradle.cc"
+#include <string>
+#include <cctype> //character comparison functions
 
 
 namespace ds_compiler {
@@ -35,7 +36,19 @@ private:
     void compile_start() const;
     void compile_end() const;
     
+    //cradle methods
+    void report_error(const std::string err) const;
+    void abort(const std::string err) const;
+    void expected(const std::string expect) const;
+    void expected(const char c) const;
+    void match(const char c) const;
+    char get_name () const;
+    char get_num () const;
+    void emit (std::string s) const;
+    void emit_line (std::string s) const;
     
+    
+    //helper members to allow stream syntax with pointers to streams
     std::istream& is() const;
     std::ostream& os() const;
     mutable std::istream *m_is;

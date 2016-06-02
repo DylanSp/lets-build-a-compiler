@@ -42,32 +42,108 @@ void Compiler::compile_full () const {
 void Compiler::compile_start () const {
     
     //emit lines for necessary includes
-    emit_line("#include <stack>", this->os());
-    emit_line("#include <vector>", this->os());
+    emit_line("#include <stack>");
+    emit_line("#include <vector>");
     
     //emit lines for int main() {
-    emit_line("int main () {", os());
+    emit_line("int main () {");
     
     //create a stack and vector for registers
     std::string stack_init = "std::stack<int> cpu_stack;";
     std::string registers_init = "std::vector<int> cpu_registers(" + std::to_string(NUM_REGISTERS) + ", 0);";
     
-    emit_line(stack_init, os());
-    emit_line(registers_init, os());
+    emit_line(stack_init);
+    emit_line(registers_init);
     
 }
 
 void Compiler::compile_end () const {
     
     //emit lines for closing main
-    emit_line("return 0;", os());
-    emit_line("}", os());
+    emit_line("return 0;");
+    emit_line("}");
     
 }
     
 void Compiler::parse_expression () {
     
 }   
+
+
+//cradle methods
+
+void Compiler::report_error(const std::string err) const {
+    
+    os() << '\n';
+    os() << "Error: " << err << '\n';
+    
+}
+
+void Compiler::abort(const std::string err) const {
+    
+    report_error(err);
+    //TODO - throw exception?
+}
+
+void Compiler::expected(const std::string expect) const {
+    
+    abort(expect + " expected.\n");
+}
+
+//overload to handle single characters; 
+//prevents having to construct a string whenever calling expected()
+void Compiler::expected(const char c) const {
+    expected(std::string(1, c));
+}
+
+//checks if next character matches; if so, consume that character
+void Compiler::match(const char c) const {
+    
+    if (is().peek() == c) {
+        is().get(); 
+    } else {
+        expected(c);
+    }
+    
+    
+}
+
+// gets a valid identifier from input stream
+char Compiler::get_name () const {
+    if (!std::isalpha(is().peek())) {
+        expected("Name");
+        return ERR_CHAR;
+    } else {
+        return std::toupper(is().get());
+    }
+    
+}
+
+//gets a number
+char Compiler::get_num () const {
+    if (!std::isdigit(is().peek())) {
+        expected("Integer");
+        return ERR_CHAR;
+    } else {
+        return is().get();
+    }
+}
+
+
+//output a string 
+void Compiler::emit (std::string s) const {
+    os() << s;
+}
+
+//output a string with newline 
+void Compiler::emit_line (std::string s) const {
+    emit(s);
+    emit("\n");
+}
+    
+
+
+//helper members to allow using stream syntax with *is, *os
 
 void Compiler::set_is (std::istream *new_is) {
     m_is = new_is;
