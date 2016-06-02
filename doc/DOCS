@@ -3,3 +3,5 @@ tutorial: http://compilers.iecc.com/crenshaw/
 Google Test: https://github.com/google/googletest
 directory structure: http://hiltmon.com/blog/2013/07/03/a-simple-c-plus-plus-project-structure/
 style: https://github.com/lefticus/cppbestpractices, https://google.github.io/styleguide/cppguide.html
+
+Motorola 68k manual: http://dev-docs.atariforge.org/files/Asm_Lang_Prog_68K_Family.pdf
