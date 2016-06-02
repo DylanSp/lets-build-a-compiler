@@ -28,7 +28,7 @@ Compiler::Compiler (std::istream *new_is, std::ostream *new_os)
 
 
 void Compiler::compile_intermediate () const {
-
+    os() << "Test.";
 }
     
 void Compiler::compile_full () const {
@@ -44,6 +44,8 @@ void Compiler::compile_start () const {
     //emit lines for necessary includes
     emit_line("#include <stack>");
     emit_line("#include <vector>");
+    emit_line("#include <stack>", os());
+    emit_line("#include <vector>", os());
     
     //emit lines for int main() {
     emit_line("int main () {");
