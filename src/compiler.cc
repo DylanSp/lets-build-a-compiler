@@ -10,7 +10,7 @@
 namespace ds_compiler {
     
 const size_t Compiler::NUM_REGISTERS = 8;
-const char Compiler::ERR_CHAR = 'E';
+const char Compiler::ERR_CHAR = '\0';
     
 //constructors
 Compiler::Compiler () 
@@ -65,15 +65,8 @@ void Compiler::compile_end () const {
     
 }
     
-void Compiler::expression () const {
-    char expr = get_num(is(), os());
-    
-    if (expr != ERR_CHAR) {
-        emit_line(
-        std::string("cpu_registers.at(0) = ") + expr + ";"
-        , os()
-        );
-    }
+
+void Compiler::parse_expression () {
     
 }   
 
