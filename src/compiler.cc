@@ -51,6 +51,8 @@ void Compiler::compile_start () const {
     //emit lines for necessary includes
     emit_line("#include <stack>");
     emit_line("#include <vector>");
+    emit_line("#include <iostream>");
+    emit_line("#include <string>");
     
     //emit lines for int main() {
     emit_line("int main () {");
@@ -65,6 +67,14 @@ void Compiler::compile_start () const {
 }
 
 void Compiler::compile_end () const {
+    
+    //dump register contents
+    emit_line("std::cout << \"Register contents\\n\";");
+    emit_line(
+        std::string("for (int i = 0; i < ") + std::to_string(NUM_REGISTERS) + "; ++i)"
+        );
+    emit_line("std::cout << std::string(\"Register \") << i << \": \" << cpu_registers.at(i) << '\\n';");
+    
     
     //emit lines for closing main
     emit_line("return 0;");
@@ -113,7 +123,7 @@ void Compiler::expression () const {
     term();
     
     while (is_in(ADD_OPS, is().peek())) {
-        emit_line("cpu_stack.at(1) = cpu_stack.at(0);");
+        emit_line("cpu_registers.at(1) = cpu_registers.at(0);");
         switch (is().peek()) {
             case '+':
                 add();
