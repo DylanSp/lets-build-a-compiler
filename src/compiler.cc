@@ -29,13 +29,11 @@ Compiler::Compiler (std::istream *new_is, std::ostream *new_os)
 
 
 void Compiler::compile_intermediate () const {
-    
     try {
-
+        expression();
     } catch (std::exception &ex) {
         std::cerr << ex.what() << '\n';
     }
-
 }
     
 void Compiler::compile_full () const {
@@ -92,11 +90,6 @@ void Compiler::compile_end () const {
 }
     
 
-void Compiler::parse_expression () {
-    
-}   
-
-
 //cradle methods
 
 void Compiler::report_error(const std::string err) const {
@@ -131,8 +124,33 @@ void Compiler::match(const char c) const {
     } else {
         expected(c);
     }
+}
+
+void Compiler::expression () const {
+    term();
+    emit_line(
+        "cpu_stack.at(1) = cpu_stack.at(0);"
+    );
+    switch (is().peek()) {
+        case '+':
+            add();
+            break;
+        case '-':
+            subtract();
+            break;
+        default:
+            expected("Addop");
+    }
+}
     
+void Compiler::term () const {
+    char expr = get_num();
     
+    if (expr != ERR_CHAR) {
+        emit_line(
+            std::string("cpu_registers.at(0) = ") + expr + ";"
+        );
+    }
 }
 
 // gets a valid identifier from input stream
@@ -171,6 +189,22 @@ void Compiler::emit_line (std::string s) const {
 
 
 //helper members to allow using stream syntax with *is, *os
+
+void Compiler::add () const {
+    match('+');
+    term();
+    emit_line(
+        std::string("cpu_registers.at(0) = cpu_registers.at(1) + cpu_registers.at(0);")
+    );
+}
+
+void Compiler::subtract () const {
+    match('-');
+    term();
+    emit_line(
+        std::string("cpu_registers.at(0) = cpu_registers.at(1) - cpu_registers.at(0);")
+    );
+}
 
 void Compiler::set_is (std::istream *new_is) {
     m_is = new_is;

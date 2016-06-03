@@ -24,7 +24,11 @@ public:
     void compile_full () const;         //compiles a full C++ program
     
 
-    void parse_expression();
+    //compiling (parts of) lines 
+    void expression() const;
+    void term() const;
+    void add() const;
+    void subtract() const;
     
     void set_is(std::istream *new_is);
     void set_os(std::ostream *new_os);
