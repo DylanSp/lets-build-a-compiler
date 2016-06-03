@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include <string>
-
+#include <unordered_set>
 
 
 namespace ds_compiler {
@@ -35,8 +35,10 @@ public:
 
 
 private:
-    static const size_t NUM_REGISTERS;    //number of registers available to the compiled code
+    static const size_t NUM_REGISTERS;          //number of registers available to the compiled code
     static const char ERR_CHAR;
+    static const std::unordered_set<char> ADD_OPS;
+    static const std::unordered_set<char> MULT_OPS;
 
     void compile_start() const;
     void compile_end() const;
@@ -52,6 +54,7 @@ private:
     void emit (std::string s) const;
     void emit_line (std::string s) const;
     
+    static bool is_in(const std::unordered_set<char> us, const char elem);
     
     //helper members to allow stream syntax with pointers to streams
     std::istream& is() const;

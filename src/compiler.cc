@@ -12,6 +12,8 @@ namespace ds_compiler {
     
 const size_t Compiler::NUM_REGISTERS = 8;
 const char Compiler::ERR_CHAR = '\0';
+const std::unordered_set<char> ADD_OPS({'+', '-'});
+const std::unordered_set<char> MULT_OPS();
     
 //constructors
 Compiler::Compiler () 
@@ -185,6 +187,10 @@ void Compiler::subtract () const {
     emit_line(
         std::string("cpu_registers.at(0) = cpu_registers.at(1) - cpu_registers.at(0);")
     );
+}
+
+static bool is_in(const std::unordered_set<char> us, const char elem) {
+    return us.find(elem) != us.end();
 }
 
 void Compiler::set_is (std::istream *new_is) {
