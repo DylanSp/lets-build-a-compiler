@@ -4,8 +4,9 @@
 
 */
 
+#include <cctype>       //character comparison functions
+#include <stdexcept>
 #include "compiler.hh"
-#include <string>
 
 namespace ds_compiler {
     
@@ -28,7 +29,11 @@ Compiler::Compiler (std::istream *new_is, std::ostream *new_os)
 
 
 void Compiler::compile_intermediate () const {
-    expression();
+    try {
+        expression();
+    } catch (std::exception &ex) {
+        std::cerr << ex.what() << '\n';
+    }
 }
     
 void Compiler::compile_full () const {
@@ -78,7 +83,7 @@ void Compiler::report_error(const std::string err) const {
 void Compiler::abort(const std::string err) const {
     
     report_error(err);
-    //TODO - throw exception?
+    throw std::runtime_error("Compilation failed.\n");
 }
 
 void Compiler::expected(const std::string expect) const {
