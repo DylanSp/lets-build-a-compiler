@@ -132,7 +132,7 @@ void Compiler::expression () const {
     term();
     
     while (is_in(ADD_OPS, is().peek())) {
-        emit_line("cpu_stack.at(1) = cpu_stack.at(0);");
+        emit_line("cpu_registers.at(1) = cpu_registers.at(0);");
         switch (is().peek()) {
             case '+':
                 add();
