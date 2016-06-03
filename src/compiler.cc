@@ -12,8 +12,8 @@ namespace ds_compiler {
     
 const size_t Compiler::NUM_REGISTERS = 8;
 const char Compiler::ERR_CHAR = '\0';
-const std::unordered_set<char> ADD_OPS({'+', '-'});
-const std::unordered_set<char> MULT_OPS();
+const std::unordered_set<char> Compiler::ADD_OPS({'+', '-'});
+const std::unordered_set<char> Compiler::MULT_OPS;
     
 //constructors
 Compiler::Compiler () 
@@ -130,18 +130,19 @@ void Compiler::match(const char c) const {
 
 void Compiler::expression () const {
     term();
-    emit_line(
-        "cpu_stack.at(1) = cpu_stack.at(0);"
-    );
-    switch (is().peek()) {
-        case '+':
-            add();
-            break;
-        case '-':
-            subtract();
-            break;
-        default:
-            expected("Addop");
+    
+    while (is_in(ADD_OPS, is().peek())) {
+        emit_line("cpu_stack.at(1) = cpu_stack.at(0);");
+        switch (is().peek()) {
+            case '+':
+                add();
+                break;
+            case '-':
+                subtract();
+                break;
+            default:
+                expected("Addop");
+        }
     }
 }
     
@@ -208,7 +209,7 @@ void Compiler::subtract () const {
     );
 }
 
-static bool is_in(const std::unordered_set<char> us, const char elem) {
+bool Compiler::is_in(const std::unordered_set<char> us, const char elem) {
     return us.find(elem) != us.end();
 }
 
