@@ -1,0 +1,8 @@
+Cloud 9 docs:
+https://docs.c9.io/v1.0/docs/debugging-your-code
+https://docs.c9.io/docs/running-and-debugging-code
+https://docs.c9.io/docs/custom-runners
+
+Also see https://community.c9.io/t/debugging-c-code/497/3
+
+Need to use custom-defined runner, then run with cloud 9's interface instead of from command line
