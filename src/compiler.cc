@@ -119,34 +119,6 @@ void Compiler::match(const char c) const {
     }
 }
 
-void Compiler::expression () const {
-    term();
-    
-    while (is_in(ADD_OPS, is().peek())) {
-        emit_line("cpu_registers.at(1) = cpu_registers.at(0);");
-        switch (is().peek()) {
-            case '+':
-                add();
-                break;
-            case '-':
-                subtract();
-                break;
-            default:
-                expected("Addop");
-        }
-    }
-}
-    
-void Compiler::term () const {
-    char expr = get_num();
-    
-    if (expr != ERR_CHAR) {
-        emit_line(
-            std::string("cpu_registers.at(0) = ") + expr + ";"
-        );
-    }
-}
-
 // gets a valid identifier from input stream
 char Compiler::get_name () const {
     if (!std::isalpha(is().peek())) {
@@ -181,8 +153,33 @@ void Compiler::emit_line (std::string s) const {
 }
     
 
-
-//helper members to allow using stream syntax with *is, *os
+void Compiler::expression () const {
+    term();
+    
+    while (is_in(ADD_OPS, is().peek())) {
+        emit_line("cpu_registers.at(1) = cpu_registers.at(0)");
+        switch (is().peek()) {
+            case '+':
+                add();
+                break;
+            case '-':
+                subtract();
+                break;
+            default:
+                expected("Addop");
+        }
+    }
+}
+    
+void Compiler::term () const {
+    char expr = get_num();
+    
+    if (expr != ERR_CHAR) {
+        emit_line(
+            std::string("cpu_registers.at(0) = ") + expr + ";"
+        );
+    }
+}
 
 void Compiler::add () const {
     match('+');
@@ -203,6 +200,8 @@ void Compiler::subtract () const {
 bool Compiler::is_in(const std::unordered_set<char> us, const char elem) {
     return us.find(elem) != us.end();
 }
+
+//helper members to allow using stream syntax with *is, *os
 
 void Compiler::set_is (std::istream *new_is) {
     m_is = new_is;
