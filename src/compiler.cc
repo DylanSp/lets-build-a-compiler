@@ -98,13 +98,13 @@ void Compiler::compile_end () const {
 
 void Compiler::expression () const {
     
-    if (is_in(ADD_OPS, is().peek())) {
+    if (is_in(is().peek(), ADD_OPS)) {
         emit_line("cpu_registers.at(0) = 0;");  //support unary +/- by inserting 0 before the op
     } else {
         term();
     }
     
-    while (is_in(ADD_OPS, is().peek())) {
+    while (is_in(is().peek(), ADD_OPS)) {
         emit_line("cpu_stack.push(cpu_registers.at(0));");
         switch (is().peek()) {
             case '+':
@@ -121,7 +121,7 @@ void Compiler::expression () const {
     
 void Compiler::term () const {
     factor();
-    while (is_in(MULT_OPS, is().peek())) {
+    while (is_in(is().peek(), MULT_OPS)) {
         emit_line("cpu_stack.push(cpu_registers.at(0));");
         switch (is().peek()) {
             case '*':
@@ -247,7 +247,7 @@ void Compiler::emit_line (std::string s) const {
     emit("\n");
 }
 
-bool Compiler::is_in(const std::unordered_set<char> us, const char elem) {
+bool Compiler::is_in(const char elem, const std::unordered_set<char> us) {
     return us.find(elem) != us.end();
 }
 
