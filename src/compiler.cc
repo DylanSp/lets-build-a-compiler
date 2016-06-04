@@ -90,7 +90,50 @@ void Compiler::compile_end () const {
     emit_line("}");
     
 }
+
+void Compiler::expression () const {
+    term();
     
+    while (is_in(ADD_OPS, is().peek())) {
+        emit_line("cpu_registers.at(1) = cpu_registers.at(0)");
+        switch (is().peek()) {
+            case '+':
+                add();
+                break;
+            case '-':
+                subtract();
+                break;
+            default:
+                expected("Addop");
+        }
+    }
+}
+    
+void Compiler::term () const {
+    char expr = get_num();
+    
+    if (expr != ERR_CHAR) {
+        emit_line(
+            std::string("cpu_registers.at(0) = ") + expr + ";"
+        );
+    }
+}
+
+void Compiler::add () const {
+    match('+');
+    term();
+    emit_line(
+        std::string("cpu_registers.at(0) = cpu_registers.at(1) + cpu_registers.at(0);")
+    );
+}
+
+void Compiler::subtract () const {
+    match('-');
+    term();
+    emit_line(
+        std::string("cpu_registers.at(0) = cpu_registers.at(1) - cpu_registers.at(0);")
+    );
+}
 
 //cradle methods
 
@@ -159,51 +202,6 @@ void Compiler::emit (std::string s) const {
 void Compiler::emit_line (std::string s) const {
     emit(s);
     emit("\n");
-}
-    
-
-void Compiler::expression () const {
-    term();
-    
-    while (is_in(ADD_OPS, is().peek())) {
-        emit_line("cpu_registers.at(1) = cpu_registers.at(0)");
-        switch (is().peek()) {
-            case '+':
-                add();
-                break;
-            case '-':
-                subtract();
-                break;
-            default:
-                expected("Addop");
-        }
-    }
-}
-    
-void Compiler::term () const {
-    char expr = get_num();
-    
-    if (expr != ERR_CHAR) {
-        emit_line(
-            std::string("cpu_registers.at(0) = ") + expr + ";"
-        );
-    }
-}
-
-void Compiler::add () const {
-    match('+');
-    term();
-    emit_line(
-        std::string("cpu_registers.at(0) = cpu_registers.at(1) + cpu_registers.at(0);")
-    );
-}
-
-void Compiler::subtract () const {
-    match('-');
-    term();
-    emit_line(
-        std::string("cpu_registers.at(0) = cpu_registers.at(1) - cpu_registers.at(0);")
-    );
 }
 
 bool Compiler::is_in(const std::unordered_set<char> us, const char elem) {
