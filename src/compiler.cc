@@ -31,7 +31,7 @@ Compiler::Compiler (std::istream *new_is, std::ostream *new_os)
 void Compiler::compile_intermediate () const {
     
     try {
-        os() << "Test beginning.\n";
+
     } catch (std::exception &ex) {
         std::cerr << ex.what() << '\n';
     }
@@ -54,15 +54,24 @@ void Compiler::compile_start () const {
     emit_line("#include <iostream>");
     emit_line("#include <string>");
     
+    //create a stack and vector for registers
+    std::string stack_init = "static std::stack<int> cpu_stack;";
+    std::string registers_init = "static std::vector<int> cpu_registers(" + std::to_string(NUM_REGISTERS) + ", 0);";
+    emit_line(stack_init);
+    emit_line(registers_init);
+    
+    //emit definition of a function for easier stack handling
+    emit_line("int cpu_pop() {");
+    emit_line("int val = cpu_stack.top();");
+    emit_line("cpu_stack.pop();");
+    emit_line("return val; }");
+    
     //emit lines for int main() {
     emit_line("int main () {");
     
-    //create a stack and vector for registers
-    std::string stack_init = "std::stack<int> cpu_stack;";
-    std::string registers_init = "std::vector<int> cpu_registers(" + std::to_string(NUM_REGISTERS) + ", 0);";
     
-    emit_line(stack_init);
-    emit_line(registers_init);
+    
+    
     
 }
 
