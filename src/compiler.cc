@@ -88,7 +88,12 @@ void Compiler::compile_end () const {
 }
 
 void Compiler::expression () const {
-    term();
+    
+    if (is_in(ADD_OPS, is().peek())) {
+        emit_line("cpu_registers.at(0) = 0;");  //support unary +/- by inserting 0 before the op
+    } else {
+        term();
+    }
     
     while (is_in(ADD_OPS, is().peek())) {
         emit_line("cpu_stack.push(cpu_registers.at(0));");
