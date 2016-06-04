@@ -123,12 +123,16 @@ void Compiler::term () const {
 }
     
 void Compiler::factor () const {
-    char expr = get_num();
     
-    if (expr != ERR_CHAR) {
-        emit_line(
-            std::string("cpu_registers.at(0) = ") + expr + ";"
-        );
+    if (is().peek() == '(') {
+        match('(');
+        expression();
+        match(')');
+    } else {
+        char expr = get_num();
+        if (expr != ERR_CHAR) {
+            emit_line(std::string("cpu_registers.at(0) = ") + expr + ";");
+        } 
     }
 }
 
