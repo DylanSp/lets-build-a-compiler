@@ -84,8 +84,13 @@ void Compiler::compile_end () const {
         );
     emit_line("std::cout << std::string(\"Register \") << i << \": \" << cpu_registers.at(i) << '\\n';");
     
+    //dump stack contents
+    emit_line("std::cout << \"Stack contents (top to bottom)\\n\";");
+    emit_line("while (!cpu_stack.empty()) {");
+    emit_line("std::cout << cpu_stack.top() << '\\n';");
+    emit_line("cpu_stack.pop();}");
     
-    //emit lines for closing main
+    //close main()
     emit_line("return 0;");
     emit_line("}");
     
@@ -95,7 +100,7 @@ void Compiler::expression () const {
     term();
     
     while (is_in(ADD_OPS, is().peek())) {
-        emit_line("cpu_registers.at(1) = cpu_registers.at(0)");
+        emit_line("cpu_registers.at(1) = cpu_registers.at(0);");
         switch (is().peek()) {
             case '+':
                 add();
