@@ -1,4 +1,4 @@
--Change Compiler to take another ostream as error output.
+Change Compiler to take another ostream as error output.
 
 Change tester.cc to loop through .tutorial files in test/src and compile all of them, then execute them. 
 -Maybe add an entry to Makefile for this, then tester can then just call make?
@@ -16,3 +16,4 @@ Long-term (after finishing tutorial):
 -develop enhanced type-safety
 -figure out interesting ideas for semantics to play with
 -build a self-hosting compiler
+
