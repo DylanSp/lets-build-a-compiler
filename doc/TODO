@@ -1,3 +1,18 @@
 -Change Compiler to take another ostream as error output.
--Change tester.cc to loop through .tutorial files in test/src and compile all of them, then execute them. 
---Maybe add an entry to Makefile for this, then tester can then just call make?
+
+Change tester.cc to loop through .tutorial files in test/src and compile all of them, then execute them. 
+-Maybe add an entry to Makefile for this, then tester can then just call make?
+-compile first.test, second.test, probably to test/bin/first and test/bin/second
+
+Figure out some way to capture output from test programs
+-have them return the value of register[0] at the end of main()? 
+-pass them an int*, have them set it to register[0], then check it in tester?
+
+
+
+Long-term (after finishing tutorial):
+-reconstruct w/ flex/bison
+-target JVM/LLVM instead of c++
+-develop enhanced type-safety
+-figure out interesting ideas for semantics to play with
+-build a self-hosting compiler
