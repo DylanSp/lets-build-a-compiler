@@ -57,7 +57,7 @@ private:
     void emit (std::string s) const;
     void emit_line (std::string s) const;
     
-    static bool is_in(const std::unordered_set<char> us, const char elem);
+    static bool is_in(const char elem, const std::unordered_set<char> us);
     
     //helper members to allow stream syntax with pointers to streams
     std::istream& is() const;
