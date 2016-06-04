@@ -91,7 +91,8 @@ void Compiler::expression () const {
     term();
     
     while (is_in(ADD_OPS, is().peek())) {
-        emit_line("cpu_registers.at(1) = cpu_registers.at(0);");
+
+        emit_line("cpu_stack.push(cpu_registers.at(0));");
         switch (is().peek()) {
             case '+':
                 add();
@@ -118,17 +119,15 @@ void Compiler::term () const {
 void Compiler::add () const {
     match('+');
     term();
-    emit_line(
-        std::string("cpu_registers.at(0) = cpu_registers.at(1) + cpu_registers.at(0);")
-    );
+    emit_line("cpu_registers.at(0) = cpu_stack.top() + cpu_registers.at(0);");
+    emit_line("cpu_stack.pop();");
 }
 
 void Compiler::subtract () const {
     match('-');
     term();
-    emit_line(
-        std::string("cpu_registers.at(0) = cpu_registers.at(1) - cpu_registers.at(0);")
-    );
+    emit_line("cpu_registers.at(0) = cpu_stack.top() - cpu_registers.at(0);");
+    emit_line("cpu_stack.pop();");
 }
 
 //cradle methods
