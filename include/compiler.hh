@@ -27,8 +27,11 @@ public:
     //compiling (parts of) lines 
     void expression() const;
     void term() const;
+    void factor() const;
     void add() const;
     void subtract() const;
+    void multiply() const;
+    void divide() const;
     
     void set_is(std::istream *new_is);
     void set_os(std::ostream *new_os);

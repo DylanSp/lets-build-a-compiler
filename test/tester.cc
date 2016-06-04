@@ -14,7 +14,7 @@
 
 int main() {
     
-    std::string input_file = "test/src/simple_addition.tutorial";
+    std::string input_file = "test/src/add_mul_precedence.test";
     std::string compiled_file = "test/src/compiled_out.cc";
     std::string compiled_exec = "test/bin/test_exec";
     

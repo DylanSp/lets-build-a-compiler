@@ -13,7 +13,7 @@ namespace ds_compiler {
 const size_t Compiler::NUM_REGISTERS = 8;
 const char Compiler::ERR_CHAR = '\0';
 const std::unordered_set<char> Compiler::ADD_OPS({'+', '-'});
-const std::unordered_set<char> Compiler::MULT_OPS;
+const std::unordered_set<char> Compiler::MULT_OPS({'*', '/'});
     
 //constructors
 Compiler::Compiler () 
@@ -91,7 +91,6 @@ void Compiler::expression () const {
     term();
     
     while (is_in(ADD_OPS, is().peek())) {
-
         emit_line("cpu_stack.push(cpu_registers.at(0));");
         switch (is().peek()) {
             case '+':
@@ -101,12 +100,29 @@ void Compiler::expression () const {
                 subtract();
                 break;
             default:
-                expected("Addop");
+                expected("Add op");
         }
     }
 }
     
 void Compiler::term () const {
+    factor();
+    while (is_in(MULT_OPS, is().peek())) {
+        emit_line("cpu_stack.push(cpu_registers.at(0));");
+        switch (is().peek()) {
+            case '*':
+                multiply();
+                break;
+            case '/':
+                divide();
+                break;
+            default:
+                expected("Mult op");
+        }
+    }
+}
+    
+void Compiler::factor () const {
     char expr = get_num();
     
     if (expr != ERR_CHAR) {
@@ -127,6 +143,20 @@ void Compiler::subtract () const {
     match('-');
     term();
     emit_line("cpu_registers.at(0) = cpu_stack.top() - cpu_registers.at(0);");
+    emit_line("cpu_stack.pop();");
+}
+
+void Compiler::multiply() const {
+    match('*');
+    factor();
+    emit_line("cpu_registers.at(0) = cpu_stack.top() * cpu_registers.at(0);");
+    emit_line("cpu_stack.pop();");
+}
+
+void Compiler::divide() const {
+    match('/');
+    factor();
+    emit_line("cpu_registers.at(0) = cpu_stack.top() / cpu_registers.at(0);");
     emit_line("cpu_stack.pop();");
 }
 
