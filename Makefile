@@ -1,7 +1,7 @@
 # from http://hiltmon.com/blog/2013/07/03/a-simple-c-plus-plus-project-structure/
 
 CC = g++
-CFLAGS = -std=c++11 -Wall -Wextra -Wpedantic -g
+CFLAGS = -std=c++11 -Wall -Wextra -Wpedantic -pedantic-errors -g
 
 SRCDIR = src
 TESTSRC = test
