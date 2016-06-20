@@ -53,12 +53,15 @@ void Compiler::compile_start () const {
     emit_line("#include <vector>");
     emit_line("#include <iostream>");
     emit_line("#include <string>");
+    emit_line("#include <unordered_map>");
     
     //create a stack and vector for registers
     std::string stack_init = "static std::stack<int> cpu_stack;";
     std::string registers_init = "static std::vector<int> cpu_registers(" + std::to_string(NUM_REGISTERS) + ", 0);";
+    std::string variables_init = "static std::unordered_map<char, int> cpu_variables(";
     emit_line(stack_init);
     emit_line(registers_init);
+    emit_line(variables_init);
     
     //emit definition of a function for easier stack handling
     emit_line("int cpu_pop() {");
@@ -142,6 +145,11 @@ void Compiler::factor () const {
         match('(');
         expression();
         match(')');
+    } else if (std::isalpha(is().peek())) {
+        char expr = get_name();
+        if (expr != ERR_CHAR) {
+            emit_line(std::string("cpu_registers.at(0) = cpu_variables.at('") + expr + "');");
+        }
     } else {
         char expr = get_num();
         if (expr != ERR_CHAR) {
