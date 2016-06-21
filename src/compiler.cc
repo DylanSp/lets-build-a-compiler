@@ -146,16 +146,28 @@ void Compiler::factor () const {
         expression();
         match(')');
     } else if (std::isalpha(is().peek())) {
-        char expr = get_name();
-        if (expr != ERR_CHAR) {
-            emit_line(std::string("cpu_registers.at(0) = cpu_variables.at('") + expr + "');");
-        }
+        ident();
     } else {
         char expr = get_num();
         if (expr != ERR_CHAR) {
             emit_line(std::string("cpu_registers.at(0) = ") + expr + ";");
         } 
     }
+}
+
+//handles function calls/variables
+void Compiler::ident () const {
+    char name = get_name();
+
+    if (name != ERR_CHAR) { 
+        if (is().peek() == '(') {//function call
+            match('(');
+            match(')');
+            emit_line(std::string(1, name) + "();");
+        } else {
+            emit_line(std::string("cpu_registers.at(0) = cpu_variables.at(\'") + name + "\');");
+        }
+    } 
 }
 
 void Compiler::add () const {

@@ -28,6 +28,7 @@ public:
     void expression() const;
     void term() const;
     void factor() const;
+    void ident() const;
     void add() const;
     void subtract() const;
     void multiply() const;
