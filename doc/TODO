@@ -5,6 +5,9 @@ Change tester.cc to loop through .tutorial files in test/src and compile all of 
 -compile first.test, second.test, probably to test/bin/first and test/bin/second
 -alternatively, put test cases in tester.cc as stringstreams, feed them into compiler and have tester capture output
 
+Make compile_full loop through lines in input, similar to interactive_compiler, but only ending on EOF.
+-Test variable_usage.test, which has multiple lines.
+
 Figure out some way to capture output from test programs
 -have them return the value of register[0] at the end of main()? 
 -pass them an int*, have them set it to register[0], then check it in tester?
