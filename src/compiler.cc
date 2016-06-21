@@ -33,7 +33,7 @@ Compiler::Compiler (std::istream *new_is, std::ostream *new_os)
 
 void Compiler::compile_intermediate () const {
     try {
-        expression();
+        assignment();
     } catch (std::exception &ex) {
         std::cerr << ex.what() << '\n';
     }
@@ -104,6 +104,13 @@ void Compiler::compile_end () const {
     emit_line("return 0;");
     emit_line("}");
     
+}
+
+void Compiler::assignment () const {
+    char name = get_name();
+    match('=');
+    expression();
+    emit_line(std::string("cpu_variables['") + name + "'] = cpu_registers.at(0);");
 }
 
 void Compiler::expression () const {

@@ -25,6 +25,7 @@ public:
     
 
     //compiling (parts of) lines 
+    void assignment() const;
     void expression() const;
     void term() const;
     void factor() const;

@@ -1,3 +1,4 @@
+<assignment>    ::== <ident> = <expression>
 <expression>    ::== <term> [ <addop> <term> ]*
 <term>          ::== <factor> [ <multop> <factor> ]*
 <factor>        ::== <digit> 
