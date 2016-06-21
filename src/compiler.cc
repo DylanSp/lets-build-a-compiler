@@ -6,6 +6,7 @@
 
 #include <cctype>       //character comparison functions
 #include <stdexcept>
+#include <assert.h>
 #include "compiler.hh"
 
 namespace ds_compiler {
@@ -122,8 +123,8 @@ void Compiler::expression () const {
             case '-':
                 subtract();
                 break;
-            default:
-                expected("Add op");
+            default: //should never be reached!
+                assert(false);
         }
     }
 }
@@ -139,8 +140,8 @@ void Compiler::term () const {
             case '/':
                 divide();
                 break;
-            default:
-                expected("Mult op");
+            default: //should never be reached!
+                assert(false);
         }
     }
 }

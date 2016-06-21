@@ -1,2 +1,5 @@
 MSDN article on exceptions, exception handling
 https://msdn.microsoft.com/en-us/library/hh279678.aspx
+
+Currently, Compiler::abort throws a std::runtime_error, which isn't explicitly handled anywhere. This causes the program to abort when this error is thrown.
+The parsing logic raises exceptions via calls to match(), get_name(), and get_num().
