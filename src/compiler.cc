@@ -58,7 +58,7 @@ void Compiler::compile_start () const {
     //create a stack and vector for registers
     std::string stack_init = "static std::stack<int> cpu_stack;";
     std::string registers_init = "static std::vector<int> cpu_registers(" + std::to_string(NUM_REGISTERS) + ", 0);";
-    std::string variables_init = "static std::unordered_map<char, int> cpu_variables(";
+    std::string variables_init = "static std::unordered_map<char, int> cpu_variables;";
     emit_line(stack_init);
     emit_line(registers_init);
     emit_line(variables_init);
@@ -92,6 +92,12 @@ void Compiler::compile_end () const {
     emit_line("while (!cpu_stack.empty()) {");
     emit_line("std::cout << cpu_stack.top() << '\\n';");
     emit_line("cpu_stack.pop();}");
+    
+    //dump variable contents
+    emit_line("std::cout << \"Variable contents\\n\";");
+    
+    emit_line("for (auto i = cpu_variables.begin(); i != cpu_variables.end(); ++i)"); 
+    emit_line("std::cout << \"cpu_variables[\" << i->first << \"] = \" << i->second << '\\n';");
     
     //close main()
     emit_line("return 0;");
