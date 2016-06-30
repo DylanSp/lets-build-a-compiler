@@ -1,0 +1,41 @@
+-Compiler class uses stringstream& as input
+-Compiler ctor has 2 params, stringstream& input, ostream& output (defaults to std::cout)
+-parsing methods refer to input
+-compile_intermediate() takes string as params
+--clears the input stringstream, then passes string into it
+-compile_full() takes vector<string>
+--compile_begin()
+--for (auto line : VECTOR) compile_intermediate(line)
+--compile_end()
+-instead of compiled output all being in main, have it output a class with get methods for register, variable, stack, and a "main" run() method
+--tester (using Google Test) will hook into this class
+--Compiler will need to have a way to specify classname, maybe as string param to compile_full()
+--maybe have class generate its own testing methods; take as an optional param to compile_full()? (std::optional<test specification>)
+---test specification would say what output to test, what to compare it too...maybe not, though. 
+---vector<pair<expected value, actual quantity> >. expected value is an int, actual quantity specifies register/stack/variable, index of register/name of variable
+---wrap test specification in a class/struct?
+
+-CompilerReader class, handles batch processing of a file
+-uses while(getline) to parse file into vector<string>, calls compile_full
+
+-Compiler - have a (private) method for start symbol that begins parsing
+-make assignment(), expression(), etc. private
+
+Testing:
+-have a static enum(?) of response types in Compiler: "compilation ok", "syntax error", "type error", etc.
+-test methods can check if response is right type
+-compile_full() returns this type
+-tester can pass strings/vector<strings> direct to compiler, not from separate input files
+--still have separate output files (go in test/generated, maybe?)
+-two stages:
+--first: "make tests". builds test_generator.cc to bin/test_generator. this, when run, creates a bunch of compiled outputs
+---each output defines a class with associated test method.
+--second: "make tester". builds tester.cc and compiled outputs to bin/tester. this is a main() wrapped around Google Tests' RUN_ALL_TESTS.
+
+test/
+  src/
+    tester.cc
+  generated/
+    (compiler outputs, .cc files)
+  bin/
+    (execs from running gcc on generated, if we have separate executables)
