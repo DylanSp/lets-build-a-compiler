@@ -1,12 +1,5 @@
--Compiler class uses stringstream as input
--Compiler ctor has 1 param, ostream& output (defaults to std::cout)
--parsing methods refer to input
--compile_intermediate() takes string as params
---clears the input stringstream, then passes string into it
--compile_full() takes vector<string>
---compile_begin()
---for (auto line : VECTOR) compile_intermediate(line)
---compile_end()
+
+
 -instead of compiled output all being in main, have it output a class with get methods for register, variable, stack, and a "main" run() method
 --tester (using Google Test) will hook into this class
 --Compiler will need to have a way to specify classname, maybe as string param to compile_full()

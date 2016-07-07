@@ -14,7 +14,7 @@ int main () {
     const char QUIT_CHAR = '$';
     const std::string PROMPT = std::string("Enter a line to be compiled ('") + QUIT_CHAR + "' to quit):\n";
     std::stringstream compiler_input(std::ios::in|std::ios::out);    
-    ds_compiler::Compiler my_compiler(&compiler_input, &std::cout);
+    ds_compiler::Compiler my_compiler;
     
     
     std::string input_line = "";

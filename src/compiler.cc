@@ -17,18 +17,12 @@ const std::unordered_set<char> Compiler::ADD_OPS({'+', '-'});
 const std::unordered_set<char> Compiler::MULT_OPS({'*', '/'});
     
 //constructors
-Compiler::Compiler () 
-    : m_is (&std::cin), m_os (&std::cout), m_input_stream (std::ios::in|std::ios::out)
+Compiler::Compiler (std::ostream& output) 
+    : m_input_stream (std::ios::in|std::ios::out), m_output_stream(output)
 {
     
 }
 
-
-Compiler::Compiler (std::istream *new_is, std::ostream *new_os) 
-    : m_is (new_is), m_os (new_os), m_input_stream (std::ios::in|std::ios::out)
-{
-        
-}
 
 
 void Compiler::compile_intermediate (const std::string input_line) {
@@ -149,7 +143,7 @@ void Compiler::term () {
     factor();
     while (is_in(m_input_stream.peek(), MULT_OPS)) {
         emit_line("cpu_stack.push(cpu_registers.at(0));");
-        switch (is().peek()) {
+        switch (m_input_stream.peek()) {
             case '*':
                 multiply();
                 break;
@@ -225,8 +219,8 @@ void Compiler::divide() {
 
 void Compiler::report_error(const std::string err) const {
     
-    os() << '\n';
-    os() << "Error: " << err << '\n';
+    m_output_stream << '\n';
+    m_output_stream << "Error: " << err << '\n';
     
 }
 
@@ -281,7 +275,7 @@ char Compiler::get_num () {
 
 //output a string 
 void Compiler::emit (std::string s) const {
-    os() << s;
+    m_output_stream << s;
 }
 
 //output a string with newline 
@@ -292,24 +286,6 @@ void Compiler::emit_line (std::string s) const {
 
 bool Compiler::is_in(const char elem, const std::unordered_set<char> us) {
     return us.find(elem) != us.end();
-}
-
-//helper members to allow using stream syntax with *is, *os
-
-void Compiler::set_is (std::istream *new_is) {
-    m_is = new_is;
-}
-
-void Compiler::set_os (std::ostream *new_os) {
-    m_os = new_os;
-}
-
-std::istream& Compiler::is() const {
-    return *m_is;
-}
-
-std::ostream& Compiler::os() const {
-    return *m_os;
 }
     
 } //end namespace

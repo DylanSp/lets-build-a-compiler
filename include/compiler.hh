@@ -17,8 +17,7 @@ namespace ds_compiler {
 class Compiler {
   
 public:
-    Compiler();
-    Compiler(std::istream *new_is, std::ostream *new_os);
+    Compiler(std::ostream& output = std::cout);
     
     //"main" methods, compile from is to os
     void compile_intermediate(const std::string input_line);  //compiles a single line of input
@@ -35,9 +34,6 @@ public:
     void subtract();
     void multiply();
     void divide();
-    
-    void set_is(std::istream *new_is);
-    void set_os(std::ostream *new_os);
 
 
 private:
@@ -62,14 +58,8 @@ private:
     
     static bool is_in(const char elem, const std::unordered_set<char> us);
     
-    //helper members to allow stream syntax with pointers to streams
-    std::istream& is() const;
-    std::ostream& os() const;
-    mutable std::istream *m_is;
-    mutable std::ostream *m_os;
-    
     std::stringstream m_input_stream;
-
+    std::ostream& m_output_stream;
     
 };
 
