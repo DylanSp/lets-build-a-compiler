@@ -9,7 +9,8 @@
 #include <iostream>
 #include <string>
 #include <unordered_set>
-
+#include <vector>
+#include <sstream>
 
 namespace ds_compiler {
 
@@ -20,20 +21,20 @@ public:
     Compiler(std::istream *new_is, std::ostream *new_os);
     
     //"main" methods, compile from is to os
-    void compile_intermediate() const;  //compiles a single line of input
-    void compile_full () const;         //compiles a full C++ program
+    void compile_intermediate(const std::string input_line);  //compiles a single line of input
+    void compile_full (const std::vector<std::string> source);         //compiles a full C++ program
     
 
     //compiling (parts of) lines 
-    void assignment() const;
-    void expression() const;
-    void term() const;
-    void factor() const;
-    void ident() const;
-    void add() const;
-    void subtract() const;
-    void multiply() const;
-    void divide() const;
+    void assignment();
+    void expression();
+    void term();
+    void factor();
+    void ident();
+    void add();
+    void subtract();
+    void multiply();
+    void divide();
     
     void set_is(std::istream *new_is);
     void set_os(std::ostream *new_os);
@@ -53,9 +54,9 @@ private:
     void abort(const std::string err) const;
     void expected(const std::string expect) const;
     void expected(const char c) const;
-    void match(const char c) const;
-    char get_name () const;
-    char get_num () const;
+    void match(const char c);
+    char get_name ();
+    char get_num ();
     void emit (std::string s) const;
     void emit_line (std::string s) const;
     
@@ -66,6 +67,8 @@ private:
     std::ostream& os() const;
     mutable std::istream *m_is;
     mutable std::ostream *m_os;
+    
+    std::stringstream m_input_stream;
 
     
 };

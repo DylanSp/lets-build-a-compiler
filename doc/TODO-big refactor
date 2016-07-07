@@ -1,5 +1,5 @@
--Compiler class uses stringstream& as input
--Compiler ctor has 2 params, stringstream& input, ostream& output (defaults to std::cout)
+-Compiler class uses stringstream as input
+-Compiler ctor has 1 param, ostream& output (defaults to std::cout)
 -parsing methods refer to input
 -compile_intermediate() takes string as params
 --clears the input stringstream, then passes string into it

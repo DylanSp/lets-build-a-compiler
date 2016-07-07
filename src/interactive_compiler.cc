@@ -29,7 +29,7 @@ int main () {
         //std::cout << "DEBUG: " << "input_line contents = " << input_line << '\n';
         //std::cout << "DEBUG: " << "compiler_input contents = " << compiler_input.str() << '\n';
         
-        my_compiler.compile_intermediate();
+        my_compiler.compile_intermediate(input_line);
         compiler_input.str(""); //clear stringstream
         compiler_input.clear();
     }

@@ -18,20 +18,27 @@ const std::unordered_set<char> Compiler::MULT_OPS({'*', '/'});
     
 //constructors
 Compiler::Compiler () 
-    : m_is (&std::cin), m_os (&std::cout)
+    : m_is (&std::cin), m_os (&std::cout), m_input_stream (std::ios::in|std::ios::out)
 {
     
 }
 
 
 Compiler::Compiler (std::istream *new_is, std::ostream *new_os) 
-    : m_is (new_is), m_os (new_os) 
+    : m_is (new_is), m_os (new_os), m_input_stream (std::ios::in|std::ios::out)
 {
         
 }
 
 
-void Compiler::compile_intermediate () const {
+void Compiler::compile_intermediate (const std::string input_line) {
+    
+    //clear contents and error flags on m_input_stream
+    m_input_stream.str("");
+    m_input_stream.clear();
+    
+    m_input_stream << input_line;
+    
     try {
         assignment();
     } catch (std::exception &ex) {
@@ -39,10 +46,12 @@ void Compiler::compile_intermediate () const {
     }
 }
     
-void Compiler::compile_full () const {
+void Compiler::compile_full (const std::vector<std::string> source) {
     
     compile_start();
-    compile_intermediate();
+    for (auto line : source) {
+        compile_intermediate(line);
+    }    
     compile_end();
     
 }
@@ -106,24 +115,24 @@ void Compiler::compile_end () const {
     
 }
 
-void Compiler::assignment () const {
+void Compiler::assignment () {
     char name = get_name();
     match('=');
     expression();
     emit_line(std::string("cpu_variables['") + name + "'] = cpu_registers.at(0);");
 }
 
-void Compiler::expression () const {
+void Compiler::expression () {
     
-    if (is_in(is().peek(), ADD_OPS)) {
+    if (is_in(m_input_stream.peek(), ADD_OPS)) {
         emit_line("cpu_registers.at(0) = 0;");  //support unary +/- by inserting 0 before the op
     } else {
         term();
     }
     
-    while (is_in(is().peek(), ADD_OPS)) {
+    while (is_in(m_input_stream.peek(), ADD_OPS)) {
         emit_line("cpu_stack.push(cpu_registers.at(0));");
-        switch (is().peek()) {
+        switch (m_input_stream.peek()) {
             case '+':
                 add();
                 break;
@@ -136,9 +145,9 @@ void Compiler::expression () const {
     }
 }
     
-void Compiler::term () const {
+void Compiler::term () {
     factor();
-    while (is_in(is().peek(), MULT_OPS)) {
+    while (is_in(m_input_stream.peek(), MULT_OPS)) {
         emit_line("cpu_stack.push(cpu_registers.at(0));");
         switch (is().peek()) {
             case '*':
@@ -153,13 +162,13 @@ void Compiler::term () const {
     }
 }
     
-void Compiler::factor () const {
+void Compiler::factor () {
     
-    if (is().peek() == '(') {
+    if (m_input_stream.peek() == '(') {
         match('(');
         expression();
         match(')');
-    } else if (std::isalpha(is().peek())) {
+    } else if (std::isalpha(m_input_stream.peek())) {
         ident();
     } else {
         char expr = get_num();
@@ -170,11 +179,11 @@ void Compiler::factor () const {
 }
 
 //handles function calls/variables
-void Compiler::ident () const {
+void Compiler::ident () {
     char name = get_name();
 
     if (name != ERR_CHAR) { 
-        if (is().peek() == '(') {//function call
+        if (m_input_stream.peek() == '(') {//function call
             match('(');
             match(')');
             emit_line(std::string(1, name) + "();");
@@ -184,28 +193,28 @@ void Compiler::ident () const {
     } 
 }
 
-void Compiler::add () const {
+void Compiler::add () {
     match('+');
     term();
     emit_line("cpu_registers.at(0) = cpu_stack.top() + cpu_registers.at(0);");
     emit_line("cpu_stack.pop();");
 }
 
-void Compiler::subtract () const {
+void Compiler::subtract () {
     match('-');
     term();
     emit_line("cpu_registers.at(0) = cpu_stack.top() - cpu_registers.at(0);");
     emit_line("cpu_stack.pop();");
 }
 
-void Compiler::multiply() const {
+void Compiler::multiply() {
     match('*');
     factor();
     emit_line("cpu_registers.at(0) = cpu_stack.top() * cpu_registers.at(0);");
     emit_line("cpu_stack.pop();");
 }
 
-void Compiler::divide() const {
+void Compiler::divide() {
     match('/');
     factor();
     emit_line("cpu_registers.at(0) = cpu_stack.top() / cpu_registers.at(0);");
@@ -239,33 +248,33 @@ void Compiler::expected(const char c) const {
 }
 
 //checks if next character matches; if so, consume that character
-void Compiler::match(const char c) const {
+void Compiler::match(const char c) {
     
-    if (is().peek() == c) {
-        is().get(); 
+    if (m_input_stream.peek() == c) {
+        m_input_stream.get(); 
     } else {
         expected(c);
     }
 }
 
 // gets a valid identifier from input stream
-char Compiler::get_name () const {
-    if (!std::isalpha(is().peek())) {
+char Compiler::get_name () {
+    if (!std::isalpha(m_input_stream.peek())) {
         expected("Name");
         return ERR_CHAR;
     } else {
-        return std::toupper(is().get());
+        return std::toupper(m_input_stream.get());
     }
     
 }
 
 //gets a number
-char Compiler::get_num () const {
-    if (!std::isdigit(is().peek())) {
+char Compiler::get_num () {
+    if (!std::isdigit(m_input_stream.peek())) {
         expected("Integer");
         return ERR_CHAR;
     } else {
-        return is().get();
+        return m_input_stream.get();
     }
 }
 
