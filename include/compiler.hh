@@ -23,8 +23,17 @@ public:
     void compile_intermediate(const std::string input_line);  //compiles a single line of input
     void compile_full (const std::vector<std::string> source);         //compiles a full C++ program
     
+private:
+    static const size_t NUM_REGISTERS;          //number of registers available to the compiled code
+    static const char ERR_CHAR;
+    static const std::unordered_set<char> ADD_OPS;
+    static const std::unordered_set<char> MULT_OPS;
 
+    void compile_start() const;
+    void compile_end() const;
+    
     //compiling (parts of) lines 
+    void start_symbol();
     void assignment();
     void expression();
     void term();
@@ -34,16 +43,6 @@ public:
     void subtract();
     void multiply();
     void divide();
-
-
-private:
-    static const size_t NUM_REGISTERS;          //number of registers available to the compiled code
-    static const char ERR_CHAR;
-    static const std::unordered_set<char> ADD_OPS;
-    static const std::unordered_set<char> MULT_OPS;
-
-    void compile_start() const;
-    void compile_end() const;
     
     //cradle methods
     void report_error(const std::string err) const;

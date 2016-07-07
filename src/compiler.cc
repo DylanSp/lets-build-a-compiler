@@ -34,7 +34,7 @@ void Compiler::compile_intermediate (const std::string input_line) {
     m_input_stream << input_line;
     
     try {
-        assignment();
+        start_symbol();
     } catch (std::exception &ex) {
         std::cerr << ex.what() << '\n';
     }
@@ -107,6 +107,10 @@ void Compiler::compile_end () const {
     emit_line("return 0;");
     emit_line("}");
     
+}
+
+void Compiler::start_symbol () {
+    assignment();
 }
 
 void Compiler::assignment () {
