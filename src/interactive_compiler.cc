@@ -13,7 +13,6 @@ int main () {
 
     const char QUIT_CHAR = '$';
     const std::string PROMPT = std::string("Enter a line to be compiled ('") + QUIT_CHAR + "' to quit):\n";
-    std::stringstream compiler_input(std::ios::in|std::ios::out);    
     ds_compiler::Compiler my_compiler;
     
     
@@ -30,8 +29,6 @@ int main () {
         //std::cout << "DEBUG: " << "compiler_input contents = " << compiler_input.str() << '\n';
         
         my_compiler.compile_intermediate(input_line);
-        compiler_input.str(""); //clear stringstream
-        compiler_input.clear();
     }
         
     
