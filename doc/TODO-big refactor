@@ -1,4 +1,4 @@
-
+** Merge this back into main; make separate branch for testing **
 
 -instead of compiled output all being in main, have it output a class with get methods for register, variable, stack, and a "main" run() method
 --tester (using Google Test) will hook into this class
@@ -8,7 +8,7 @@
 ---vector<pair<expected value, actual quantity> >. expected value is an int, actual quantity specifies register/stack/variable, index of register/name of variable
 ---wrap test specification in a class/struct?
 
--CompilerReader class, handles batch processing of a file
+-CompilerReader class, handles batch processing of a file - ONLY IF NECESSARY
 -uses while(getline) to parse file into vector<string>, calls compile_full
 
 Testing:
