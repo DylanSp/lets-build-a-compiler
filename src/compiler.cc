@@ -37,12 +37,13 @@ void Compiler::compile_intermediate (const std::string input_line) {
         start_symbol();
     } catch (std::exception &ex) {
         std::cerr << ex.what() << '\n';
+        throw std::runtime_error("Compilation failed.\n");
     }
 }
     
-void Compiler::compile_full (const std::vector<std::string> source) {
+void Compiler::compile_full (const std::vector<std::string> source, const std::string class_name) {
     
-    compile_start();
+    compile_start(class_name);
     for (auto line : source) {
         compile_intermediate(line);
     }    
@@ -50,7 +51,7 @@ void Compiler::compile_full (const std::vector<std::string> source) {
     
 }
 
-void Compiler::compile_start () const {
+void Compiler::compile_start (const std::string class_name) const {
     
     //emit lines for necessary includes
     emit_line("#include <stack>");
@@ -59,10 +60,14 @@ void Compiler::compile_start () const {
     emit_line("#include <string>");
     emit_line("#include <unordered_map>");
     
+    //begin class declaration, qualify everything as public
+    emit_line("class "+ class_name + "{");
+    emit_line("public:");
+    
     //create a stack and vector for registers
-    std::string stack_init = "static std::stack<int> cpu_stack;";
-    std::string registers_init = "static std::vector<int> cpu_registers(" + std::to_string(NUM_REGISTERS) + ", 0);";
-    std::string variables_init = "static std::unordered_map<char, int> cpu_variables;";
+    std::string stack_init = "std::stack<int> cpu_stack;";
+    std::string registers_init = "std::vector<int> cpu_registers(" + std::to_string(NUM_REGISTERS) + ", 0);";
+    std::string variables_init = "std::unordered_map<char, int> cpu_variables;";
     emit_line(stack_init);
     emit_line(registers_init);
     emit_line(variables_init);
@@ -73,9 +78,17 @@ void Compiler::compile_start () const {
     emit_line("cpu_stack.pop();");
     emit_line("return val; }");
     
-    //emit lines for int main() {
-    emit_line("int main () {");
+    //emit definitions of getters for registers, variables
+    emit_line("int get_register(int index) {");
+    emit_line("return cpu_registers.at(index);}");
     
+    emit_line("int get_variable(char var_name) {");
+    emit_line("return cpu_variables.at(var_name);}");
+    
+    //no getter for stack; stack should always be empty
+    
+    //begin definition of run()
+    emit_line("void run() {");
     
     
     
@@ -83,6 +96,18 @@ void Compiler::compile_start () const {
 }
 
 void Compiler::compile_end () const {
+    
+    //TODO - should I assert that cpu_stack is empty?
+    
+    //end definition of run()
+    emit_line("}");
+    
+    
+    //TODO - are these dumps necessary?
+    //if so, make them member functions
+    
+    //begin definition of dump()
+    emit_line("void dump () {");
     
     //dump register contents
     emit_line("std::cout << \"Register contents\\n\";");
@@ -99,13 +124,14 @@ void Compiler::compile_end () const {
     
     //dump variable contents
     emit_line("std::cout << \"Variable contents\\n\";");
-    
     emit_line("for (auto i = cpu_variables.begin(); i != cpu_variables.end(); ++i)"); 
     emit_line("std::cout << \"cpu_variables[\" << i->first << \"] = \" << i->second << '\\n';");
     
-    //close main()
-    emit_line("return 0;");
+    //end definition of dump()
     emit_line("}");
+    
+    //close class declaration
+    emit_line("};");
     
 }
 

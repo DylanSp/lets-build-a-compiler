@@ -23,7 +23,6 @@ int main () {
         if (input_line.at(0) == QUIT_CHAR) {
             break;
         }
-        compiler_input << input_line;
         
         //std::cout << "DEBUG: " << "input_line contents = " << input_line << '\n';
         //std::cout << "DEBUG: " << "compiler_input contents = " << compiler_input.str() << '\n';

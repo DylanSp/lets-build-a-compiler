@@ -6,7 +6,7 @@ CFLAGS = -std=c++11 -Wall -Wextra -Wpedantic -pedantic-errors -g
 SRCDIR = src
 TESTSRC = test
 BUILDDIR = build
-TARGET = bin/interactive_compiler
+TARGET = 
 SRCEXT = cc
 SOURCES = $(wildcard $(SRCDIR)/*.$(SRCEXT))
 TESTSOURCES = $(wildcard $(TESTDIR)/*.$(SRCEXT))
@@ -36,3 +36,9 @@ clean:
 tester: build/compiler.o $(TESTOBJS)
 	$(CC) $(CFLAGS) $^ $(INC) $(LIB) -o bin/tester test/tester.cc 
 	
+# Spikes
+interactive: $(OBJECTS)
+	$(CC) $(CFLAGS) $^ $(INC) $(LIB) -o bin/interactive_compiler spikes/interactive_compiler.cc	
+  
+full: $(OBJECTS)
+	$(CC) $(CFLAGS) $^ $(INC) $(LIB) -o bin/full_compiler spikes/full_compiler.cc

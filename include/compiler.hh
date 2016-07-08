@@ -21,7 +21,7 @@ public:
     
     //"main" methods, compile from is to os
     void compile_intermediate(const std::string input_line);  //compiles a single line of input
-    void compile_full (const std::vector<std::string> source);         //compiles a full C++ program
+    void compile_full (const std::vector<std::string> source, const std::string class_name);         //compiles a full C++ program
     
 private:
     static const size_t NUM_REGISTERS;          //number of registers available to the compiled code
@@ -29,7 +29,7 @@ private:
     static const std::unordered_set<char> ADD_OPS;
     static const std::unordered_set<char> MULT_OPS;
 
-    void compile_start() const;
+    void compile_start(const std::string class_name) const;
     void compile_end() const;
     
     //compiling (parts of) lines 
