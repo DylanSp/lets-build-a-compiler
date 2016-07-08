@@ -1,7 +1,5 @@
 Flesh out full_compiler; make it output to a file.
 
-Refactor compile_begin/compile_end, split out stuff into separate functions.
-
 Change Compiler to take another ostream as error output.
 
 -Test variable_usage.test, which has multiple lines.

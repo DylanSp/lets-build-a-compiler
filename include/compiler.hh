@@ -32,7 +32,15 @@ private:
     void compile_start(const std::string class_name) const;
     void compile_end() const;
     
-    //compiling (parts of) lines 
+    //code generation methods
+    void add_includes() const;
+    void define_member_variables() const;
+    void define_constructor(const std::string class_name) const;
+    void define_cpu_pop() const;
+    void define_getters() const;
+    void define_dump() const;
+    
+    //parsing methods
     void start_symbol();
     void assignment();
     void expression();
