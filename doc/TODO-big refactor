@@ -1,5 +1,3 @@
-** Merge this back into main; make separate branch for testing **
-
 -instead of compiled output all being in main, have it output a class with get methods for register, variable, stack, and a "main" run() method
 --tester (using Google Test) will hook into this class
 --maybe have class generate its own testing methods; take as an optional param to compile_full()? (std::optional<test specification>)

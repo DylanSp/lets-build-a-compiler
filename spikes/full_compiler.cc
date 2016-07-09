@@ -4,17 +4,21 @@
 */
 
 #include <iostream>
+#include <fstream>
 #include <string>
 #include "compiler.hh"
 
 int main () {
     
-    //TODO - output to a file in src/ (right now, outputs to cout)
-    //just specify filename in source code here
-    //
+    const std::string PROJ_ROOT("/home/ubuntu/workspace/");
+    std::string class_name("TestClass");
+    std::string output_filename("test/src/" + class_name + ".cc");
+    
+    std::ofstream ofs(output_filename, std::ofstream::out);
 
-    const std::string PROMPT = std::string("Enter the line to be compiled:\n");
-    ds_compiler::Compiler my_compiler;
+    ds_compiler::Compiler my_compiler(ofs);
+
+    const std::string PROMPT("Enter the line to be compiled:\n");
     std::string input_line = "";
     
     std::cout << PROMPT;
@@ -24,7 +28,7 @@ int main () {
     program.push_back(input_line);
     
     //wrap in try/catch
-    my_compiler.compile_full(program, "testclass");
+    my_compiler.compile_full(program, class_name);
         
     return 0;
 }

@@ -1,5 +1,3 @@
-Flesh out full_compiler; make it output to a file.
-
 Change Compiler to take another ostream as error output.
 
 -Test variable_usage.test, which has multiple lines.
