@@ -1,2 +1,7 @@
 MSDN article on exceptions, exception handling
 https://msdn.microsoft.com/en-us/library/hh279678.aspx
+
+Currently, Compiler::abort throws a std::runtime_error, which is handled in compile_intermediate(). 
+For the interactive compiler, the line is aborted, and the driver program asks for the next line.
+The batch compiler only calls compile_intermediate() once, so the program catches the error and stops parsing.
+The parsing logic raises exceptions via calls to match(), get_name(), and get_num().

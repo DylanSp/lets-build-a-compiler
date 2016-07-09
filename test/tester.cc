@@ -14,7 +14,7 @@
 
 int main() {
     
-    std::string input_file = "test/src/first.test";
+    std::string input_file = "test/src/variable_assignment.test";
     std::string compiled_file = "test/src/compiled_out.cc";
     std::string compiled_exec = "test/bin/test_exec";
     

@@ -6,103 +6,145 @@
 
 #include <cctype>       //character comparison functions
 #include <stdexcept>
+#include <assert.h>
 #include "compiler.hh"
 
 namespace ds_compiler {
     
 const size_t Compiler::NUM_REGISTERS = 8;
 const char Compiler::ERR_CHAR = '\0';
+const std::unordered_set<char> Compiler::ADD_OPS({'+', '-'});
+const std::unordered_set<char> Compiler::MULT_OPS({'*', '/'});
     
 //constructors
-Compiler::Compiler () 
-    : m_is (&std::cin), m_os (&std::cout)
+Compiler::Compiler (std::ostream& output) 
+    : m_input_stream (std::ios::in|std::ios::out), m_output_stream(output)
 {
     
 }
 
 
-Compiler::Compiler (std::istream *new_is, std::ostream *new_os) 
-    : m_is (new_is), m_os (new_os) 
-{
-        
-}
 
-
-void Compiler::compile_intermediate () const {
+void Compiler::compile_intermediate (const std::string input_line) {
+    
+    //clear contents and error flags on m_input_stream
+    m_input_stream.str("");
+    m_input_stream.clear();
+    
+    m_input_stream << input_line;
     
     try {
-
+        start_symbol();
     } catch (std::exception &ex) {
         std::cerr << ex.what() << '\n';
+        throw std::runtime_error("Compilation failed.\n");
     }
-
 }
     
-void Compiler::compile_full () const {
+void Compiler::compile_full (const std::vector<std::string> source, const std::string class_name) {
     
-    compile_start();
-    compile_intermediate();
+    compile_start(class_name);
+    for (auto line : source) {
+        compile_intermediate(line);
+    }    
     compile_end();
     
 }
 
-void Compiler::compile_start () const {
+void Compiler::compile_start (const std::string class_name) const {
+    add_includes();    
+   
+    //begin class declaration, qualify everything as public
+    emit_line("class "+ class_name + "{");
+    emit_line("public:");
     
-    //emit lines for necessary includes
+    define_member_variables();
+    define_constructor(class_name);
+    define_cpu_pop();
+    define_getters();
+    
+    emit_line("void run() {");  //begin definition of run()
+}
+
+void Compiler::compile_end () const {
+    //TODO - should I assert that cpu_stack is empty?
+    
+    emit_line("}");     //end definition of run()
+    define_dump();
+    emit_line("};");    //close class declaration
+}
+
+void Compiler::add_includes() const {
     emit_line("#include <stack>");
     emit_line("#include <vector>");
     emit_line("#include <iostream>");
     emit_line("#include <string>");
-    
-    //create a stack and vector for registers
-    std::string stack_init = "static std::stack<int> cpu_stack;";
-    std::string registers_init = "static std::vector<int> cpu_registers(" + std::to_string(NUM_REGISTERS) + ", 0);";
-    emit_line(stack_init);
-    emit_line(registers_init);
-    
-    //emit definition of a function for easier stack handling
+    emit_line("#include <unordered_map>");
+}
+
+void Compiler::define_member_variables() const {
+    emit_line("std::stack<int> cpu_stack;");
+    emit_line("std::vector<int> cpu_registers;");
+    emit_line("std::unordered_map<char, int> cpu_variables;");
+}
+
+void Compiler::define_constructor(const std::string class_name) const {
+    emit_line(class_name + "() ");
+    emit_line(": cpu_stack()");
+    emit_line(", cpu_registers(" + std::to_string(NUM_REGISTERS) + ", 0)");
+    emit_line(", cpu_variables()");
+}
+
+//emit definition of a function for easier stack handling
+void Compiler::define_cpu_pop() const {
     emit_line("int cpu_pop() {");
     emit_line("int val = cpu_stack.top();");
     emit_line("cpu_stack.pop();");
     emit_line("return val; }");
-    
-    //emit lines for int main() {
-    emit_line("int main () {");
-    
-    
-    
-    
-    
 }
 
-void Compiler::compile_end () const {
+void Compiler::define_getters() const {
+    emit_line("int get_register(int index) {");
+    emit_line("return cpu_registers.at(index);}");
     
-    //dump register contents
+    emit_line("int get_variable(char var_name) {");
+    emit_line("return cpu_variables.at(var_name);}");
+    
+    //no getter for stack; stack should always be empty
+}
+
+void Compiler::define_dump() const {
+    //TODO - are these dumps necessary?
+    
+    emit_line("void dump () {");
+    
     emit_line("std::cout << \"Register contents\\n\";");
-    emit_line(
-        std::string("for (int i = 0; i < ") + std::to_string(NUM_REGISTERS) + "; ++i)"
-        );
+    emit_line("for (int i = 0; i < " + std::to_string(NUM_REGISTERS) + "; ++i)");
     emit_line("std::cout << std::string(\"Register \") << i << \": \" << cpu_registers.at(i) << '\\n';");
     
+    emit_line("std::cout << \"Stack contents (top to bottom)\\n\";");
+    emit_line("while (!cpu_stack.empty()) {");
+    emit_line("std::cout << cpu_stack.top() << '\\n';");
+    emit_line("cpu_stack.pop();}");
     
-    //emit lines for closing main
-    emit_line("return 0;");
+    emit_line("std::cout << \"Variable contents\\n\";");
+    emit_line("for (auto i = cpu_variables.begin(); i != cpu_variables.end(); ++i)"); 
+    emit_line("std::cout << \"cpu_variables[\" << i->first << \"] = \" << i->second << '\\n';");
+    
     emit_line("}");
+}
+
+
+void Compiler::start_symbol () {
     
 }
-    
-
-void Compiler::parse_expression () {
-    
-}   
-
 
 //cradle methods
 
 void Compiler::report_error(const std::string err) const {
     
-    os() << '\n';
-    os() << "Error: " << err << '\n';
+    m_output_stream << '\n';
+    m_output_stream << "Error: " << err << '\n';
     
 }
 
@@ -124,42 +166,40 @@ void Compiler::expected(const char c) const {
 }
 
 //checks if next character matches; if so, consume that character
-void Compiler::match(const char c) const {
+void Compiler::match(const char c) {
     
-    if (is().peek() == c) {
-        is().get(); 
+    if (m_input_stream.peek() == c) {
+        m_input_stream.get(); 
     } else {
         expected(c);
     }
-    
-    
 }
 
 // gets a valid identifier from input stream
-char Compiler::get_name () const {
-    if (!std::isalpha(is().peek())) {
+char Compiler::get_name () {
+    if (!std::isalpha(m_input_stream.peek())) {
         expected("Name");
         return ERR_CHAR;
     } else {
-        return std::toupper(is().get());
+        return std::toupper(m_input_stream.get());
     }
     
 }
 
 //gets a number
-char Compiler::get_num () const {
-    if (!std::isdigit(is().peek())) {
+char Compiler::get_num () {
+    if (!std::isdigit(m_input_stream.peek())) {
         expected("Integer");
         return ERR_CHAR;
     } else {
-        return is().get();
+        return m_input_stream.get();
     }
 }
 
 
 //output a string 
 void Compiler::emit (std::string s) const {
-    os() << s;
+    m_output_stream << s;
 }
 
 //output a string with newline 
@@ -167,25 +207,9 @@ void Compiler::emit_line (std::string s) const {
     emit(s);
     emit("\n");
 }
-    
 
-
-//helper members to allow using stream syntax with *is, *os
-
-void Compiler::set_is (std::istream *new_is) {
-    m_is = new_is;
-}
-
-void Compiler::set_os (std::ostream *new_os) {
-    m_os = new_os;
-}
-
-std::istream& Compiler::is() const {
-    return *m_is;
-}
-
-std::ostream& Compiler::os() const {
-    return *m_os;
+bool Compiler::is_in(const char elem, const std::unordered_set<char> us) {
+    return us.find(elem) != us.end();
 }
     
 } //end namespace

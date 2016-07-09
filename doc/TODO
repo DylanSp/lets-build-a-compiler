@@ -1,19 +1,11 @@
--Change Compiler to take another ostream as error output.
+Flesh out full_compiler; make it output to a file.
 
-Change tester.cc to loop through .tutorial files in test/src and compile all of them, then execute them. 
--Maybe add an entry to Makefile for this, then tester can then just call make?
--compile first.test, second.test, probably to test/bin/first and test/bin/second
--alternatively, put test cases in tester.cc as stringstreams, feed them into compiler and have tester capture output
+Change Compiler to take another ostream as error output.
 
-Figure out some way to capture output from test programs
--have them return the value of register[0] at the end of main()? 
--pass them an int*, have them set it to register[0], then check it in tester?
+-Test variable_usage.test, which has multiple lines.
 
 Get debugger working
 
-Manage pointers in Compiler properly, probably weak pointers
--http://programmers.stackexchange.com/questions/274801/raw-weak-ptr-unique-ptr-shared-ptr-etc-how-to-choose-them-wisely
--update doc/stream pointers appropriately
 
 
 
