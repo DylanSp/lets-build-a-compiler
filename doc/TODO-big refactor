@@ -19,9 +19,10 @@ Testing:
 ---each output defines a class with associated test method.
 --second: "make tester". builds compiled outputs, generated tests, then links with gtest_main, outputs test/bin/tester.
 
+src/
+  test_generator.cc
+  tester.cc
 test/
-  src/
-    tester.cc
   generated/
     (compiler outputs, .cc files)
   bin/

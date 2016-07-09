@@ -1,3 +1,7 @@
+change config - enable double-tab thingy by default, get Git auto-completion
+
+Rework tester.cc, test_generator.cc
+
 Change Compiler to take another ostream as error output.
 
 -Test variable_usage.test, which has multiple lines.
