@@ -93,6 +93,7 @@ void Compiler::define_constructor(const std::string class_name) const {
     emit_line(": cpu_stack()");
     emit_line(", cpu_registers(" + std::to_string(NUM_REGISTERS) + ", 0)");
     emit_line(", cpu_variables()");
+    emit_line("{}");
 }
 
 //emit definition of a function for easier stack handling
