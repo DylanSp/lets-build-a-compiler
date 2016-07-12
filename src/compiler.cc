@@ -114,6 +114,11 @@ void Compiler::define_getters() const {
     //no getter for stack; stack should always be empty
 }
 
+void define_is_stack_empty() const {
+    emit_line("bool is_stack_empty() {");
+    emit_line("return cpu_stack.empty();}");
+}
+
 void Compiler::define_dump() const {
     //TODO - are these dumps necessary?
     

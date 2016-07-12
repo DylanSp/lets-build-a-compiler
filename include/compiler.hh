@@ -38,6 +38,7 @@ private:
     void define_constructor(const std::string class_name) const;
     void define_cpu_pop() const;
     void define_getters() const;
+    void define_is_stack_empty() const;
     void define_dump() const;
     
     //parsing methods
