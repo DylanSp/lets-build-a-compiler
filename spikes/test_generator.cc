@@ -69,9 +69,7 @@ std::vector<test_input_params> initialize_test_params () {
     
     std::string single_constant_name("SingleConstant");
     std::vector<std::string> single_constant_program(1, "x=1" );
-    //single_constant_program.push_back("x = 1");
-    std::map<char, int> single_constant_expected_values;
-    single_constant_expected_values['X'] = 1;
+    std::map<char, int> single_constant_expected_values { {'X', 1} } ;
     test_input_params single_constant { single_constant_name, single_constant_program, single_constant_expected_values };
     test_params.push_back(single_constant);
     
