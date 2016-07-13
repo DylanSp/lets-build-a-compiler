@@ -58,16 +58,12 @@ struct test_input_params {
 };
 
 std::vector<test_input_params> initialize_test_params () {
-    std::vector<test_input_params> test_params;
-    
-    test_input_params empty_program { "EmptyProgram", {}, {} };
-    test_params.push_back(empty_program);
-    
-    test_input_params single_constant {"SingleConstant", {1, "x=1"}, { {'X', 1} } };
-    test_params.push_back(single_constant);
-    
-    test_input_params addition { "Addition", {1, "x=1+2"}, { {'X', 3} } };
-    test_params.push_back(addition);
+    std::vector<test_input_params> test_params {
+        {"EmptyProgram", {}, {}},
+        {"SingleConstant", {1, "x=1"}, {{'X', 1}}},
+        {"Addition", {1, "x=1+1"}, {{'X', 2}}},
+        {"Subtraction", {1, "x=4-1"}, {{'X',3}}}
+    };
     
     return test_params;
 }
