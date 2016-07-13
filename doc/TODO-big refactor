@@ -1,7 +1,0 @@
--CompilerReader class, handles batch processing of a file - ONLY IF NECESSARY
--uses while(getline) to parse file into vector<string>, calls compile_full
-
-Testing:
--have a static enum(?) of response types in Compiler: "compilation ok", "syntax error", "type error", etc.
--test methods can check if response is right type
--compile_full() returns this type

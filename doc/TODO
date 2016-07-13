@@ -1,13 +1,10 @@
--debug makefile with "make -nd <target> > test_debug"
--have "tests" target make test_generator, run it, then compile tests?
+-CompilerReader class, handles batch processing of a file - ONLY IF NECESSARY
+-uses while(getline) to parse file into vector<string>, calls compile_full
 
-modify Makefile
--clean up references to TESTSOURCES, TESTOBJS, TEST_ARTS
--add "tests" target that makes everything in test/generated (.o to build), links with gtest_main
-
-
-building object file from test: g++ -std=c++11 -I lib/googletest/googletest/include/ -c test/src/TestClass.c
-building executable: g++ -pthread lib/googletest/googletest/make/gtest_main.a TestClass.o
+Testing:
+-have a static enum(?) of response types in Compiler: "compilation ok", "syntax error", "type error", etc.
+-test methods can check if response is right type
+-compile_full() returns this type
 
 Change Compiler to take another ostream as error output.
 
