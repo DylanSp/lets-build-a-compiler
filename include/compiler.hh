@@ -40,6 +40,7 @@ private:
     void define_getters() const;
     void define_is_stack_empty() const;
     void define_dump() const;
+    void define_function (char ident) const;
     
     //parsing methods
     void start_symbol();

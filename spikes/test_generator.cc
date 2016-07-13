@@ -84,6 +84,7 @@ std::vector<test_input_params> initialize_test_params () {
         {"SubMultPrecedence", {"x=4-5*6"}, {{'X',-26}}},
         {"AddDivPrecedence", {"x=7+8/2"}, {{'X',11}}},
         {"SubDivPrecedence", {"x=4-6/3"}, {{'X',2}}},
+        {"SimpleFunctionCall", {"x=f()"}, {}},
     };
     
     return test_params;

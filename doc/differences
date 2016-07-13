@@ -1,0 +1,7 @@
+Differences from tutorial:
+-variables are looked up in a std::map
+-registers are simulated by array
+-functions are defined as empty lambdas, don't actually do anything. 
+--if they're part of an assignment, variable gets register 0.
+-compile_intermediate() handles a single line, compile_full() handles a vector of lines. 
+--separation by newlines is handled by driver program (interactive_compiler, full_compiler, test_generator)

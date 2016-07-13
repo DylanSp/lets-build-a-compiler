@@ -218,6 +218,7 @@ void Compiler::ident () {
         if (m_input_stream.peek() == '(') {//function call
             match('(');
             match(')');
+            define_function(name);
             emit_line(std::string(1, name) + "();");
         } else {
             emit_line(std::string("cpu_registers.at(0) = cpu_variables.at(\'") + name + "\');");
@@ -251,6 +252,11 @@ void Compiler::divide() {
     factor();
     emit_line("cpu_registers.at(0) = cpu_stack.top() / cpu_registers.at(0);");
     emit_line("cpu_stack.pop();");
+}
+
+//defines an empty lambda so output compiles
+void Compiler::define_function (char ident) const {
+    emit_line(std::string("auto ") + ident + " = [](){};");
 }
 
 //cradle methods
