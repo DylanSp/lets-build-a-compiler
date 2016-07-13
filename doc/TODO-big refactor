@@ -1,10 +1,3 @@
--instead of compiled output all being in main, have it output a class with get methods for register, variable, stack, and a "main" run() method
---tester (using Google Test) will hook into this class
---maybe have class generate its own testing methods; take as an optional param to compile_full()? (std::optional<test specification>)
----test specification would say what output to test, what to compare it too...maybe not, though. 
----vector<pair<expected value, actual quantity> >. expected value is an int, actual quantity specifies register/stack/variable, index of register/name of variable
----wrap test specification in a class/struct?
-
 -CompilerReader class, handles batch processing of a file - ONLY IF NECESSARY
 -uses while(getline) to parse file into vector<string>, calls compile_full
 
@@ -12,18 +5,3 @@ Testing:
 -have a static enum(?) of response types in Compiler: "compilation ok", "syntax error", "type error", etc.
 -test methods can check if response is right type
 -compile_full() returns this type
--tester can pass strings/vector<strings> direct to compiler, not from separate input files
---still have separate output files (go in test/generated, maybe?)
--two stages:
---first: "make tests". builds test_generator.cc to bin/test_generator. this, when run, creates a bunch of compiled outputs
----each output defines a class with associated test method.
---second: "make tester". builds compiled outputs, generated tests, then links with gtest_main, outputs test/bin/tester.
-
-src/
-  test_generator.cc
-  tester.cc
-test/
-  generated/
-    (compiler outputs, .cc files)
-  bin/
-    (execs from running gcc on generated, if we have separate executables)

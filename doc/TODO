@@ -1,10 +1,17 @@
-change config - enable double-tab thingy by default, get Git auto-completion
+-debug makefile with "make -nd <target> > test_debug"
+-have "tests" target make test_generator, run it, then compile tests?
 
-Rework tester.cc, test_generator.cc
+modify Makefile
+-clean up references to TESTSOURCES, TESTOBJS, TEST_ARTS
+-add "tests" target that makes everything in test/generated (.o to build), links with gtest_main
+
+
+building object file from test: g++ -std=c++11 -I lib/googletest/googletest/include/ -c test/src/TestClass.c
+building executable: g++ -pthread lib/googletest/googletest/make/gtest_main.a TestClass.o
 
 Change Compiler to take another ostream as error output.
 
--Test variable_usage.test, which has multiple lines.
+
 
 Get debugger working
 
