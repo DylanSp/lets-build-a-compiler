@@ -60,19 +60,14 @@ struct test_input_params {
 std::vector<test_input_params> initialize_test_params () {
     std::vector<test_input_params> test_params;
     
-    std::string empty_source_name("EmptySource");
-    std::vector<std::string> empty_source_program;
-    std::map<char, int> empty_source_expected_values;
-    test_input_params empty_program { empty_source_name, empty_source_program, empty_source_expected_values };
+    test_input_params empty_program { "EmptyProgram", {}, {} };
     test_params.push_back(empty_program);
     
-    
-    std::string single_constant_name("SingleConstant");
-    std::vector<std::string> single_constant_program(1, "x=1" );
-    std::map<char, int> single_constant_expected_values { {'X', 1} } ;
-    test_input_params single_constant { single_constant_name, single_constant_program, single_constant_expected_values };
+    test_input_params single_constant {"SingleConstant", {1, "x=1"}, { {'X', 1} } };
     test_params.push_back(single_constant);
     
+    test_input_params addition { "Addition", {1, "x=1+2"}, { {'X', 3} } };
+    test_params.push_back(addition);
     
     return test_params;
 }
