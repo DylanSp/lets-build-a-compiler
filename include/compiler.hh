@@ -43,7 +43,16 @@ private:
     
     //parsing methods
     void start_symbol();
-
+    void assignment();
+    void expression();
+    void term();
+    void factor();
+    void ident();
+    void add();
+    void subtract();
+    void multiply();
+    void divide();
+    
     //cradle methods
     void report_error(const std::string err) const;
     void abort(const std::string err) const;
