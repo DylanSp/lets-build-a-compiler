@@ -2,23 +2,23 @@
 
 CC = g++
 CFLAGS = -std=c++11 -Wall -Wextra -Wpedantic -pedantic-errors -g
+SRCEXT = cc
 
 SRCDIR = src
-TESTSRC = test
+TESTDIR = test/generated
 BUILDDIR = build
+TESTBUILDDIR = test/build
 TARGET = 
-SRCEXT = cc
 SOURCES = $(wildcard $(SRCDIR)/*.$(SRCEXT))
 TESTSOURCES = $(wildcard $(TESTDIR)/*.$(SRCEXT))
 OBJECTS = $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
-TESTOBJS = $(patsubst $(TESTDIR)/%,$(BUILDDIR)/%,$(TESTSOURCES:.$(SRCEXT)=.o))
+TESTOBJS = $(patsubst $(TESTDIR)/%,$(TESTBUILDDIR)/%,$(TESTSOURCES:.$(SRCEXT)=.o))
 
-# artifacts from test program
-TEST_ARTS = test/src/compiled_out.cc test/bin/*
-LIB = 
-INC = -I include -I src
+LIB = -pthread 
+INC = -I include -I src -I lib/googletest/googletest/include 
 
-all: $(TARGET)
+#all: $(TARGET)
+all: interactive full tests
 
 $(TARGET): $(OBJECTS)
 	@echo " Linking..."
@@ -28,13 +28,24 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
   
+$(TESTBUILDDIR)/%.o: $(TESTDIR)/%.$(SRCEXT) 
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
+  
+.PHONY: clean
+  
 clean:
 	@echo " Cleaning..."; 
-	$(RM) -r $(BUILDDIR) $(TARGET) $(TEST_ARTS)
+	$(RM) -r $(BUILDDIR) $(TESTBUILDDIR) $(TARGET) $(TESTDIR)
 
-# Tests
-tester: build/compiler.o $(TESTOBJS)
-	$(CC) $(CFLAGS) $^ $(INC) $(LIB) -o bin/tester test/tester.cc 
+# Tests; builds and runs test_generator, then builds run_tests
+tests: test_generator
+	mkdir -p $(TESTDIR)
+	bin/test_generator
+	$(MAKE) run_tests
+	
+run_tests: $(TESTOBJS)
+	$(CC) $(CFLAGS) $(LIB) $(TESTOBJS) lib/googletest/googletest/make/gtest_main.a -o bin/run_tests 
 	
 # Spikes
 interactive: $(OBJECTS)
@@ -42,3 +53,8 @@ interactive: $(OBJECTS)
   
 full: $(OBJECTS)
 	$(CC) $(CFLAGS) $^ $(INC) $(LIB) -o bin/full_compiler spikes/full_compiler.cc
+	
+test_generator: $(OBJECTS)
+	$(CC) $(CFLAGS) $^ $(INC) $(LIB) -o bin/test_generator spikes/test_generator.cc
+	
+	

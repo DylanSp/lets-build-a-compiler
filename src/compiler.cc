@@ -62,6 +62,7 @@ void Compiler::compile_start (const std::string class_name) const {
     define_constructor(class_name);
     define_cpu_pop();
     define_getters();
+    define_is_stack_empty();
     
     emit_line("void run() {");  //begin definition of run()
 }
@@ -71,7 +72,7 @@ void Compiler::compile_end () const {
     
     emit_line("}");     //end definition of run()
     define_dump();
-    emit_line("};");    //close class declaration
+    emit_line("};");    //close class definition
 }
 
 void Compiler::add_includes() const {
@@ -93,6 +94,7 @@ void Compiler::define_constructor(const std::string class_name) const {
     emit_line(": cpu_stack()");
     emit_line(", cpu_registers(" + std::to_string(NUM_REGISTERS) + ", 0)");
     emit_line(", cpu_variables()");
+    emit_line("{}");
 }
 
 //emit definition of a function for easier stack handling
@@ -111,6 +113,11 @@ void Compiler::define_getters() const {
     emit_line("return cpu_variables.at(var_name);}");
     
     //no getter for stack; stack should always be empty
+}
+
+void Compiler::define_is_stack_empty() const {
+    emit_line("bool is_stack_empty() {");
+    emit_line("return cpu_stack.empty();}");
 }
 
 void Compiler::define_dump() const {
