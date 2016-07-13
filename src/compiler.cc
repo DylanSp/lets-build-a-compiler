@@ -120,6 +120,7 @@ void Compiler::define_is_stack_empty() const {
     emit_line("return cpu_stack.empty();}");
 }
 
+
 void Compiler::define_dump() const {
     //TODO - are these dumps necessary?
     
@@ -143,7 +144,113 @@ void Compiler::define_dump() const {
 
 
 void Compiler::start_symbol () {
+    assignment();
+}
+
+void Compiler::assignment () {
+    char name = get_name();
+    match('=');
+    expression();
+    emit_line(std::string("cpu_variables['") + name + "'] = cpu_registers.at(0);");
+}
+
+void Compiler::expression () {
     
+    if (is_in(m_input_stream.peek(), ADD_OPS)) {
+        emit_line("cpu_registers.at(0) = 0;");  //support unary +/- by inserting 0 before the op
+    } else {
+        term();
+    }
+    
+    while (is_in(m_input_stream.peek(), ADD_OPS)) {
+        emit_line("cpu_stack.push(cpu_registers.at(0));");
+        switch (m_input_stream.peek()) {
+            case '+':
+                add();
+                break;
+            case '-':
+                subtract();
+                break;
+            default: //should never be reached!
+                assert(false);
+        }
+    }
+}
+    
+void Compiler::term () {
+    factor();
+    while (is_in(m_input_stream.peek(), MULT_OPS)) {
+        emit_line("cpu_stack.push(cpu_registers.at(0));");
+        switch (m_input_stream.peek()) {
+            case '*':
+                multiply();
+                break;
+            case '/':
+                divide();
+                break;
+            default: //should never be reached!
+                assert(false);
+        }
+    }
+}
+    
+void Compiler::factor () {
+    
+    if (m_input_stream.peek() == '(') {
+        match('(');
+        expression();
+        match(')');
+    } else if (std::isalpha(m_input_stream.peek())) {
+        ident();
+    } else {
+        char expr = get_num();
+        if (expr != ERR_CHAR) {
+            emit_line(std::string("cpu_registers.at(0) = ") + expr + ";");
+        } 
+    }
+}
+
+//handles function calls/variables
+void Compiler::ident () {
+    char name = get_name();
+
+    if (name != ERR_CHAR) { 
+        if (m_input_stream.peek() == '(') {//function call
+            match('(');
+            match(')');
+            emit_line(std::string(1, name) + "();");
+        } else {
+            emit_line(std::string("cpu_registers.at(0) = cpu_variables.at(\'") + name + "\');");
+        }
+    } 
+}
+
+void Compiler::add () {
+    match('+');
+    term();
+    emit_line("cpu_registers.at(0) = cpu_stack.top() + cpu_registers.at(0);");
+    emit_line("cpu_stack.pop();");
+}
+
+void Compiler::subtract () {
+    match('-');
+    term();
+    emit_line("cpu_registers.at(0) = cpu_stack.top() - cpu_registers.at(0);");
+    emit_line("cpu_stack.pop();");
+}
+
+void Compiler::multiply() {
+    match('*');
+    factor();
+    emit_line("cpu_registers.at(0) = cpu_stack.top() * cpu_registers.at(0);");
+    emit_line("cpu_stack.pop();");
+}
+
+void Compiler::divide() {
+    match('/');
+    factor();
+    emit_line("cpu_registers.at(0) = cpu_stack.top() / cpu_registers.at(0);");
+    emit_line("cpu_stack.pop();");
 }
 
 //cradle methods
