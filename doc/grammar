@@ -1,0 +1,9 @@
+<assignment>    ::== <ident> = <expression>
+<expression>    ::== <term> [ <addop> <term> ]*
+<term>          ::== <factor> [ <multop> <factor> ]*
+<factor>        ::== <digit> 
+                     | (<expression)
+                     | <ident>      
+                     | <ident> () 
+<ident>         ::== <letter>
+<letter>        ::== A | B | (...) | Z
