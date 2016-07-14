@@ -91,6 +91,7 @@ std::vector<test_input_params> initialize_test_params () {
         {"MultiCharMultiDigit", {"test=34"}, {{"TEST", 34}}},
         {"SimpleWhitespace", {"test = 5 + 6"}, {{"TEST", 11}}},
         {"TabWhitespace", {"test\t=\t 7 + 8"}, {{"TEST", 15}}},
+        {"TrailingZeroes", {"test = 10 + 2"}, {{"TEST", 12}}},
         {"TheKitchenSink", {"intermediate = 12+34-56*8/64","result = -\t(intermediate+123)*456"}, 
                            {{"INTERMEDIATE", 39}, {"RESULT", -73872}}},
     };

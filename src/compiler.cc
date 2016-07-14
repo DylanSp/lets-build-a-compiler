@@ -327,6 +327,9 @@ std::string Compiler::get_num () {
     if (!std::isdigit(m_input_stream.peek())) {
         expected("Integer");
         return ERR_STRING;
+    } else if (m_input_stream.peek() == '0') {
+        expected("Non-zero initial digit");
+        return ERR_STRING;
     } else {
         while (std::isdigit(m_input_stream.peek())) {
             num += static_cast<char>(m_input_stream.get()); 

@@ -1,6 +1,9 @@
 clean up code - vectors can be constructed with {elem} instead of (1, elem)
 fix full_compiler to use new directory structure, add target for compiling its output in Makefile
 
+Look over tutorial notes - do I want to do chap4? merge chap3 with master? 
+Decide whether to allow multi-char tokens going forward.
+
 -CompilerReader class, handles batch processing of a file - ONLY IF NECESSARY
 -uses while(getline) to parse file into vector<string>, calls compile_full
 
@@ -12,6 +15,8 @@ Testing:
 -have a static enum(?) of response types in Compiler: "compilation ok", "syntax error", "type error", etc.
 -test methods can check if response is right type
 -compile_full() returns this type
+-create test battery to check handling of input with bad syntax.
+
 
 Change Compiler to take another ostream as error output.
 
