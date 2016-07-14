@@ -1,6 +1,3 @@
-clean up code - vectors can be constructed with {elem} instead of (1, elem)
-fix full_compiler to use new directory structure, add target for compiling its output in Makefile
-
 Look over tutorial notes - do I want to do chap4? merge chap3 with master? 
 Decide whether to allow multi-char tokens going forward.
 
@@ -17,6 +14,7 @@ Testing:
 -compile_full() returns this type
 -create test battery to check handling of input with bad syntax.
 
+Add license (which?) to repo.
 
 Change Compiler to take another ostream as error output.
 
