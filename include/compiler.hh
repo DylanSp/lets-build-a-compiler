@@ -28,6 +28,7 @@ private:
     static const std::string ERR_STRING;
     static const std::unordered_set<char> ADD_OPS;
     static const std::unordered_set<char> MULT_OPS;
+    static const std::unordered_set<char> WHITESPACE;
 
     void compile_start(const std::string class_name) const;
     void compile_end() const;
@@ -59,6 +60,7 @@ private:
     void abort(const std::string err) const;
     void expected(const std::string expect) const;
     void expected(const char c) const;
+    void skip_whitespace();
     void match(const char c);
     std::string get_name ();
     std::string get_num ();

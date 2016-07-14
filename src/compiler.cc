@@ -15,6 +15,7 @@ const size_t Compiler::NUM_REGISTERS = 8;
 const std::string Compiler::ERR_STRING("\0");
 const std::unordered_set<char> Compiler::ADD_OPS({'+', '-'});
 const std::unordered_set<char> Compiler::MULT_OPS({'*', '/'});
+const std::unordered_set<char> Compiler::WHITESPACE({' ', '\t'});
     
 //constructors
 Compiler::Compiler (std::ostream& output) 
@@ -35,6 +36,7 @@ void Compiler::compile_intermediate (const std::string input_line) {
     
     try {
         start_symbol();
+        assert(m_input_stream.rdbuf()->in_avail() == 0);
     } catch (std::exception &ex) {
         std::cerr << ex.what() << '\n';
         throw std::runtime_error("Compilation failed.\n");
@@ -285,13 +287,20 @@ void Compiler::expected(const char c) const {
     expected(std::string(1, c));
 }
 
+void Compiler::skip_whitespace () {
+    while (is_in(m_input_stream.peek(), WHITESPACE)) {
+        m_input_stream.get();  //intentionally discard result 
+    }
+}
+
 //checks if next character matches; if so, consume that character
 void Compiler::match(const char c) {
     
-    if (m_input_stream.peek() == c) {
-        m_input_stream.get(); 
-    } else {
+    if (m_input_stream.peek() != c) {
         expected(c);
+    } else {
+        m_input_stream.get();
+        skip_whitespace();
     }
 }
 
@@ -306,6 +315,7 @@ std::string Compiler::get_name () {
         while (std::isalnum(m_input_stream.peek())) {
             name += static_cast<char>(std::toupper(m_input_stream.get()));   
         }
+        skip_whitespace();
         return name;
     }
 }
@@ -321,6 +331,7 @@ std::string Compiler::get_num () {
         while (std::isdigit(m_input_stream.peek())) {
             num += static_cast<char>(m_input_stream.get()); 
         }
+        skip_whitespace();
         return num;
     }
 }
