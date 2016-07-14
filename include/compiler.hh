@@ -25,7 +25,7 @@ public:
     
 private:
     static const size_t NUM_REGISTERS;          //number of registers available to the compiled code
-    static const char ERR_CHAR;
+    static const std::string ERR_STRING;
     static const std::unordered_set<char> ADD_OPS;
     static const std::unordered_set<char> MULT_OPS;
 
@@ -40,7 +40,7 @@ private:
     void define_getters() const;
     void define_is_stack_empty() const;
     void define_dump() const;
-    void define_function (char ident) const;
+    void define_function (const std::string ident) const;
     
     //parsing methods
     void start_symbol();
@@ -60,8 +60,8 @@ private:
     void expected(const std::string expect) const;
     void expected(const char c) const;
     void match(const char c);
-    char get_name ();
-    char get_num ();
+    std::string get_name ();
+    std::string get_num ();
     void emit (std::string s) const;
     void emit_line (std::string s) const;
     

@@ -12,7 +12,7 @@
 namespace ds_compiler {
     
 const size_t Compiler::NUM_REGISTERS = 8;
-const char Compiler::ERR_CHAR = '\0';
+const std::string Compiler::ERR_STRING("\0");
 const std::unordered_set<char> Compiler::ADD_OPS({'+', '-'});
 const std::unordered_set<char> Compiler::MULT_OPS({'*', '/'});
     
@@ -86,7 +86,7 @@ void Compiler::add_includes() const {
 void Compiler::define_member_variables() const {
     emit_line("std::stack<int> cpu_stack;");
     emit_line("std::vector<int> cpu_registers;");
-    emit_line("std::unordered_map<char, int> cpu_variables;");
+    emit_line("std::unordered_map<std::string, int> cpu_variables;");
 }
 
 void Compiler::define_constructor(const std::string class_name) const {
@@ -109,7 +109,7 @@ void Compiler::define_getters() const {
     emit_line("int get_register(int index) {");
     emit_line("return cpu_registers.at(index);}");
     
-    emit_line("int get_variable(char var_name) {");
+    emit_line("int get_variable(std::string var_name) {");
     emit_line("return cpu_variables.at(var_name);}");
     
     //no getter for stack; stack should always be empty
@@ -148,10 +148,10 @@ void Compiler::start_symbol () {
 }
 
 void Compiler::assignment () {
-    char name = get_name();
+    std::string name = get_name();
     match('=');
     expression();
-    emit_line(std::string("cpu_variables['") + name + "'] = cpu_registers.at(0);");
+    emit_line("cpu_variables[\"" + name + "\"] = cpu_registers.at(0);");
 }
 
 void Compiler::expression () {
@@ -203,25 +203,25 @@ void Compiler::factor () {
     } else if (std::isalpha(m_input_stream.peek())) {
         ident();
     } else {
-        char expr = get_num();
-        if (expr != ERR_CHAR) {
-            emit_line(std::string("cpu_registers.at(0) = ") + expr + ";");
+        std::string expr = get_num();
+        if (expr != ERR_STRING) {
+            emit_line("cpu_registers.at(0) = " + expr + ";");
         } 
     }
 }
 
 //handles function calls/variables
 void Compiler::ident () {
-    char name = get_name();
+    std::string name = get_name();
 
-    if (name != ERR_CHAR) { 
+    if (name != ERR_STRING) { 
         if (m_input_stream.peek() == '(') {//function call
             match('(');
             match(')');
             define_function(name);
-            emit_line(std::string(1, name) + "();");
+            emit_line(name + "();");
         } else {
-            emit_line(std::string("cpu_registers.at(0) = cpu_variables.at(\'") + name + "\');");
+            emit_line("cpu_registers.at(0) = cpu_variables.at(\"" + name + "\");");
         }
     } 
 }
@@ -255,8 +255,8 @@ void Compiler::divide() {
 }
 
 //defines an empty lambda so output compiles
-void Compiler::define_function (char ident) const {
-    emit_line(std::string("auto ") + ident + " = [](){};");
+void Compiler::define_function (std::string ident) const {
+    emit_line("auto " + ident + " = [](){};");
 }
 
 //cradle methods
@@ -296,23 +296,32 @@ void Compiler::match(const char c) {
 }
 
 // gets a valid identifier from input stream
-char Compiler::get_name () {
+std::string Compiler::get_name () {
+    std::string name;
+    
     if (!std::isalpha(m_input_stream.peek())) {
         expected("Name");
-        return ERR_CHAR;
+        return ERR_STRING;
     } else {
-        return std::toupper(m_input_stream.get());
+        while (std::isalnum(m_input_stream.peek())) {
+            name += static_cast<char>(std::toupper(m_input_stream.get()));   
+        }
+        return name;
     }
-    
 }
 
 //gets a number
-char Compiler::get_num () {
+std::string Compiler::get_num () {
+    std::string num;
+    
     if (!std::isdigit(m_input_stream.peek())) {
         expected("Integer");
-        return ERR_CHAR;
+        return ERR_STRING;
     } else {
-        return m_input_stream.get();
+        while (std::isdigit(m_input_stream.peek())) {
+            num += static_cast<char>(m_input_stream.get()); 
+        }
+        return num;
     }
 }
 

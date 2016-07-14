@@ -1,7 +1,15 @@
+chapter 3 - multi-character tokens
+clean up code - vectors can be constructed with {elem} instead of (1, elem)
+fix full_compiler to use new directory structure, add target for compiling its output in Makefile
+
 -CompilerReader class, handles batch processing of a file - ONLY IF NECESSARY
 -uses while(getline) to parse file into vector<string>, calls compile_full
 
 Testing:
+-have test_generator read from input files?
+--if so, this can speed test generation, as test_generator.cc won't be changing;
+  makefile can manage dependencies (have test/build/%.o depend on test/src/%.o)
+
 -have a static enum(?) of response types in Compiler: "compilation ok", "syntax error", "type error", etc.
 -test methods can check if response is right type
 -compile_full() returns this type
@@ -10,7 +18,7 @@ Change Compiler to take another ostream as error output.
 
 
 
-Get debugger working
+Get cloud9 debugger working
 
 
 
