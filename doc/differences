@@ -9,7 +9,13 @@ Char/string processing:
 -compile_intermediate() handles a single line (read into a stringstream), compile_full() handles a vector of lines. 
 -Separation by newlines is handled by a driver program (interactive_compiler, full_compiler, test_generator).
 
--variables are looked up in a std::map
--registers are simulated by array
--functions are defined as empty lambdas, don't actually do anything. 
---if they're part of an assignment, variable gets register 0.
+Special characters are recognized by membership in std::unordered_set, with aid of the is_in() helper method.
+
+Variables are looked up in a std::map.
+
+Registers are simulated by an array
+
+Functions:
+-Functions are defined as empty lambdas, don't actually do anything. 
+-if they're part of an assignment, variable gets value of register 0.
+
