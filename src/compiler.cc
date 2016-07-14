@@ -284,7 +284,7 @@ void Compiler::expected(const std::string expect) const {
 //overload to handle single characters; 
 //prevents having to construct a string whenever calling expected()
 void Compiler::expected(const char c) const {
-    expected(std::string(1, c));
+    expected(std::string{c});
 }
 
 void Compiler::skip_whitespace () {
