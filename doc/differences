@@ -19,3 +19,5 @@ Functions:
 -Functions are defined as empty lambdas, don't actually do anything. 
 -if they're part of an assignment, variable gets value of register 0.
 
+Grammar:
+-Numeric literals can't begin with 0, to avoid inadvertent use of C++ octal literals.

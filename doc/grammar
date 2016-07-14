@@ -1,9 +1,16 @@
-<assignment>    ::== <ident> = <expression>
-<expression>    ::== <term> [ <addop> <term> ]*
-<term>          ::== <factor> [ <multop> <factor> ]*
-<factor>        ::== <digit> 
-                     | (<expression)
-                     | <ident>      
-                     | <ident> () 
-<ident>         ::== <letter>
-<letter>        ::== A | B | (...) | Z
+(*  Whitespace at beginning/end of lines and between identifiers and/or expressions is ignored *)
+
+<assignment>        ::== <ident> <optional-space> "=" <expression>
+<expression>        ::== <term> [ <addop> <term> ]*
+<term>              ::== <factor> [ <multop> <factor> ]*
+<factor>            ::== <digit> 
+                         | (<expression)
+                         | <ident>      
+                         | <ident> ()
+                         | <num-literal>
+<ident>             ::== <letter>
+<letter>            ::== "A" | "B" | (...) | "Z"
+<num-literal>       ::== <nonzero-digit> [ <digit> ]*
+<digit>             ::== "0" | <nonzero-digit>
+<nonzero-digit>     ::== "1" | "2" | (...) | "9"
+<optional-space>    ::== ' ' | '\t'
