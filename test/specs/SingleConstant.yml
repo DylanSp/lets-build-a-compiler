@@ -1,0 +1,6 @@
+class_name: SingleConstant
+program_source: 
+  - x=1
+expected_values:
+  X: 1
+    

@@ -3,6 +3,7 @@
 #include <map>
 #include <string>
 #include "compiler.hh"
+#include "yaml-cpp/yaml.h"
 
 //primary test case - GetsCorrectResults
 //checks variable value(s)
@@ -99,12 +100,44 @@ std::vector<test_input_params> initialize_test_params () {
     return test_params;
 }
 
-int main () {
+int main (int argc, char *argv[]) {
+    
+    //validate arguments
+    if (argc < 2) {
+        std::cerr << "Needs at least one argument." << '\n';
+        return 1;
+    }
+    
     const std::string PROJ_ROOT("/home/ubuntu/workspace/");
+    //const std::string SPEC_DIR("test/specs/");
+    const std::string SPEC_DIR("");
+    
+    std::vector<test_input_params> test_params;
+    for (int i = 1; i < argc; ++i) {
+        std::string spec_file_name(PROJ_ROOT + SPEC_DIR + argv[i]);
+        
+        //DEBUG
+        std::cout << "Loading " << spec_file_name << '\n';
+        
+        YAML::Node test_spec = YAML::LoadFile(spec_file_name);
+        
+        test_input_params params;    
+        
+        params.class_name = test_spec["class_name"].as<std::string>();
+        
+        for (auto line : test_spec["program_source"]) {
+            params.program_source.push_back(line.as<std::string>());
+        }
+        
+        for (auto value_pair : test_spec["expected_values"]) {
+            params.expected_values[value_pair.first.as<std::string>()] = value_pair.second.as<int>();
+        }
+
+        test_params.push_back(params);
+    }
+    
     const std::string CLASS_DIR("test/generated/");
     const std::string TEST_DIR("test/generated/");
-    
-    std::vector<test_input_params> test_params = initialize_test_params();
     
     for (auto i : test_params) {
         std::string class_file_name(PROJ_ROOT + CLASS_DIR + i.class_name + ".cc");
