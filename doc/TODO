@@ -5,7 +5,9 @@ Decide whether to allow multi-char tokens going forward.
 -uses while(getline) to parse file into vector<string>, calls compile_full
 
 Testing:
--"tests" target has multiple prereqs, but it rebuilds everything every time, instead of checking if something's modified
+-have Makefile automatically check if test/generated/* files exist, instead of causing errors when make bin/run_tests is called directly
+-http://stackoverflow.com/questions/9744865/how-to-force-revaluation-of-variables-in-makefile
+-have bin/run_tests depend on TESTCLASSSOURCES, TESTCASESOURCES as well?
 
 -have a static enum(?) of response types in Compiler: "compilation ok", "syntax error", "type error", etc.
 -test methods can check if response is right type

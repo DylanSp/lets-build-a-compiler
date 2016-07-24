@@ -14,14 +14,20 @@ SOURCES = $(wildcard $(SRCDIR)/*.$(SRCEXT))
 OBJECTS = $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 SPECDIR = test/specs
 TESTSPECS = $(wildcard $(SPECDIR)/*.$(SPECEXT))
-TESTSOURCES = $(patsubst $(SPECDIR)/%,$(TESTDIR)/%,$(TESTSPECS:.$(SPECEXT)=.$(SRCEXT)))
-TESTOBJS = $(wildcard $(TESTBUILDDIR)/*.o)
+TESTCLASSSOURCES = $(patsubst $(SPECDIR)/%,$(TESTDIR)/%,$(TESTSPECS:.$(SPECEXT)=.$(SRCEXT)))
+TESTCASESOURCES = $(patsubst %.cc,%Test.cc,$(TESTCLASSSOURCES))
+TESTCLASSOBJS = $(patsubst $(TESTDIR)/%,$(TESTBUILDDIR)/%,$(TESTCLASSSOURCES:.$(SRCEXT)=.o))
+TESTCASEOBJS = $(patsubst $(TESTDIR)/%,$(TESTBUILDDIR)/%,$(TESTCASESOURCES:.$(SRCEXT)=.o))
 
 LIB = -pthread -L /usr/local/lib 
 INC = -I include -I src -I lib/googletest/googletest/include -I /usr/local/include
 
 #all: $(TARGET)
 all: interactive full tests
+
+interactive: bin/interactive_compiler
+
+full: bin/full_compiler
 
 $(TARGET): $(OBJECTS)
 	@echo " Linking..."
@@ -31,7 +37,7 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
   
-$(TESTDIR)/%.$(SRCEXT): $(SPECDIR)/%.$(SPECEXT) test_generator
+$(TESTDIR)/%.$(SRCEXT): $(SPECDIR)/%.$(SPECEXT) bin/test_generator
 	@mkdir -p $(TESTDIR)
 	bin/test_generator $<
   
@@ -46,20 +52,21 @@ clean:
 	$(RM) -r $(BUILDDIR) $(TESTBUILDDIR) $(TARGET) $(TESTDIR)
 
 # Tests; makes sure all generated test files exist, then recursive make call re-evaluates TESTOBJS
-tests: $(TESTSOURCES)
-	$(MAKE) run_tests
+tests: $(TESTCLASSSOURCES) $(TESTCASESOURCES)
+	$(MAKE) bin/run_tests
 	
-run_tests: $(TESTOBJS)
-	$(CC) $(CFLAGS) $(LIB) $(TESTOBJS) lib/googletest/googletest/make/gtest_main.a -o bin/run_tests 
+# DO NOT CALL THIS DIRECTLY
+bin/run_tests: $(TESTCLASSOBJS) $(TESTCASEOBJS)
+	$(CC) $(CFLAGS) $(LIB) $(TESTCLASSOBJS) $(TESTCASEOBJS) lib/googletest/googletest/make/gtest_main.a -o bin/run_tests 
 	
-test_generator: $(OBJECTS)
+bin/test_generator: $(OBJECTS)
 	$(CC) $(CFLAGS) $^ $(INC) $(LIB) -o bin/test_generator spikes/test_generator.cc -lyaml-cpp 
 	
 # Spikes
-interactive: $(OBJECTS)
+bin/interactive_compiler: $(OBJECTS)
 	$(CC) $(CFLAGS) $^ $(INC) $(LIB) -o bin/interactive_compiler spikes/interactive_compiler.cc	
   
-full: $(OBJECTS)
+bin/full_compiler: $(OBJECTS)
 	mkdir -p test/src
 	$(CC) $(CFLAGS) $^ $(INC) $(LIB) -o bin/full_compiler spikes/full_compiler.cc
 
