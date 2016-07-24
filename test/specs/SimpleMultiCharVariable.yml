@@ -1,0 +1,5 @@
+class_name: SimpleMultiCharVariable
+program_source:
+  - test=1
+expected_values:
+  TEST: 1

@@ -1,0 +1,7 @@
+class_name: TheKitchenSink
+program_source:
+  - intermediate = 12+34-56*8/64
+  - "result = -\t(intermediate+123)*456"
+expected_values:
+  INTERMEDIATE: 39
+  RESULT: -73872

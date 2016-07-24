@@ -1,0 +1,5 @@
+class_name: SimpleParens
+program_source:
+  - x=(1+2)
+expected_values:
+  X: 3

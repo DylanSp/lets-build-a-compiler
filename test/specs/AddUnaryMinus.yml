@@ -1,5 +1,5 @@
-class_name: SingleConstant
+class_name: AddUnaryMinus
 program_source:
-  - x=1
+  - x=-1+2
 expected_values:
   X: 1

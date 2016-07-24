@@ -1,0 +1,5 @@
+class_name: MultiCharMultiDigit
+program_source:
+  - test=34
+expected_values:
+  TEST: 34

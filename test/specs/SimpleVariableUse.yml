@@ -1,0 +1,7 @@
+class_name: SimpleVariableUse
+program_source:
+  - x=1
+  - y=x
+expected_values:
+  X: 1
+  Y: 1
