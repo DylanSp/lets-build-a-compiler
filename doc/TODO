@@ -5,10 +5,7 @@ Decide whether to allow multi-char tokens going forward.
 -uses while(getline) to parse file into vector<string>, calls compile_full
 
 Testing:
--have test_generator read from input files?
---if so, this can speed test generation, as test_generator.cc won't be changing;
-  makefile can manage dependencies (have test/build/%.o depend on test/src/%.o)
--split single "tests" target into multiple targets in Makefile
+-"tests" target has multiple prereqs, but it rebuilds everything every time, instead of checking if something's modified
 
 -have a static enum(?) of response types in Compiler: "compilation ok", "syntax error", "type error", etc.
 -test methods can check if response is right type

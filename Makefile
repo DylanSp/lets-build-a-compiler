@@ -3,6 +3,7 @@
 CC = g++
 CFLAGS = -std=c++11 -Wall -Wextra -Wpedantic -pedantic-errors -g
 SRCEXT = cc
+SPECEXT = yml
 
 SRCDIR = src
 TESTDIR = test/generated
@@ -10,10 +11,11 @@ BUILDDIR = build
 TESTBUILDDIR = test/build
 TARGET = 
 SOURCES = $(wildcard $(SRCDIR)/*.$(SRCEXT))
-TESTSOURCES = $(wildcard $(TESTDIR)/*.$(SRCEXT))
 OBJECTS = $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
-TESTOBJS = $(patsubst $(TESTDIR)/%,$(TESTBUILDDIR)/%,$(TESTSOURCES:.$(SRCEXT)=.o))
-TESTSPECS = $(wildcard test/specs/*.yml)
+SPECDIR = test/specs
+TESTSPECS = $(wildcard $(SPECDIR)/*.$(SPECEXT))
+TESTSOURCES = $(patsubst $(SPECDIR)/%,$(TESTDIR)/%,$(TESTSPECS:.$(SPECEXT)=.$(SRCEXT)))
+TESTOBJS = $(wildcard $(TESTBUILDDIR)/*.o)
 
 LIB = -pthread -L /usr/local/lib 
 INC = -I include -I src -I lib/googletest/googletest/include -I /usr/local/include
@@ -29,6 +31,10 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
   
+$(TESTDIR)/%.$(SRCEXT): $(SPECDIR)/%.$(SPECEXT) test_generator
+	@mkdir -p $(TESTDIR)
+	bin/test_generator $<
+  
 $(TESTBUILDDIR)/%.o: $(TESTDIR)/%.$(SRCEXT) 
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
@@ -39,10 +45,8 @@ clean:
 	@echo " Cleaning..."; 
 	$(RM) -r $(BUILDDIR) $(TESTBUILDDIR) $(TARGET) $(TESTDIR)
 
-# Tests; builds and runs test_generator, then builds run_tests
-tests: test_generator $(TESTSPECS)
-	mkdir -p $(TESTDIR)
-	bin/test_generator $(TESTSPECS)
+# Tests; makes sure all generated test files exist, then recursive make call re-evaluates TESTOBJS
+tests: $(TESTSOURCES)
 	$(MAKE) run_tests
 	
 run_tests: $(TESTOBJS)
