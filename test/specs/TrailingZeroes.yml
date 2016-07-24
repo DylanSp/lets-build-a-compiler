@@ -1,0 +1,5 @@
+class_name: TrailingZeroes
+program_source:
+  - test = 10 + 2
+expected_values:
+  TEST: 12

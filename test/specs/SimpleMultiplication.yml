@@ -1,0 +1,5 @@
+class_name: SimpleMultiplication
+program_source:
+  - x=2*2
+expected_values:
+  X: 4

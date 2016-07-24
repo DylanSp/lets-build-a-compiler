@@ -1,0 +1,5 @@
+class_name: SimpleSubtraction
+program_source:
+  - x=4-1
+expected_values:
+  X: 3

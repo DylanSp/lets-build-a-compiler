@@ -1,0 +1,5 @@
+class_name: SimpleDivision
+program_source:
+  - x=4/2
+expected_values:
+  X: 2

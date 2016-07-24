@@ -1,0 +1,5 @@
+class_name: SubtractUnaryMinus
+program_source:
+  - x=-1-1
+expected_values:
+  X: -2

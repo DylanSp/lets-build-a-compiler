@@ -1,0 +1,5 @@
+class_name: AddDivPrecedence
+program_source:
+  - x=7+8/2
+expected_values:
+  X: 11

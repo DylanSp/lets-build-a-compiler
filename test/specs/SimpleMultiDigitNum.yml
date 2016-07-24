@@ -1,0 +1,5 @@
+class_name: SimpleMultiDigitNum
+program_source:
+  - x=23
+expected_values:
+  X: 23

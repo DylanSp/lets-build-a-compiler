@@ -1,0 +1,5 @@
+class_name: MultiplyUnaryMinus
+program_source:
+  - x=-1*3
+expected_values:
+  X: -3

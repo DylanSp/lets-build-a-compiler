@@ -1,0 +1,7 @@
+class_name: VariableSubtraction
+program_source:
+  - x=3
+  - y=x-2
+expected_values:
+  X: 3
+  Y: 1
