@@ -8,13 +8,20 @@ Testing:
 -have test_generator read from input files?
 --if so, this can speed test generation, as test_generator.cc won't be changing;
   makefile can manage dependencies (have test/build/%.o depend on test/src/%.o)
+-split single "tests" target into multiple targets in Makefile
 
 -have a static enum(?) of response types in Compiler: "compilation ok", "syntax error", "type error", etc.
 -test methods can check if response is right type
 -compile_full() returns this type
 -create test battery to check handling of input with bad syntax.
+--create a custom Exception class deriving std::runtime_error, use google test's EXPECT_THROW
 
-Add license (which?) to repo.
+For pretty-printing STL containers
+-http://stackoverflow.com/questions/4850473/pretty-print-c-stl-containers
+-http://louisdx.github.io/cxx-prettyprint/
+
+Re-examine using boost for some things like filesystem paths, just to gain familiarity
+
 
 Change Compiler to take another ostream as error output.
 
