@@ -37,3 +37,5 @@ Long-term (after finishing tutorial):
 -develop enhanced type-safety
 -figure out interesting ideas for semantics to play with
 -build a self-hosting compiler
+-optimization
+--see ideas referenced in http://joeduffyblog.com/2015/12/19/safe-native-code/
