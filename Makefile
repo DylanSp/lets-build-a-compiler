@@ -31,6 +31,8 @@ tests: bin/run_tests
 yaml_parser: bin/yaml_parser
 spec_generator: bin/spec_generator
 
+.PRECIOUS: test/generated/%.$(SRCEXT)
+
 $(TARGET): $(OBJECTS)
 	@echo " Linking..."
 	$(CC) $^ -o $(TARGET) $(LIB)
