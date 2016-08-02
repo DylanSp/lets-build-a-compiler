@@ -1,0 +1,23 @@
+Differences from tutorial:
+
+Stream processing:
+-No lookahead variable; use peek() instead
+-No separate GetChar() function; use get() instead
+
+Char/string processing:
+-No separate isNum(), isAlpha(), isAlNum() functions; use native functions from cctype
+-compile_intermediate() handles a single line (read into a stringstream), compile_full() handles a vector of lines. 
+-Separation by newlines is handled by a driver program (interactive_compiler, full_compiler, test_generator).
+
+Special characters are recognized by membership in std::unordered_set, with aid of the is_in() helper method.
+
+Variables are looked up in a std::map.
+
+Registers are simulated by an array
+
+Functions:
+-Functions are defined as empty lambdas, don't actually do anything. 
+-if they're part of an assignment, variable gets value of register 0.
+
+Grammar:
+-Numeric literals can't begin with 0, to avoid inadvertent use of C++ octal literals.

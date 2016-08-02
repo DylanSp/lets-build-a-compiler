@@ -1,16 +1,30 @@
+Look over tutorial notes - do I want to do chap4? merge chap3 with master? 
+-don't do chap4.
+
+Decide whether to allow multi-char tokens going forward.
+-don't, complicates things with conditionals.
+
 -CompilerReader class, handles batch processing of a file - ONLY IF NECESSARY
 -uses while(getline) to parse file into vector<string>, calls compile_full
 
-Testing:
 -have a static enum(?) of response types in Compiler: "compilation ok", "syntax error", "type error", etc.
 -test methods can check if response is right type
 -compile_full() returns this type
+-create test battery to check handling of input with bad syntax.
+--create a custom Exception class deriving std::runtime_error, use google test's EXPECT_THROW
+
+For pretty-printing STL containers
+-http://stackoverflow.com/questions/4850473/pretty-print-c-stl-containers
+-http://louisdx.github.io/cxx-prettyprint/
+
+Re-examine using boost for some things like filesystem paths, just to gain familiarity
+
 
 Change Compiler to take another ostream as error output.
 
 
 
-Get debugger working
+Get cloud9 debugger working
 
 
 
@@ -21,3 +35,5 @@ Long-term (after finishing tutorial):
 -develop enhanced type-safety
 -figure out interesting ideas for semantics to play with
 -build a self-hosting compiler
+-optimization
+--see ideas referenced in http://joeduffyblog.com/2015/12/19/safe-native-code/

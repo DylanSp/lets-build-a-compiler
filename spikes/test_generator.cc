@@ -1,17 +1,19 @@
 #include <iostream>
 #include <fstream>
 #include <map>
+#include <string>
 #include "compiler.hh"
+#include "yaml-cpp/yaml.h"
 
 //primary test case - GetsCorrectResults
 //checks variable value(s)
 void generate_correct_functionality_test (const std::string class_name, 
-                                          std::map<char, int> expected_values, 
+                                          std::map<std::string, int> expected_values, 
                                           std::ofstream& ofs) {
     std::string test_class_name = class_name + "Class";
     ofs << "TEST_F(" << test_class_name << ", GetsCorrectResults ) {" << '\n';
     for (auto test : expected_values) {
-        ofs << "EXPECT_EQ(" << test.second << ", tested_object.get_variable('" << test.first << "'));" << '\n';
+        ofs << "EXPECT_EQ(" << test.second << ", tested_object.get_variable(\"" << test.first << "\"));" << '\n';
     }
     ofs << "}" << '\n';
     
@@ -54,37 +56,41 @@ void create_testable_class (const std::string class_name,
 struct test_input_params {
     std::string class_name;
     std::vector<std::string> program_source;
-    std::map<char, int> expected_values;
+    std::map<std::string, int> expected_values;
 };
 
-std::vector<test_input_params> initialize_test_params () {
-    std::vector<test_input_params> test_params;
+//arguments - path (from project root) to .yml test spec
+int main (int argc, char *argv[]) {
     
-    std::string empty_source_name("EmptySource");
-    std::vector<std::string> empty_source_program;
-    std::map<char, int> empty_source_expected_values;
-    test_input_params empty_program { empty_source_name, empty_source_program, empty_source_expected_values };
-    test_params.push_back(empty_program);
+    //validate arguments
+    if (argc < 2) {
+        std::cerr << "Needs at least one argument." << '\n';
+        return 1;
+    }
     
-    /*
-    std::string single_constant_name("SingleConstant");
-    std::vector<std::string> single_constant_program;
-    single_constant_program.push_back("x = 1");
-    std::map<char, int> single_constant_expected_values;
-    single_constant_expected_values['X'] = 1;
-    test_input_params single_constant { single_constant_name, single_constant_program, single_constant_expected_values };
-    test_params.push_back(single_constant);
-    */
-    
-    return test_params;
-}
-
-int main () {
     const std::string PROJ_ROOT("/home/ubuntu/workspace/");
+    
+    std::vector<test_input_params> test_params;
+    for (int i = 1; i < argc; ++i) {
+        std::string spec_file_name(PROJ_ROOT + argv[i]);
+        YAML::Node test_spec = YAML::LoadFile(spec_file_name);
+        test_input_params params;    
+    
+        params.class_name = test_spec["class_name"].as<std::string>();
+        
+        for (auto line : test_spec["program_source"]) {
+            params.program_source.push_back(line.as<std::string>());
+        }
+        
+        for (auto value_pair : test_spec["expected_values"]) {
+            params.expected_values[value_pair.first.as<std::string>()] = value_pair.second.as<int>();
+        }
+
+        test_params.push_back(params);
+    }
+    
     const std::string CLASS_DIR("test/generated/");
     const std::string TEST_DIR("test/generated/");
-    
-    std::vector<test_input_params> test_params = initialize_test_params();
     
     for (auto i : test_params) {
         std::string class_file_name(PROJ_ROOT + CLASS_DIR + i.class_name + ".cc");
