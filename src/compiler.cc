@@ -17,6 +17,7 @@ const std::unordered_set<char> Compiler::ADD_OPS({'+', '-'});
 const std::unordered_set<char> Compiler::MULT_OPS({'*', '/'});
 const char Compiler::END_CHAR = 'e';
 const std::unordered_set<char> Compiler::BLOCK_ENDS({END_CHAR});
+const char Compiler::IF_CHAR = 'i';
     
 //constructors
 Compiler::Compiler (std::ostream& output) 
@@ -160,10 +161,37 @@ void Compiler::program () {
 
 void Compiler::block () {
     while (!is_in(m_input_stream.peek(), BLOCK_ENDS)) {
-        other();
+        switch (m_input_stream.peek()) {
+            case IF_CHAR:
+                parse_if();
+                break;
+            default:
+                other();
+                break;
+        }
     }
 }
 
+void Compiler::parse_if() {
+    match(IF_CHAR);
+    std::string label = new_label();
+    condition();
+    branch_on_not_cond(label);
+    block();
+    match(END_CHAR);
+    post_label(label);
+    
+}
+
+void Compiler::condition() {
+    //dummy version
+    emit_line("cond = true;");
+}
+
+//equivalent of assembly's BEQ
+void Compiler::branch_on_not_cond(const std::string label) {
+    emit_line({"if (!cond) { goto " + label + "; }"});
+}
 
 void Compiler::other () {
     emit_line(std::string("std::cout << \"") + get_name() + "\" << '\\n';");

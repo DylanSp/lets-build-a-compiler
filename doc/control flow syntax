@@ -1,4 +1,5 @@
-'E' = end character
+'e' = end program, endif
+'i' = if
 
 IF
 <condition>    {  cond = Condition()

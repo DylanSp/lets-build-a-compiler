@@ -30,6 +30,7 @@ private:
     static const std::unordered_set<char> MULT_OPS;
     static const char END_CHAR;
     static const std::unordered_set<char> BLOCK_ENDS;
+    static const char IF_CHAR;
 
     void compile_start(const std::string class_name) const;
     void compile_end() const;
@@ -47,7 +48,9 @@ private:
     void start_symbol();
     void program();
     void block();
-    //void parse_if();
+    void parse_if();
+    void condition();
+    void branch_on_not_cond(const std::string label); 
     void other();
     
     //label handling
