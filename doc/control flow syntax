@@ -1,0 +1,11 @@
+'E' = end character
+
+IF
+<condition>    {  cond = Condition()
+                  if (!cond) {
+                  L = NewLabel;
+                  Emit(goto L);
+                  }
+                }
+<block>
+ENDIF          {  PostLabel(L) }

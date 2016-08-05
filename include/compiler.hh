@@ -47,7 +47,13 @@ private:
     void start_symbol();
     void program();
     void block();
+    //void parse_if();
     void other();
+    
+    //label handling
+    size_t label_count;
+    std::string new_label();
+    void post_label(const std::string label) const;
 
     //cradle methods
     void report_error(const std::string err) const;

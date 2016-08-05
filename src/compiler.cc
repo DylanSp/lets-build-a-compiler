@@ -20,7 +20,7 @@ const std::unordered_set<char> Compiler::BLOCK_ENDS({END_CHAR});
     
 //constructors
 Compiler::Compiler (std::ostream& output) 
-    : m_input_stream (std::ios::in|std::ios::out), m_output_stream(output)
+    : label_count(0), m_input_stream (std::ios::in|std::ios::out), m_output_stream(output) 
 {
     
 }
@@ -89,6 +89,7 @@ void Compiler::define_member_variables() const {
     emit_line("std::stack<int> cpu_stack;");
     emit_line("std::vector<int> cpu_registers;");
     emit_line("std::unordered_map<char, int> cpu_variables;");
+    emit_line("bool cond;");
 }
 
 void Compiler::define_constructor(const std::string class_name) const {
@@ -96,6 +97,7 @@ void Compiler::define_constructor(const std::string class_name) const {
     emit_line(": cpu_stack()");
     emit_line(", cpu_registers(" + std::to_string(NUM_REGISTERS) + ", 0)");
     emit_line(", cpu_variables()");
+    emit_line(", cond(false)");
     emit_line("{}");
 }
 
@@ -165,6 +167,18 @@ void Compiler::block () {
 
 void Compiler::other () {
     emit_line(std::string("std::cout << \"") + get_name() + "\" << '\\n';");
+}
+
+
+//label handling
+std::string Compiler::new_label() {
+    std::string label{'L' + std::to_string(label_count)};
+    ++label_count;
+    return label;
+}
+
+void Compiler::post_label(const std::string label) const {
+    emit_line({label + ":"});
 }
 
 //cradle methods
