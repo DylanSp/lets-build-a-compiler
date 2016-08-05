@@ -28,6 +28,8 @@ private:
     static const char ERR_CHAR;
     static const std::unordered_set<char> ADD_OPS;
     static const std::unordered_set<char> MULT_OPS;
+    static const char END_CHAR;
+    static const std::unordered_set<char> BLOCK_ENDS;
 
     void compile_start(const std::string class_name) const;
     void compile_end() const;
@@ -43,6 +45,9 @@ private:
     
     //parsing methods
     void start_symbol();
+    void program();
+    void block();
+    void other();
 
     //cradle methods
     void report_error(const std::string err) const;

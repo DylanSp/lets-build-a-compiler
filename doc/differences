@@ -21,3 +21,8 @@ Functions:
 
 Grammar:
 -Numeric literals can't begin with 0, to avoid inadvertent use of C++ octal literals.
+
+Block processing:
+-instead of END statement, have "return;"
+
+Chapter 5's other() function produces code echoing get_name() to std::cout

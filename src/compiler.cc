@@ -15,6 +15,8 @@ const size_t Compiler::NUM_REGISTERS = 8;
 const char Compiler::ERR_CHAR = '\0';
 const std::unordered_set<char> Compiler::ADD_OPS({'+', '-'});
 const std::unordered_set<char> Compiler::MULT_OPS({'*', '/'});
+const char Compiler::END_CHAR = 'e';
+const std::unordered_set<char> Compiler::BLOCK_ENDS({END_CHAR});
     
 //constructors
 Compiler::Compiler (std::ostream& output) 
@@ -143,7 +145,26 @@ void Compiler::define_dump() const {
 
 
 void Compiler::start_symbol () {
-    
+    program();
+}
+
+void Compiler::program () {
+    block();
+    if (m_input_stream.peek() != END_CHAR) {
+        expected("End");
+    }
+    emit_line("return;");
+}
+
+void Compiler::block () {
+    while (!is_in(m_input_stream.peek(), BLOCK_ENDS)) {
+        other();
+    }
+}
+
+
+void Compiler::other () {
+    emit_line(std::string("std::cout << \"") + get_name() + "\" << '\\n';");
 }
 
 //cradle methods
