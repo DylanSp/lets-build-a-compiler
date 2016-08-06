@@ -161,10 +161,7 @@ void Compiler::program () {
 }
 
 void Compiler::block () {
-    char look = m_input_stream.peek();
-    
     while (!is_in(m_input_stream.peek(), BLOCK_ENDS)) {
-    //while (!is_in(look, BLOCK_ENDS)) {
         switch (m_input_stream.peek()) {
             case IF_CHAR:
                 parse_if();
@@ -173,7 +170,6 @@ void Compiler::block () {
                 other();
                 break;
         }
-        //look = m_input_stream.peek();
     }
 }
 
@@ -187,7 +183,7 @@ void Compiler::parse_if() {
     if (m_input_stream.peek() == ELSE_CHAR) {
         match(ELSE_CHAR);
         label_two = new_label();
-        branch_on_cond(label_two);
+        jump(label_two);
         post_label(label_one);
         block();
     }
@@ -201,7 +197,7 @@ void Compiler::condition() {
     emit_line("cond = true;");
 }
 
-//equivalent of assembly's BRA
+//equivalent of assembly's BNE
 void Compiler::branch_on_cond(const std::string label) {
     emit_line({"if (cond) { goto " + label + "; }"});
 }
@@ -209,6 +205,11 @@ void Compiler::branch_on_cond(const std::string label) {
 //equivalent of assembly's BEQ
 void Compiler::branch_on_not_cond(const std::string label) {
     emit_line({"if (!cond) { goto " + label + "; }"});
+}
+
+//equivalent of assembly's BRA, JMP
+void Compiler::jump (const std::string label) {
+    emit_line({"goto " + label + ";"});
 }
 
 void Compiler::other () {

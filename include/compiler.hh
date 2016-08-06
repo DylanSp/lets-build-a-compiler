@@ -52,7 +52,8 @@ private:
     void parse_if();
     void condition();
     void branch_on_cond(const std::string label);
-    void branch_on_not_cond(const std::string label); 
+    void branch_on_not_cond(const std::string label);
+    void jump(const std::string label);
     void other();
     
     //label handling

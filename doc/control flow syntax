@@ -23,9 +23,7 @@ IF
                   }
                 }
 <block>
-ELSE           {  if (cond) {
-                      Emit (goto L2)
-                  }
+ELSE           {  Emit (goto L2)
                   PostLabel(L1) 
                 }
 <block>
