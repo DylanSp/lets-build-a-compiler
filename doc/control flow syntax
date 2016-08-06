@@ -2,6 +2,9 @@
 'i' = if
 'l' = else
 'w' = while
+'p' = loop
+
+if:
 
 IF
 <condition>    {  cond = Condition()
@@ -14,7 +17,7 @@ IF
 ENDIF          {  PostLabel(L) }
 
 
-with ELSE:
+if/else:
 
 IF
 <condition>    {  L1 = NewLabel;
@@ -31,6 +34,8 @@ ELSE           {  Emit (goto L2)
 ENDIF          { PostLabel(L2) }
 
 
+while: 
+
  WHILE         { L1 = NewLabel;
                  L2 = NewLabel;
                   PostLabel(L1) }
@@ -41,3 +46,11 @@ ENDIF          { PostLabel(L2) }
 <block>
 ENDWHILE       { Emit(goto L1);
                  PostLabel(L2) }
+                 
+
+loop:
+LOOP        { L = NewLabel;
+              PostLabel(L);
+            }
+<block>
+ENDLOOP     { Emit(goto L); }

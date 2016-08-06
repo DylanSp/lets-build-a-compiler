@@ -20,6 +20,7 @@ const std::unordered_set<char> Compiler::BLOCK_ENDS({END_CHAR, ELSE_CHAR});
 const char Compiler::IF_CHAR = 'i';
 const char Compiler::ELSE_CHAR = 'l';
 const char Compiler::WHILE_CHAR = 'w';
+const char Compiler::LOOP_CHAR = 'p';
     
 //constructors
 Compiler::Compiler (std::ostream& output) 
@@ -170,6 +171,9 @@ void Compiler::block () {
             case WHILE_CHAR:
                 parse_while();
                 break;
+            case LOOP_CHAR:
+                parse_loop();
+                break;
             default:
                 other();
                 break;
@@ -207,6 +211,15 @@ void Compiler::parse_while() {
     match(END_CHAR);
     jump(label_one);
     post_label(label_two);
+}
+
+void Compiler::parse_loop() {
+    match(LOOP_CHAR);
+    const std::string label = new_label();
+    post_label(label);
+    block();
+    match(END_CHAR);
+    jump(label);
 }
 
 void Compiler::condition() {

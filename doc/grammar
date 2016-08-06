@@ -3,3 +3,4 @@
 <statement>         ::= <if-statement> | <while-statement> | <other>
 <if-statement>      ::= IF <condition> <block> [ ELSE <block> ] ENDIF
 <while-statement>   ::= WHILE <condition> <block> ENDWHILE
+<loop-statement>    ::= LOOP <block> ENDLOOP
