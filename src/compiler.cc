@@ -19,6 +19,7 @@ const char Compiler::END_CHAR = 'e';
 const std::unordered_set<char> Compiler::BLOCK_ENDS({END_CHAR, ELSE_CHAR});
 const char Compiler::IF_CHAR = 'i';
 const char Compiler::ELSE_CHAR = 'l';
+const char Compiler::WHILE_CHAR = 'w';
     
 //constructors
 Compiler::Compiler (std::ostream& output) 
@@ -166,6 +167,9 @@ void Compiler::block () {
             case IF_CHAR:
                 parse_if();
                 break;
+            case WHILE_CHAR:
+                parse_while();
+                break;
             default:
                 other();
                 break;
@@ -190,6 +194,19 @@ void Compiler::parse_if() {
     match(END_CHAR);
     post_label(label_two);
     
+}
+
+void Compiler::parse_while() {
+    match(WHILE_CHAR);
+    std::string label_one = new_label();
+    std::string label_two = new_label();
+    post_label(label_one);
+    condition();
+    branch_on_not_cond(label_two);
+    block();
+    match(END_CHAR);
+    jump(label_one);
+    post_label(label_two);
 }
 
 void Compiler::condition() {

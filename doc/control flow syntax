@@ -1,6 +1,7 @@
-'e' = end program, endif
+'e' = end program, endif, endwhile
 'i' = if
 'l' = else
+'w' = while
 
 IF
 <condition>    {  cond = Condition()
@@ -28,3 +29,15 @@ ELSE           {  Emit (goto L2)
                 }
 <block>
 ENDIF          { PostLabel(L2) }
+
+
+ WHILE         { L1 = NewLabel;
+                 L2 = NewLabel;
+                  PostLabel(L1) }
+<condition>    {  if (!cond) {
+                        Emit (goto L2)
+                  } 
+                }
+<block>
+ENDWHILE       { Emit(goto L1);
+                 PostLabel(L2) }

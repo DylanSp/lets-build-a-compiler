@@ -56,4 +56,21 @@ aiiblcedifelgehjiiikeeee (expected: abdfhjk)
     END
         
         
-        
+awbee (expected: abbbbb...)
+    a
+    while (true)
+        b
+    endwhile
+    END
+    
+aiblwcedee (expected: ab)
+    a
+    if (true)
+        b
+    else
+        while (true)
+            c
+        endwhile
+        d
+    endif
+    END

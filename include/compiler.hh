@@ -26,12 +26,15 @@ public:
 private:
     static const size_t NUM_REGISTERS;          //number of registers available to the compiled code
     static const char ERR_CHAR;
+    
+    //language keywords
     static const std::unordered_set<char> ADD_OPS;
     static const std::unordered_set<char> MULT_OPS;
     static const char END_CHAR;
     static const std::unordered_set<char> BLOCK_ENDS;
     static const char IF_CHAR;
     static const char ELSE_CHAR;
+    static const char WHILE_CHAR;
 
     void compile_start(const std::string class_name) const;
     void compile_end() const;
@@ -50,6 +53,7 @@ private:
     void program();
     void block();
     void parse_if();
+    void parse_while();
     void condition();
     void branch_on_cond(const std::string label);
     void branch_on_not_cond(const std::string label);

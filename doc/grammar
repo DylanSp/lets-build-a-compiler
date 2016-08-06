@@ -1,4 +1,5 @@
-<program>       ::= <block> END
-<block>         ::= [ <statement> ]*
-<statement>     ::= <if-statement> | <other>
-<if-statement>  ::= IF <condition> <block> [ ELSE <block> ] ENDIF
+<program>           ::= <block> END
+<block>             ::= [ <statement> ]*
+<statement>         ::= <if-statement> | <while-statement> | <other>
+<if-statement>      ::= IF <condition> <block> [ ELSE <block> ] ENDIF
+<while-statement>   ::= WHILE <condition> <block> ENDWHILE
