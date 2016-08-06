@@ -1,5 +1,6 @@
 'e' = end program, endif
 'i' = if
+'l' = else
 
 IF
 <condition>    {  cond = Condition()
@@ -10,3 +11,22 @@ IF
                 }
 <block>
 ENDIF          {  PostLabel(L) }
+
+
+with ELSE:
+
+IF
+<condition>    {  L1 = NewLabel;
+                  L2 = NewLabel;
+                  if (!cond) {
+                      Emit(goto L1)
+                  }
+                }
+<block>
+ELSE           {  if (cond) {
+                      Emit (goto L2)
+                  }
+                  PostLabel(L1) 
+                }
+<block>
+ENDIF          { PostLabel(L2) }

@@ -31,6 +31,7 @@ private:
     static const char END_CHAR;
     static const std::unordered_set<char> BLOCK_ENDS;
     static const char IF_CHAR;
+    static const char ELSE_CHAR;
 
     void compile_start(const std::string class_name) const;
     void compile_end() const;
@@ -50,6 +51,7 @@ private:
     void block();
     void parse_if();
     void condition();
+    void branch_on_cond(const std::string label);
     void branch_on_not_cond(const std::string label); 
     void other();
     

@@ -1,4 +1,4 @@
-aibece:
+aibece: (expected: abc)
     a
     if (true)
         b
@@ -6,7 +6,7 @@ aibece:
     c 
     END
     
-aibicedefe:
+aibicedefe: (expected: abcdf)
     a
     if (true)
         b
@@ -17,3 +17,43 @@ aibicedefe:
     endif
     f
     END
+    
+    
+aiblcede: (expected: abd)
+    a
+    if (true)
+        b
+    else
+        c
+    endif
+    d
+    END
+    
+aiiblcedifelgehjiiikeeee (expected: abdfhjk)
+    a
+    if (true)
+        if (true)
+            b
+        else
+            c
+        endif
+        d
+        if (true)
+            f
+        endif
+    else
+        g
+    endif
+    h
+    j
+    if (true)
+        if (true)
+            if (true)
+                k
+            endif
+        endif
+    endif
+    END
+        
+        
+        

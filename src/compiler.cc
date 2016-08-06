@@ -16,8 +16,9 @@ const char Compiler::ERR_CHAR = '\0';
 const std::unordered_set<char> Compiler::ADD_OPS({'+', '-'});
 const std::unordered_set<char> Compiler::MULT_OPS({'*', '/'});
 const char Compiler::END_CHAR = 'e';
-const std::unordered_set<char> Compiler::BLOCK_ENDS({END_CHAR});
+const std::unordered_set<char> Compiler::BLOCK_ENDS({END_CHAR, ELSE_CHAR});
 const char Compiler::IF_CHAR = 'i';
+const char Compiler::ELSE_CHAR = 'l';
     
 //constructors
 Compiler::Compiler (std::ostream& output) 
@@ -160,7 +161,10 @@ void Compiler::program () {
 }
 
 void Compiler::block () {
+    char look = m_input_stream.peek();
+    
     while (!is_in(m_input_stream.peek(), BLOCK_ENDS)) {
+    //while (!is_in(look, BLOCK_ENDS)) {
         switch (m_input_stream.peek()) {
             case IF_CHAR:
                 parse_if();
@@ -169,23 +173,37 @@ void Compiler::block () {
                 other();
                 break;
         }
+        //look = m_input_stream.peek();
     }
 }
 
 void Compiler::parse_if() {
     match(IF_CHAR);
-    std::string label = new_label();
     condition();
-    branch_on_not_cond(label);
+    std::string label_one = new_label();
+    std::string label_two = label_one;
+    branch_on_not_cond(label_one);
     block();
+    if (m_input_stream.peek() == ELSE_CHAR) {
+        match(ELSE_CHAR);
+        label_two = new_label();
+        branch_on_cond(label_two);
+        post_label(label_one);
+        block();
+    }
     match(END_CHAR);
-    post_label(label);
+    post_label(label_two);
     
 }
 
 void Compiler::condition() {
     //dummy version
     emit_line("cond = true;");
+}
+
+//equivalent of assembly's BRA
+void Compiler::branch_on_cond(const std::string label) {
+    emit_line({"if (cond) { goto " + label + "; }"});
 }
 
 //equivalent of assembly's BEQ

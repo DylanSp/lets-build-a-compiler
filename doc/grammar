@@ -1,4 +1,4 @@
 <program>       ::= <block> END
 <block>         ::= [ <statement> ]*
 <statement>     ::= <if-statement> | <other>
-<if-statement>  ::= IF <condition> <block> ENDIF
+<if-statement>  ::= IF <condition> <block> [ ELSE <block> ] ENDIF

@@ -25,5 +25,6 @@ Grammar:
 Block processing/control flow:
 -instead of END statement, have "return;"
 -condition flags are tracked by a boolean, "cond"
+-ELSE_CHAR added to BLOCK_ENDS so block() stops properly
 
 Chapter 5's other() function produces code echoing get_name() to std::cout
