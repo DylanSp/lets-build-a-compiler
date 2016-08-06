@@ -184,7 +184,7 @@ void Compiler::block () {
 void Compiler::parse_if() {
     match(IF_CHAR);
     condition();
-    std::string label_one = new_label();
+    const std::string label_one = new_label();
     std::string label_two = label_one;
     branch_on_not_cond(label_one);
     block();
@@ -202,8 +202,8 @@ void Compiler::parse_if() {
 
 void Compiler::parse_while() {
     match(WHILE_CHAR);
-    std::string label_one = new_label();
-    std::string label_two = new_label();
+    const std::string label_one = new_label();
+    const std::string label_two = new_label();
     post_label(label_one);
     condition();
     branch_on_not_cond(label_two);
