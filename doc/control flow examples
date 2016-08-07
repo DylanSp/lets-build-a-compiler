@@ -109,3 +109,11 @@ afc=bede (expected: abd, c = 1)
     endfor
     d
     END
+    
+adbece (expected: ac)
+    a
+    do (0)
+        b
+    enddo
+    c
+    END

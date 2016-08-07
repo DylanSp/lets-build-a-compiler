@@ -8,3 +8,4 @@
 <loop-statement>            ::= LOOP <block> ENDLOOP
 <repeat-until-statement>    ::= REPEAT <block> UNTIL <condition>
 <for-statement>             ::= FOR <ident> = <expr1> TO <expr2> <block> ENDFOR
+<do-statement>              ::= DO <expr> <block> ENDDO

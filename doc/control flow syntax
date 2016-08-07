@@ -1,4 +1,4 @@
-'e' = end program, endif, endwhile, endfor
+'e' = end program, endif, endwhile, endfor, enddo
 'i' = if
 'l' = else
 'w' = while
@@ -6,6 +6,7 @@
 'r' = repeat
 'u' = until
 'f' = for
+'d' = do
 
 if:
 
@@ -74,3 +75,6 @@ UNTIL
             
             
 for: see "for statement translation"
+
+
+do: see "do statement translation"

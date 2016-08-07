@@ -23,6 +23,7 @@ const char Compiler::LOOP_CHAR = 'p';
 const char Compiler::REPEAT_CHAR = 'r';
 const char Compiler::UNTIL_CHAR = 'u';
 const char Compiler::FOR_CHAR = 'f';
+const char Compiler::DO_CHAR = 'd';
 const std::unordered_set<char> Compiler::BLOCK_ENDS({END_CHAR, ELSE_CHAR, UNTIL_CHAR});
     
 //constructors
@@ -183,6 +184,9 @@ void Compiler::block () {
             case FOR_CHAR:
                 parse_for();
                 break;
+            case DO_CHAR:
+                parse_do();
+                break;
             default:
                 other();
                 break;
@@ -261,6 +265,23 @@ void Compiler::parse_for() {
     jump(loop_start); //go back to beginning of loop
     post_label(loop_end);
     emit_line("cpu_stack.pop();"); //clean upper limit off of stack
+}
+
+void Compiler::parse_do() {
+    match(DO_CHAR);
+    const std::string loop_start = new_label();
+    const std::string loop_end = new_label();
+    expression();       //get number of iterations
+    post_label(loop_start);
+    emit_line("cond = cpu_registers.at(0) <= 0;");     
+    branch_on_cond(loop_end);
+    emit_line("cpu_stack.push(cpu_registers.at(0));");
+    block();
+    match(END_CHAR);
+    emit_line("cpu_registers.at(0) = cpu_pop();");
+    emit_line("--cpu_registers.at(0);");
+    jump(loop_start);
+    post_label(loop_end);
 }
 
 void Compiler::expression() {

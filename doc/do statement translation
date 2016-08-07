@@ -1,0 +1,12 @@
+char loop_start = new_label();
+char loop_end = new_label();
+expression();       //get number of iterations
+post_label(loop_start);
+emit_line("cond = cpu_registers.at(0) <= 0;");     
+branch_on_cond(loop_end);
+emit_line("cpu_stack.push(cpu_registers.at(0));");
+block();
+emit_line("cpu_registers.at(0) = cpu_pop();");
+emit_line("--cpu_registers.at(0);");
+jump(loop_start);
+post_label(loop_end);
