@@ -16,11 +16,13 @@ const char Compiler::ERR_CHAR = '\0';
 const std::unordered_set<char> Compiler::ADD_OPS({'+', '-'});
 const std::unordered_set<char> Compiler::MULT_OPS({'*', '/'});
 const char Compiler::END_CHAR = 'e';
-const std::unordered_set<char> Compiler::BLOCK_ENDS({END_CHAR, ELSE_CHAR});
 const char Compiler::IF_CHAR = 'i';
 const char Compiler::ELSE_CHAR = 'l';
 const char Compiler::WHILE_CHAR = 'w';
 const char Compiler::LOOP_CHAR = 'p';
+const char Compiler::REPEAT_CHAR = 'r';
+const char Compiler::UNTIL_CHAR = 'u';
+const std::unordered_set<char> Compiler::BLOCK_ENDS({END_CHAR, ELSE_CHAR, UNTIL_CHAR});
     
 //constructors
 Compiler::Compiler (std::ostream& output) 
@@ -174,6 +176,9 @@ void Compiler::block () {
             case LOOP_CHAR:
                 parse_loop();
                 break;
+            case REPEAT_CHAR:
+                parse_repeat();
+                break;
             default:
                 other();
                 break;
@@ -220,6 +225,16 @@ void Compiler::parse_loop() {
     block();
     match(END_CHAR);
     jump(label);
+}
+
+void Compiler::parse_repeat() {
+    match(REPEAT_CHAR);
+    const std::string label = new_label();
+    post_label(label);
+    block();
+    match(UNTIL_CHAR);
+    condition();
+    branch_on_not_cond(label);
 }
 
 void Compiler::condition() {

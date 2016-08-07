@@ -36,6 +36,8 @@ private:
     static const char ELSE_CHAR;
     static const char WHILE_CHAR;
     static const char LOOP_CHAR;
+    static const char REPEAT_CHAR;
+    static const char UNTIL_CHAR;
 
     void compile_start(const std::string class_name) const;
     void compile_end() const;
@@ -56,6 +58,7 @@ private:
     void parse_if();
     void parse_while();
     void parse_loop();
+    void parse_repeat();
     void condition();
     void branch_on_cond(const std::string label);
     void branch_on_not_cond(const std::string label);

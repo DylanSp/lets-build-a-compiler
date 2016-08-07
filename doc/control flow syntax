@@ -3,6 +3,8 @@
 'l' = else
 'w' = while
 'p' = loop
+'r' = repeat
+'u' = until
 
 if:
 
@@ -49,8 +51,22 @@ ENDWHILE       { Emit(goto L1);
                  
 
 loop:
+
 LOOP        { L = NewLabel;
               PostLabel(L);
             }
 <block>
 ENDLOOP     { Emit(goto L); }
+
+
+repeat until:
+
+REPEAT      { L = NewLabel;
+              PostLabel(L);
+            }
+<block>
+UNTIL
+<condition> { if (!cond) {
+                    Emit (goto L);    
+              }
+            }

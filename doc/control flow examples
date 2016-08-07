@@ -74,3 +74,30 @@ aiblwcedee (expected: ab)
         d
     endif
     END
+    
+arbue (expected: ab)
+    a
+    repeat
+        b
+    until (true)
+    END
+    
+arbiceue (expected: abc)
+    a
+    repeat
+        b
+        if (true)
+            c
+        endif
+    until (true)
+    END
+    
+arbrcuue (expected: abc)
+    a
+    repeat
+        b
+        repeat
+            c
+        until (true)
+    until (true)
+    END
