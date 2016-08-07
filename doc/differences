@@ -26,5 +26,8 @@ Block processing/control flow:
 -instead of END statement, have "return;"
 -condition flags are tracked by a boolean, "cond"
 -ELSE_CHAR added to BLOCK_ENDS so block() stops properly
+-for statement uses cpu_variables[counter_name] instead of LEA-addressed memory
 
 Chapter 5's other() function produces code echoing get_name() to std::cout
+Chapter 5's condition() statement sets cond = true
+Chapter 5's expression() statement sets cpu_registers[0] = 0

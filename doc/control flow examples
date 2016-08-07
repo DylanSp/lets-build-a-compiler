@@ -101,3 +101,11 @@ arbrcuue (expected: abc)
         until (true)
     until (true)
     END
+    
+afc=bede (expected: abd, c = 1)
+    a
+    for c = (0) to (0)
+        b
+    endfor
+    d
+    END

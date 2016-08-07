@@ -1,9 +1,10 @@
 <program>                   ::= <block> END
 <block>                     ::= [ <statement> ]*
 <statement>                 ::= <if-statement> | <while-statement> | <loop-statement>
-                                | <repeat-until-statement>
+                                | <repeat-until-statement> | <for-statement>
                                 | <other>
 <if-statement>              ::= IF <condition> <block> [ ELSE <block> ] ENDIF
 <while-statement>           ::= WHILE <condition> <block> ENDWHILE
 <loop-statement>            ::= LOOP <block> ENDLOOP
 <repeat-until-statement>    ::= REPEAT <block> UNTIL <condition>
+<for-statement>             ::= FOR <ident> = <expr1> TO <expr2> <block> ENDFOR

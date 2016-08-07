@@ -22,6 +22,7 @@ const char Compiler::WHILE_CHAR = 'w';
 const char Compiler::LOOP_CHAR = 'p';
 const char Compiler::REPEAT_CHAR = 'r';
 const char Compiler::UNTIL_CHAR = 'u';
+const char Compiler::FOR_CHAR = 'f';
 const std::unordered_set<char> Compiler::BLOCK_ENDS({END_CHAR, ELSE_CHAR, UNTIL_CHAR});
     
 //constructors
@@ -179,6 +180,9 @@ void Compiler::block () {
             case REPEAT_CHAR:
                 parse_repeat();
                 break;
+            case FOR_CHAR:
+                parse_for();
+                break;
             default:
                 other();
                 break;
@@ -235,6 +239,33 @@ void Compiler::parse_repeat() {
     match(UNTIL_CHAR);
     condition();
     branch_on_not_cond(label);
+}
+
+void Compiler::parse_for() {
+    match(FOR_CHAR);
+    const std::string loop_start = new_label();
+    const std::string loop_end = new_label();
+    char counter_name = get_name();         //get name of loop counter
+    match('=');
+    expression();       //get initial value
+    emit_line(std::string("cpu_variables['") + counter_name + "'] = cpu_registers.at(0);"); //initialize loop counter w/ initial value
+    emit_line(std::string("--cpu_variables['") + counter_name + "'];");  //predecrement loop counter
+    expression();       //get upper limit
+    emit_line("cpu_stack.push(cpu_registers.at(0));"); //push upper limit to stack
+    post_label(loop_start); //define L1
+    emit_line(std::string("++cpu_variables['") + counter_name + "'];");    //increment the counter
+    emit_line(std::string("cond = cpu_variables['") + counter_name + "'] > cpu_stack.top();"); //test if counter > upper limit
+    branch_on_cond(loop_end); //leave loop if counter > upper limit
+    block();  //body of for statement
+    match(END_CHAR);
+    jump(loop_start); //go back to beginning of loop
+    post_label(loop_end);
+    emit_line("cpu_stack.pop();"); //clean upper limit off of stack
+}
+
+void Compiler::expression() {
+    //dummy version
+    emit_line("cpu_registers.at(0) = 0;");
 }
 
 void Compiler::condition() {

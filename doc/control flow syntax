@@ -1,10 +1,11 @@
-'e' = end program, endif, endwhile
+'e' = end program, endif, endwhile, endfor
 'i' = if
 'l' = else
 'w' = while
 'p' = loop
 'r' = repeat
 'u' = until
+'f' = for
 
 if:
 
@@ -70,3 +71,6 @@ UNTIL
                     Emit (goto L);    
               }
             }
+            
+            
+for: see "for statement translation"

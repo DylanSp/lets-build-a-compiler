@@ -38,6 +38,7 @@ private:
     static const char LOOP_CHAR;
     static const char REPEAT_CHAR;
     static const char UNTIL_CHAR;
+    static const char FOR_CHAR;
 
     void compile_start(const std::string class_name) const;
     void compile_end() const;
@@ -59,6 +60,8 @@ private:
     void parse_while();
     void parse_loop();
     void parse_repeat();
+    void parse_for();
+    void expression();
     void condition();
     void branch_on_cond(const std::string label);
     void branch_on_not_cond(const std::string label);

@@ -1,0 +1,35 @@
+          <ident>             get name of loop counter
+          <expr1>             get initial value
+          LEA <ident>(PC),A0  address the loop counter
+          SUBQ #1,D0          predecrement it
+          MOVE D0,(A0)        save it
+          <expr1>             get upper limit
+          MOVE D0,-(SP)       save it on stack
+
+     L1:  LEA <ident>(PC),A0  address loop counter
+          MOVE (A0),D0        fetch it to D0
+          ADDQ #1,D0          bump the counter
+          MOVE D0,(A0)        save new value
+          CMP (SP),D0         check for range
+          BLE L2              skip out if D0 > (SP)
+          <block>
+          BRA L1              loop for next pass
+     L2:  ADDQ #2,SP          clean up the stack
+     
+     
+char loop_start = new_label();
+char loop_end = new_label();
+char counter_name = get_name();         //get name of loop counter
+expression();       //get initial value
+emit_line("cpu_variables[counter_name] = cpu_registers.at(0);"); //initialize loop counter w/ initial value
+emit_line("--cpu_variables[counter_name]");  //predecrement loop counter
+expression();       //get upper limit
+emit_line("cpu_stack.push(cpu_registers.at(0));"); //push upper limit to stack
+post_label(loop_start); //define L1
+emit_line(++cpu_variables[counter_name]);    //increment the counter
+emit_line("cond = cpu_variables[counter_name] > cpu_stack.top();"); //test if counter > upper limit
+branch_on_cond(label_two); //leave loop
+block();  //body of for statement
+jump(loop_start); //go back to beginning of loop
+post_label(loop_end);
+emit_line("cpu_stack.pop();"); //clean upper limit off of stack
