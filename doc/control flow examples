@@ -6,30 +6,30 @@ aibece: (expected: abc)
     c 
     END
     
-aibicedefe: (expected: abcdf)
+aibicegehe: (expected: abcgh)
     a
     if (true)
         b
         if (true)
             c
         endif
-        d
+        g
     endif
-    f
+    h
     END
     
     
-aiblcede: (expected: abd)
+aiblcege: (expected: abg)
     a
     if (true)
         b
     else
         c
     endif
-    d
+    g
     END
     
-aiiblcedifelgehjiiikeeee (expected: abdfhjk)
+aiiblceminelgehjiiikeeee (expected: abmnhjk)
     a
     if (true)
         if (true)
@@ -37,9 +37,9 @@ aiiblcedifelgehjiiikeeee (expected: abdfhjk)
         else
             c
         endif
-        d
+        m
         if (true)
-            f
+            n
         endif
     else
         g
@@ -63,7 +63,7 @@ awbee (expected: abbbbb...)
     endwhile
     END
     
-aiblwcedee (expected: ab)
+aiblwcegee (expected: ab)
     a
     if (true)
         b
@@ -71,7 +71,7 @@ aiblwcedee (expected: ab)
         while (true)
             c
         endwhile
-        d
+        g
     endif
     END
     
@@ -102,12 +102,12 @@ arbrcuue (expected: abc)
     until (true)
     END
     
-afc=bede (expected: abd, c = 1)
+afc=bege (expected: abg, c = 1)
     a
     for c = (0) to (0)
         b
     endfor
-    d
+    g
     END
     
 adbece (expected: ac)
