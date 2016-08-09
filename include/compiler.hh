@@ -57,12 +57,12 @@ private:
     void start_symbol();
     void program();
     void block();
-    void parse_if();
-    void parse_while();
-    void parse_loop();
-    void parse_repeat();
-    void parse_for();
-    void parse_do();
+    void if_statement();
+    void while_statement();
+    void loop_statement();
+    void repeat_statement();
+    void for_statement();
+    void do_statement();
     void expression();
     void condition();
     void branch_on_cond(const std::string label);

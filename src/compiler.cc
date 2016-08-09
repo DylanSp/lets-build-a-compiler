@@ -170,22 +170,22 @@ void Compiler::block () {
     while (!is_in(m_input_stream.peek(), BLOCK_ENDS)) {
         switch (m_input_stream.peek()) {
             case IF_CHAR:
-                parse_if();
+                if_statement();
                 break;
             case WHILE_CHAR:
-                parse_while();
+                while_statement();
                 break;
             case LOOP_CHAR:
-                parse_loop();
+                loop_statement();
                 break;
             case REPEAT_CHAR:
-                parse_repeat();
+                repeat_statement();
                 break;
             case FOR_CHAR:
-                parse_for();
+                for_statement();
                 break;
             case DO_CHAR:
-                parse_do();
+                do_statement();
                 break;
             default:
                 other();
@@ -194,7 +194,7 @@ void Compiler::block () {
     }
 }
 
-void Compiler::parse_if() {
+void Compiler::if_statement() {
     match(IF_CHAR);
     condition();
     const std::string label_one = new_label();
@@ -213,7 +213,7 @@ void Compiler::parse_if() {
     
 }
 
-void Compiler::parse_while() {
+void Compiler::while_statement() {
     match(WHILE_CHAR);
     const std::string label_one = new_label();
     const std::string label_two = new_label();
@@ -226,7 +226,7 @@ void Compiler::parse_while() {
     post_label(label_two);
 }
 
-void Compiler::parse_loop() {
+void Compiler::loop_statement() {
     match(LOOP_CHAR);
     const std::string label = new_label();
     post_label(label);
@@ -235,7 +235,7 @@ void Compiler::parse_loop() {
     jump(label);
 }
 
-void Compiler::parse_repeat() {
+void Compiler::repeat_statement() {
     match(REPEAT_CHAR);
     const std::string label = new_label();
     post_label(label);
@@ -245,7 +245,7 @@ void Compiler::parse_repeat() {
     branch_on_not_cond(label);
 }
 
-void Compiler::parse_for() {
+void Compiler::for_statement() {
     match(FOR_CHAR);
     const std::string loop_start = new_label();
     const std::string loop_end = new_label();
@@ -267,7 +267,7 @@ void Compiler::parse_for() {
     emit_line("cpu_stack.pop();"); //clean upper limit off of stack
 }
 
-void Compiler::parse_do() {
+void Compiler::do_statement() {
     match(DO_CHAR);
     const std::string loop_start = new_label();
     const std::string loop_end = new_label();
