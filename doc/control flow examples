@@ -1,15 +1,15 @@
-aibece: (expected: abc)
+aigece: (expected: agc)
     a
     if (true)
-        b
+        g
     endif
     c 
     END
     
-aibicegehe: (expected: abcgh)
+aijicegehe: (expected: ajcgh)
     a
     if (true)
-        b
+        j
         if (true)
             c
         endif
@@ -19,21 +19,21 @@ aibicegehe: (expected: abcgh)
     END
     
     
-aiblcege: (expected: abg)
+aijlcege: (expected: ajg)
     a
     if (true)
-        b
+        j
     else
         c
     endif
     g
     END
     
-aiiblceminelgehjiiikeeee (expected: abmnhjk)
+aiiplceminelgehjiiikeeee (expected: apmnhjk)
     a
     if (true)
         if (true)
-            b
+            p
         else
             c
         endif
@@ -56,17 +56,17 @@ aiiblceminelgehjiiikeeee (expected: abmnhjk)
     END
         
         
-awbee (expected: abbbbb...)
+awjee (expected: ajjjjj...)
     a
     while (true)
-        b
+        j
     endwhile
     END
     
-aiblwcegee (expected: ab)
+aijlwcegee (expected: aj)
     a
     if (true)
-        b
+        j
     else
         while (true)
             c
@@ -75,45 +75,102 @@ aiblwcegee (expected: ab)
     endif
     END
     
-arbue (expected: ab)
+arjue (expected: aj)
     a
     repeat
-        b
+        j
     until (true)
     END
     
-arbiceue (expected: abc)
+arjiceue (expected: ajc)
     a
     repeat
-        b
+        j
         if (true)
             c
         endif
     until (true)
     END
     
-arbrcuue (expected: abc)
+arjrcuue (expected: ajc)
     a
     repeat
-        b
+        j
         repeat
             c
         until (true)
     until (true)
     END
     
-afc=bege (expected: abg, c = 1)
+afc=jege (expected: ajg, c = 1)
     a
     for c = (0) to (0)
-        b
+        j
     endfor
     g
     END
     
-adbece (expected: ac)
+adjece (expected: ac)
     a
     do (0)
-        b
+        j
     enddo
     c
     END
+    
+apcege (expected: acccc...)
+    a 
+    loop
+        c
+    endloop
+    g
+    END
+    
+awjbece (expected: ajc)
+    a
+    while (true)
+        j
+        break
+    endwhile
+    c
+    END
+    
+aicrbguhljee (expected: ach)
+    a
+    if (true)
+        c
+        repeat
+            break
+            g
+        until (true)
+        h
+    else
+        j
+    endif
+    END
+    
+apjrcbguhbmeke (expected: ajchk)
+    a
+    loop
+        j
+        repeat
+            c
+            break
+            g
+        until (true)
+        h
+        break
+        m
+    endloop
+    k
+    END
+    
+adjbece (expected: ac)
+    a
+    do (0)
+        j
+        break
+    enddo
+    c
+    END
+    

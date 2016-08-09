@@ -1,3 +1,5 @@
+Chapter 5 - Break statement
+
 -CompilerReader class, handles batch processing of a file - ONLY IF NECESSARY
 -uses while(getline) to parse file into vector<string>, calls compile_full
 

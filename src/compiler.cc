@@ -24,6 +24,8 @@ const char Compiler::REPEAT_CHAR = 'r';
 const char Compiler::UNTIL_CHAR = 'u';
 const char Compiler::FOR_CHAR = 'f';
 const char Compiler::DO_CHAR = 'd';
+const char Compiler::BREAK_CHAR = 'b';
+const std::string Compiler::ERR_LABEL("err_label");
 const std::unordered_set<char> Compiler::BLOCK_ENDS({END_CHAR, ELSE_CHAR, UNTIL_CHAR});
     
 //constructors
@@ -159,18 +161,18 @@ void Compiler::start_symbol () {
 }
 
 void Compiler::program () {
-    block();
+    block(ERR_LABEL);
     if (m_input_stream.peek() != END_CHAR) {
         expected("End");
     }
     emit_line("return;");
 }
 
-void Compiler::block () {
+void Compiler::block (const std::string exit_label) {
     while (!is_in(m_input_stream.peek(), BLOCK_ENDS)) {
         switch (m_input_stream.peek()) {
             case IF_CHAR:
-                if_statement();
+                if_statement(exit_label);
                 break;
             case WHILE_CHAR:
                 while_statement();
@@ -187,6 +189,9 @@ void Compiler::block () {
             case DO_CHAR:
                 do_statement();
                 break;
+            case BREAK_CHAR:
+                break_statement(exit_label);
+                break;
             default:
                 other();
                 break;
@@ -194,19 +199,19 @@ void Compiler::block () {
     }
 }
 
-void Compiler::if_statement() {
+void Compiler::if_statement(const std::string exit_label) {
     match(IF_CHAR);
     condition();
     const std::string label_one = new_label();
     std::string label_two = label_one;
     branch_on_not_cond(label_one);
-    block();
+    block(exit_label);
     if (m_input_stream.peek() == ELSE_CHAR) {
         match(ELSE_CHAR);
         label_two = new_label();
         jump(label_two);
         post_label(label_one);
-        block();
+        block(exit_label);
     }
     match(END_CHAR);
     post_label(label_two);
@@ -215,34 +220,38 @@ void Compiler::if_statement() {
 
 void Compiler::while_statement() {
     match(WHILE_CHAR);
-    const std::string label_one = new_label();
-    const std::string label_two = new_label();
-    post_label(label_one);
+    const std::string loop_start = new_label();
+    const std::string loop_end = new_label();
+    post_label(loop_start);
     condition();
-    branch_on_not_cond(label_two);
-    block();
+    branch_on_not_cond(loop_end);
+    block(loop_end);
     match(END_CHAR);
-    jump(label_one);
-    post_label(label_two);
+    jump(loop_start);
+    post_label(loop_end);
 }
 
 void Compiler::loop_statement() {
     match(LOOP_CHAR);
-    const std::string label = new_label();
-    post_label(label);
-    block();
+    const std::string loop_start = new_label();
+    const std::string loop_end = new_label();
+    post_label(loop_start);
+    block(loop_end);
     match(END_CHAR);
-    jump(label);
+    jump(loop_start);
+    post_label(loop_end);
 }
 
 void Compiler::repeat_statement() {
     match(REPEAT_CHAR);
-    const std::string label = new_label();
-    post_label(label);
-    block();
+    const std::string loop_start = new_label();
+    const std::string loop_end = new_label();
+    post_label(loop_start);
+    block(loop_end);
     match(UNTIL_CHAR);
     condition();
-    branch_on_not_cond(label);
+    branch_on_not_cond(loop_start);
+    post_label(loop_end);
 }
 
 void Compiler::for_statement() {
@@ -260,7 +269,7 @@ void Compiler::for_statement() {
     emit_line(std::string("++cpu_variables['") + counter_name + "'];");    //increment the counter
     emit_line(std::string("cond = cpu_variables['") + counter_name + "'] > cpu_stack.top();"); //test if counter > upper limit
     branch_on_cond(loop_end); //leave loop if counter > upper limit
-    block();  //body of for statement
+    block(loop_end);  //body of for statement
     match(END_CHAR);
     jump(loop_start); //go back to beginning of loop
     post_label(loop_end);
@@ -276,7 +285,7 @@ void Compiler::do_statement() {
     emit_line("cond = cpu_registers.at(0) <= 0;");     
     branch_on_cond(loop_end);
     emit_line("cpu_stack.push(cpu_registers.at(0));");
-    block();
+    block(loop_end);
     match(END_CHAR);
     emit_line("cpu_registers.at(0) = cpu_pop();");
     emit_line("--cpu_registers.at(0);");
@@ -284,9 +293,18 @@ void Compiler::do_statement() {
     post_label(loop_end);
 }
 
+void Compiler::break_statement(const std::string exit_label) {
+    match(BREAK_CHAR);
+    if (exit_label == ERR_LABEL) {
+        abort("No loop to break from.");
+    } else {
+        jump(exit_label);
+    }
+}
+
 void Compiler::expression() {
     //dummy version
-    emit_line("cpu_registers.at(0) = 0;");
+    emit_line("cpu_registers.at(0) = 1;");
 }
 
 void Compiler::condition() {

@@ -40,6 +40,8 @@ private:
     static const char UNTIL_CHAR;
     static const char FOR_CHAR;
     static const char DO_CHAR;
+    static const char BREAK_CHAR;
+    static const std::string ERR_LABEL;
 
     void compile_start(const std::string class_name) const;
     void compile_end() const;
@@ -56,13 +58,14 @@ private:
     //parsing methods
     void start_symbol();
     void program();
-    void block();
-    void if_statement();
+    void block(const std::string exit_label);
+    void if_statement(const std::string exit_label);
     void while_statement();
     void loop_statement();
     void repeat_statement();
     void for_statement();
     void do_statement();
+    void break_statement(const std::string exit_label);
     void expression();
     void condition();
     void branch_on_cond(const std::string label);
