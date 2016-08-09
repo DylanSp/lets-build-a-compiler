@@ -165,7 +165,7 @@ apjrcbguhbmeke (expected: ajchk)
     k
     END
     
-adjbece (expected: ac)
+adjbece (expected: ac, stack should be empty)
     a
     do (0)
         j
@@ -174,3 +174,38 @@ adjbece (expected: ac)
     c
     END
     
+    
+adcdgbhekbmene (expected: acgkn, stack should be empty)
+    a
+    do (1)
+        c
+        do (1)
+            g
+            break
+            h
+        enddo
+        k
+        break
+        m
+    enddo
+    n
+    END
+    
+    
+adcdgdhbdkeenee (expected: acghn, stack should be empty)
+    a
+    do (1)
+        c
+        do (1)
+            g
+            do (1)
+                h
+                break
+                do (1)
+                    k
+                enddo
+            enddo
+            n
+        enddo
+    enddo
+    END

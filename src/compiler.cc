@@ -280,16 +280,19 @@ void Compiler::do_statement() {
     match(DO_CHAR);
     const std::string loop_start = new_label();
     const std::string loop_end = new_label();
+    const std::string break_target = new_label();
     expression();       //get number of iterations
     post_label(loop_start);
     emit_line("cond = cpu_registers.at(0) <= 0;");     
     branch_on_cond(loop_end);
     emit_line("cpu_stack.push(cpu_registers.at(0));");
-    block(loop_end);
+    block(break_target);
     match(END_CHAR);
     emit_line("cpu_registers.at(0) = cpu_pop();");
     emit_line("--cpu_registers.at(0);");
     jump(loop_start);
+    post_label(break_target);
+    emit_line("cpu_stack.pop();");  //if block() call breaks, numberiteration count will be left on stack; clean it up
     post_label(loop_end);
 }
 
@@ -304,7 +307,7 @@ void Compiler::break_statement(const std::string exit_label) {
 
 void Compiler::expression() {
     //dummy version
-    emit_line("cpu_registers.at(0) = 1;");
+    emit_line("cpu_registers.at(0) = 0;");
 }
 
 void Compiler::condition() {
