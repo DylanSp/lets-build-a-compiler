@@ -34,6 +34,11 @@ private:
     static const char TRUE_CHAR;
     static const char FALSE_CHAR;
     static const std::unordered_set<char> BOOLEAN_LITERALS;
+    static const char AND_CHAR;
+    static const char OR_CHAR;
+    static const char XOR_CHAR;
+    static const char NOT_CHAR;
+    static const std::unordered_set<char> OR_OPS;
 
     void compile_start(const std::string class_name) const;
     void compile_end() const;
@@ -49,6 +54,12 @@ private:
     
     //parsing methods
     void start_symbol();
+    void boolean_expression();
+    void boolean_term();
+    void boolean_not_factor();
+    void boolean_factor();
+    void boolean_or();
+    void boolean_xor();
     
     //boolean handling
     bool get_boolean();

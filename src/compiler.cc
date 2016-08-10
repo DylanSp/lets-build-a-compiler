@@ -18,6 +18,11 @@ const std::unordered_set<char> Compiler::MULT_OPS({'*', '/'});
 const char Compiler::TRUE_CHAR = 'T';
 const char Compiler::FALSE_CHAR = 'F';
 const std::unordered_set<char> Compiler::BOOLEAN_LITERALS({TRUE_CHAR, FALSE_CHAR});
+const char Compiler::AND_CHAR = '&';
+const char Compiler::OR_CHAR = '|';
+const char Compiler::XOR_CHAR = '~';
+const char Compiler::NOT_CHAR = '!';
+const std::unordered_set<char> Compiler::OR_OPS({OR_CHAR, XOR_CHAR});
     
 //constructors
 Compiler::Compiler (std::ostream& output) 
@@ -144,9 +149,60 @@ void Compiler::define_dump() const {
 
 
 void Compiler::start_symbol () {
-    get_boolean() ? emit_line("true") : emit_line("false");
+    boolean_expression();
 }
 
+
+void Compiler::boolean_expression () {
+    boolean_term();
+    while (is_in(m_input_stream.peek(), OR_OPS)) {
+        emit_line("cpu_stack.push(cpu_registers.at(0));");
+        switch (m_input_stream.peek()) {
+            case OR_CHAR:
+                boolean_or();
+                break;
+            case XOR_CHAR:
+                boolean_xor();
+                break;
+            default: //should never be reached!
+                assert(false);
+                break;
+        }
+    }
+}
+
+void Compiler::boolean_term() {
+    if (!is_boolean(m_input_stream.peek())) {
+        expected("Boolean literal");
+    }
+    
+    bool boolean_value = get_boolean();
+    if (boolean_value) {
+        emit_line("cpu_registers.at(0) = 1;");
+    } else {
+        emit_line("cpu_registers.at(0) = 0;");
+    }
+}
+
+void Compiler::boolean_not_factor() {
+    
+}
+
+void Compiler::boolean_factor() {
+    
+}
+
+void Compiler::boolean_or() {
+    match(OR_CHAR);
+    boolean_term();
+    emit_line("cpu_registers.at(0) = cpu_registers.at(0) || cpu_pop();");
+}
+
+void Compiler::boolean_xor() {
+    match(XOR_CHAR);
+    boolean_term();
+    emit_line("cpu_registers.at(0) = !cpu_registers.at(0) != !cpu_pop();"); //extra ! to coerce to bool
+}
 
 //boolean handling
 
