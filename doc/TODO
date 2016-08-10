@@ -31,6 +31,7 @@ Get cloud9 debugger working
 
 Long-term (after finishing tutorial):
 -reconstruct w/ flex/bison
+--try with early grammar of chapter 6, see if they're able to parse the non-LL(k) grammar (see doc/nonfunctional_grammar)
 -target JVM/LLVM instead of c++
 -develop enhanced type-safety
 -figure out interesting ideas for semantics to play with

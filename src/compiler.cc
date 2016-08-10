@@ -15,6 +15,9 @@ const size_t Compiler::NUM_REGISTERS = 8;
 const char Compiler::ERR_CHAR = '\0';
 const std::unordered_set<char> Compiler::ADD_OPS({'+', '-'});
 const std::unordered_set<char> Compiler::MULT_OPS({'*', '/'});
+const char Compiler::TRUE_CHAR = 'T';
+const char Compiler::FALSE_CHAR = 'F';
+const std::unordered_set<char> Compiler::BOOLEAN_LITERALS({TRUE_CHAR, FALSE_CHAR});
     
 //constructors
 Compiler::Compiler (std::ostream& output) 
@@ -141,7 +144,24 @@ void Compiler::define_dump() const {
 
 
 void Compiler::start_symbol () {
+    get_boolean() ? emit_line("true") : emit_line("false");
+}
+
+
+//boolean handling
+
+bool Compiler::get_boolean () {
+    if (!is_boolean(m_input_stream.peek())) {
+        expected("Boolean literal");    //will throw exception
+    } 
     
+    bool boolean_value = std::toupper(m_input_stream.peek()) == TRUE_CHAR;
+    m_input_stream.get();
+    return boolean_value;
+}
+
+bool Compiler::is_boolean (const char c) {
+    return is_in(std::toupper(c), BOOLEAN_LITERALS);
 }
 
 //cradle methods

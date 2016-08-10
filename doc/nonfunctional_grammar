@@ -1,0 +1,19 @@
+(From ch. 6)
+
+<expression>    ::= <term> [<addop> <term>]*
+<term>          ::= <signed factor> [<mulop> factor]*
+<signed factor> ::= [<addop>] <factor>
+<factor>        ::= <integer> | <variable> | (<expression>)
+
+<b-expression>::= <b-term> [<orop> <b-term>]*
+<b-term>      ::= <not-factor> [AND <not-factor>]*
+<not-factor>  ::= [NOT] <b-factor>
+<b-factor>    ::= <b-literal> | <b-variable> | (<b-expression>) | <relation>
+
+<relation>    ::= <expression> <relop> <expression>
+
+NOT LL(k)!
+
+ IF ((((((A + B + C) < 0 ) AND ....
+ 
+issue is ambiguity of parentheses, variable vs. b-variable
