@@ -2,6 +2,7 @@
 #include <fstream>
 #include <map>
 #include <string>
+#include <stdexcept>
 #include "compiler.hh"
 #include "yaml-cpp/yaml.h"
 
@@ -13,7 +14,16 @@ void generate_correct_functionality_test (const std::string class_name,
     std::string test_class_name = class_name + "Class";
     ofs << "TEST_F(" << test_class_name << ", GetsCorrectResults ) {" << '\n';
     for (auto test : expected_values) {
-        ofs << "EXPECT_EQ(" << test.second << ", tested_object.get_variable(\"" << test.first << "\"));" << '\n';
+        if (std::isalpha(test.first.at(0))) {
+            ofs << "EXPECT_EQ(" << test.second << ", " << "tested_object.get_variable(\"" << test.first << "\"));";
+        } else if (std::stoi(test.first) >= 0 
+                    && std::stoul(test.first) < ds_compiler::Compiler::NUM_REGISTERS) {
+            ofs << "EXPECT_EQ(" << test.second << ", " << "tested_object.get_register(" << test.first << "));";
+        } else {
+            std::cerr << "Error: key for expected_values wasn't a variable name or register index." << '\n';
+            throw std::runtime_error("Test generation failed.\n");
+        }
+        ofs << '\n';
     }
     ofs << "}" << '\n';
     

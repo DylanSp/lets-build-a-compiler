@@ -23,7 +23,6 @@ public:
     void compile_intermediate(const std::string input_line);  //compiles a single line of input
     void compile_full (const std::vector<std::string> source, const std::string class_name);         //compiles a full C++ program
     
-private:
     static const size_t NUM_REGISTERS;          //number of registers available to the compiled code
     static const std::string ERR_STRING;
     static const std::unordered_set<char> ADD_OPS;
