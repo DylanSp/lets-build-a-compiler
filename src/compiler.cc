@@ -121,8 +121,6 @@ void Compiler::define_is_stack_empty() const {
 }
 
 void Compiler::define_dump() const {
-    //TODO - are these dumps necessary?
-    
     emit_line("void dump () {");
     
     emit_line("std::cout << \"Register contents\\n\";");
