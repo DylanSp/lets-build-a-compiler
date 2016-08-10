@@ -1,8 +1,5 @@
-Look over tutorial notes - do I want to do chap4? merge chap3 with master? 
--don't do chap4.
-
-Decide whether to allow multi-char tokens going forward.
--don't, complicates things with conditionals.
+Makefile: spikes don't have the .cc files in spikes listed as prereqs; they should
+-need to not use $^ in interactive/full/test_generator so there aren't multiple spikes/*.cc -> multiple mains
 
 -CompilerReader class, handles batch processing of a file - ONLY IF NECESSARY
 -uses while(getline) to parse file into vector<string>, calls compile_full
@@ -12,10 +9,6 @@ Decide whether to allow multi-char tokens going forward.
 -compile_full() returns this type
 -create test battery to check handling of input with bad syntax.
 --create a custom Exception class deriving std::runtime_error, use google test's EXPECT_THROW
-
-For pretty-printing STL containers
--http://stackoverflow.com/questions/4850473/pretty-print-c-stl-containers
--http://louisdx.github.io/cxx-prettyprint/
 
 Re-examine using boost for some things like filesystem paths, just to gain familiarity
 

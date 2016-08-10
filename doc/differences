@@ -21,3 +21,6 @@ Functions:
 
 Grammar:
 -Numeric literals can't begin with 0, to avoid inadvertent use of C++ octal literals.
+
+Chapter 6:
+-boolean true is encoded as 1 in registers

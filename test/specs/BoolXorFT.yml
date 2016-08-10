@@ -1,0 +1,5 @@
+class_name: BoolXorFT
+program_source:
+  - f~t
+expected_values:
+  0: 1

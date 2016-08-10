@@ -1,0 +1,5 @@
+class_name: BoolOrTT
+program_source:
+  - t|t
+expected_values:
+  0: 1
