@@ -1,0 +1,5 @@
+class_name: BoolNotAnd
+program_source:
+  - "t&!f"
+expected_values:
+  0: 1

@@ -216,6 +216,16 @@ void Compiler::boolean_term() {
 }
 
 void Compiler::boolean_not_factor() {
+    if (m_input_stream.peek() == NOT_CHAR) {
+        match(NOT_CHAR);
+        boolean_not_factor();
+        emit_line("cpu_registers.at(0) = !cpu_registers.at(0);");
+    } else {
+        boolean_factor();
+    }
+}
+
+void Compiler::boolean_factor() {
     if (!is_boolean(m_input_stream.peek())) {
         expected("Boolean literal");
     }
@@ -226,10 +236,6 @@ void Compiler::boolean_not_factor() {
     } else {
         emit_line("cpu_registers.at(0) = 0;");
     }
-}
-
-void Compiler::boolean_factor() {
-    
 }
 
 void Compiler::boolean_or() {

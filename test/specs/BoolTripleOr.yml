@@ -1,0 +1,5 @@
+class_name: BoolTripleOr
+program_source:
+  - "f|f|t"
+expected_values:
+  0: 1
