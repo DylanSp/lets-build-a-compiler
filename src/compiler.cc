@@ -195,7 +195,7 @@ void Compiler::boolean_factor() {
 void Compiler::boolean_or() {
     match(OR_CHAR);
     boolean_term();
-    emit_line("cpu_registers.at(0) = cpu_registers.at(0) || cpu_pop();");
+    emit_line("cpu_registers.at(0) = cpu_registers.at(0) | cpu_pop();");
 }
 
 void Compiler::boolean_xor() {
