@@ -24,6 +24,11 @@ const char Compiler::OR_CHAR = '|';
 const char Compiler::XOR_CHAR = '~';
 const char Compiler::NOT_CHAR = '!';
 const std::unordered_set<char> Compiler::OR_OPS({OR_CHAR, XOR_CHAR});
+const char Compiler::EQ_CHAR = '=';
+const char Compiler::NEQ_CHAR = '#';
+const char Compiler::LT_CHAR = '<';
+const char Compiler::GT_CHAR = '>';
+const std::unordered_set<char> Compiler::REL_OPS({EQ_CHAR, NEQ_CHAR, LT_CHAR, GT_CHAR});
     
 //constructors
 Compiler::Compiler (std::ostream& output) 
@@ -226,16 +231,18 @@ void Compiler::boolean_not_factor() {
 }
 
 void Compiler::boolean_factor() {
-    if (!is_boolean(m_input_stream.peek())) {
-        expected("Boolean literal");
+    if (is_boolean(m_input_stream.peek())) {
+        bool boolean_value = get_boolean();
+        if (boolean_value) {
+            emit_line("cpu_registers.at(0) = 1;");
+        } else {
+            emit_line("cpu_registers.at(0) = 0;");
+        }
+    } else {
+        relation();
     }
     
-    bool boolean_value = get_boolean();
-    if (boolean_value) {
-        emit_line("cpu_registers.at(0) = 1;");
-    } else {
-        emit_line("cpu_registers.at(0) = 0;");
-    }
+    
 }
 
 void Compiler::boolean_or() {
@@ -248,6 +255,62 @@ void Compiler::boolean_xor() {
     match(XOR_CHAR);
     boolean_term();
     emit_line("cpu_registers.at(0) = !cpu_registers.at(0) != !cpu_pop();"); //extra ! to coerce to bool
+}
+
+void Compiler::relation() {
+    expression();
+    if (is_in(m_input_stream.peek(), REL_OPS)) {
+        emit_line("cpu_stack.push(cpu_registers.at(0));");
+        switch (m_input_stream.peek()) {
+            case EQ_CHAR:
+                equals();
+                break;
+            case NEQ_CHAR:
+                not_equals();
+                break;
+            case LT_CHAR:
+                less_than();
+                break;
+            case GT_CHAR:
+                greater_than();
+                break;
+            default:
+                assert(false); //should never be reached!
+                break;
+        }
+    }
+    
+    
+    emit_line("std::cout << \"<relation>\" << '\\n';");
+    m_input_stream.get();
+}
+
+void Compiler::equals() {
+    match(EQ_CHAR);
+    expression();
+    emit_line("cond = cpu_pop() == cpu_registers.at(0);");
+    emit_line("cpu_registers.at(0) = cond;");
+}
+
+void Compiler::not_equals() {
+    match(NEQ_CHAR);
+    expression();
+    emit_line("cond = cpu_pop() != cpu_registers.at(0);");
+    emit_line("cpu_registers.at(0) = cond;");
+}
+
+void Compiler::less_than() {
+    match(LT_CHAR);
+    expression();
+    emit_line("cond = cpu_pop() < cpu_registers.at(0);");
+    emit_line("cpu_registers.at(0) = cond;");
+}
+
+void Compiler::greater_than() {
+    match(GT_CHAR);
+    expression();
+    emit_line("cond = cpu_pop() > cpu_registers.at(0);");
+    emit_line("cpu_registers.at(0) = cond;");
 }
 
 //boolean handling

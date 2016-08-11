@@ -36,6 +36,11 @@ public:
     static const char XOR_CHAR;
     static const char NOT_CHAR;
     static const std::unordered_set<char> OR_OPS;
+    static const char EQ_CHAR;
+    static const char NEQ_CHAR;
+    static const char LT_CHAR;
+    static const char GT_CHAR;
+    static const std::unordered_set<char> REL_OPS;
 
     void compile_start(const std::string class_name) const;
     void compile_end() const;
@@ -58,6 +63,7 @@ public:
     void boolean_factor();
     void boolean_or();
     void boolean_xor();
+
     void assignment();
     void expression();
     void term();
@@ -67,6 +73,12 @@ public:
     void subtract();
     void multiply();
     void divide();
+
+    void relation();
+    void equals();
+    void not_equals();
+    void less_than();
+    void greater_than();
     
     //boolean handling
     bool get_boolean();
