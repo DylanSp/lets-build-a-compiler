@@ -14,6 +14,8 @@ int main () {
         {'G', 0 | 0},       // 0
         {'H', 0 & 1},       // 0
         {'I', 1 & 1},       // 1
+        {'J', ~1},          // -2, implementation-defined
+        {'K', ~0},          // -1, implementation-defined
     };
     
     std::cout << tests << '\n';

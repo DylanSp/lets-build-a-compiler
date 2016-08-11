@@ -1,0 +1,5 @@
+class_name: BoolAndOrPrecedence
+program_source:
+  - "t&t|f&f"
+expected_values:
+  0: 1
