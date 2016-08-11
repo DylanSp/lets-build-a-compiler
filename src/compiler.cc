@@ -205,6 +205,17 @@ void Compiler::boolean_expression () {
 }
 
 void Compiler::boolean_term() {
+    boolean_not_factor();
+    while (m_input_stream.peek() == AND_CHAR) {
+        emit_line("cpu_stack.push(cpu_registers.at(0));");
+        match(AND_CHAR);
+        boolean_not_factor();
+        emit_line("cpu_registers.at(0) = cpu_registers.at(0) & cpu_pop();");
+    }
+    
+}
+
+void Compiler::boolean_not_factor() {
     if (!is_boolean(m_input_stream.peek())) {
         expected("Boolean literal");
     }
@@ -215,10 +226,6 @@ void Compiler::boolean_term() {
     } else {
         emit_line("cpu_registers.at(0) = 0;");
     }
-}
-
-void Compiler::boolean_not_factor() {
-    
 }
 
 void Compiler::boolean_factor() {

@@ -1,5 +1,5 @@
 class_name: BoolOrFT
 program_source:
-  - f|t
+  - "f|t"
 expected_values:
   0: 1

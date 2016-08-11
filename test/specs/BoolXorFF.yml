@@ -1,5 +1,5 @@
 class_name: BoolXorFF
 program_source:
-  - f~f
+  - "f~f"
 expected_values:
   0: 0
