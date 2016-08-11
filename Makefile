@@ -78,8 +78,9 @@ bin/run_tests: $(TESTCLASSOBJS) $(TESTCASEOBJS)
 bin/yaml_parser: 
 	$(CC) $(CFLAGS) $(INC) $(LIB) -o bin/yaml_parser spikes/yaml_parser.cc -lyaml-cpp 
 	
-bin/spec_generator:
-	$(CC) $(CFLAGS) $(INC) $(LIB) -o bin/spec_generator spikes/spec_generator.cc -lyaml-cpp 
+bin/spec_generator: spikes/spec_generator.cc
+	mkdir -p test/new_specs
+	$(CC) $(CFLAGS) $^ $(INC) $(LIB) -o bin/spec_generator -lyaml-cpp 
 	
 bin/bool_int_test: spikes/bool_int_test.cc
 	$(CC) $(CFLAGS) $(INC) $(LIB) -o bin/bool_int_test spikes/bool_int_test.cc
