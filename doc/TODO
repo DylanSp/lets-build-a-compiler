@@ -1,3 +1,5 @@
+Chapter 6 - Relations
+
 -CompilerReader class, handles batch processing of a file - ONLY IF NECESSARY
 -uses while(getline) to parse file into vector<string>, calls compile_full
 
@@ -6,6 +8,8 @@
 -compile_full() returns this type
 -create test battery to check handling of input with bad syntax.
 --create a custom Exception class deriving std::runtime_error, use google test's EXPECT_THROW
+
+Potentially rename *_CHAR to *_SYMBOL; use a typedef to switch between char and string?
 
 Re-examine using boost for some things like filesystem paths, just to gain familiarity
 
