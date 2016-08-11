@@ -1,5 +1,5 @@
-class_name: BoolOrTT
+class_name: BoolAndTT
 program_source:
-  - "t|t"
+  - "t&t"
 expected_values:
   0: 1
