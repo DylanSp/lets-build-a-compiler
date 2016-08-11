@@ -29,6 +29,9 @@ private:
     static const std::unordered_set<char> ADD_OPS;
     static const std::unordered_set<char> MULT_OPS;
     static const std::unordered_set<char> WHITESPACE;
+    static const char TRUE_CHAR;
+    static const char FALSE_CHAR;
+    static const std::unordered_set<char> BOOLEAN_LITERALS;
 
     void compile_start(const std::string class_name) const;
     void compile_end() const;
@@ -55,6 +58,10 @@ private:
     void multiply();
     void divide();
     
+    //boolean handling
+    bool get_boolean();
+    static bool is_boolean (const char c);
+
     //cradle methods
     void report_error(const std::string err) const;
     void abort(const std::string err) const;

@@ -16,6 +16,9 @@ const std::string Compiler::ERR_STRING("\0");
 const std::unordered_set<char> Compiler::ADD_OPS({'+', '-'});
 const std::unordered_set<char> Compiler::MULT_OPS({'*', '/'});
 const std::unordered_set<char> Compiler::WHITESPACE({' ', '\t'});
+const char Compiler::TRUE_CHAR = 'T';
+const char Compiler::FALSE_CHAR = 'F';
+const std::unordered_set<char> Compiler::BOOLEAN_LITERALS({TRUE_CHAR, FALSE_CHAR});
     
 //constructors
 Compiler::Compiler (std::ostream& output) 
@@ -176,6 +179,19 @@ void Compiler::expression () {
         }
     }
 }
+
+
+//boolean handling
+
+bool Compiler::get_boolean () {
+    if (!is_boolean(m_input_stream.peek())) {
+        expected("Boolean literal");    //will throw exception
+    } 
+    
+    bool boolean_value = std::toupper(m_input_stream.peek()) == TRUE_CHAR;
+    m_input_stream.get();
+    return boolean_value;
+}
     
 void Compiler::term () {
     factor();
@@ -257,6 +273,10 @@ void Compiler::divide() {
 //defines an empty lambda so output compiles
 void Compiler::define_function (std::string ident) const {
     emit_line("auto " + ident + " = [](){};");
+}
+
+bool Compiler::is_boolean (const char c) {
+    return is_in(std::toupper(c), BOOLEAN_LITERALS);
 }
 
 //cradle methods
