@@ -1,6 +1,3 @@
-Makefile: spikes don't have the .cc files in spikes listed as prereqs; they should
--need to not use $^ in interactive/full/test_generator so there aren't multiple spikes/*.cc -> multiple mains
-
 -CompilerReader class, handles batch processing of a file - ONLY IF NECESSARY
 -uses while(getline) to parse file into vector<string>, calls compile_full
 
