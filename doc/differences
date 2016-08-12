@@ -24,3 +24,15 @@ Grammar:
 
 Chapter 6:
 -boolean true is encoded as 1 in registers
+
+Block processing/control flow:
+-instead of END statement, have "return;"
+-condition flags are tracked by a boolean, "cond"
+-ELSE_CHAR added to BLOCK_ENDS so block() stops properly
+-for statement uses cpu_variables[counter_name] instead of LEA-addressed memory
+-reworked do statement completely, avoiding dbra instruction and associated bugs
+-Note: loop statements with no break will produce a compiler warning for an unused label
+
+Chapter 5's other() function produces code echoing get_name() to std::cout
+Chapter 5's condition() statement sets cond = true
+Chapter 5's expression() statement sets cpu_registers[0] = 0

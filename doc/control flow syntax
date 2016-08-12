@@ -1,0 +1,81 @@
+'e' = end program, endif, endwhile, endfor, enddo
+'i' = if
+'l' = else
+'w' = while
+'p' = loop
+'r' = repeat
+'u' = until
+'f' = for
+'d' = do
+'b' = break
+
+if:
+
+IF
+<condition>    {  cond = Condition()
+                  if (!cond) {
+                  L = NewLabel;
+                  Emit(goto L);
+                  }
+                }
+<block>
+ENDIF          {  PostLabel(L) }
+
+
+if/else:
+
+IF
+<condition>    {  L1 = NewLabel;
+                  L2 = NewLabel;
+                  if (!cond) {
+                      Emit(goto L1)
+                  }
+                }
+<block>
+ELSE           {  Emit (goto L2)
+                  PostLabel(L1) 
+                }
+<block>
+ENDIF          { PostLabel(L2) }
+
+
+while: 
+
+ WHILE         { L1 = NewLabel;
+                 L2 = NewLabel;
+                  PostLabel(L1) }
+<condition>    {  if (!cond) {
+                        Emit (goto L2)
+                  } 
+                }
+<block>
+ENDWHILE       { Emit(goto L1);
+                 PostLabel(L2) }
+                 
+
+loop:
+
+LOOP        { L = NewLabel;
+              PostLabel(L);
+            }
+<block>
+ENDLOOP     { Emit(goto L); }
+
+
+repeat until:
+
+REPEAT      { L = NewLabel;
+              PostLabel(L);
+            }
+<block>
+UNTIL
+<condition> { if (!cond) {
+                    Emit (goto L);    
+              }
+            }
+            
+            
+for: see "for statement translation"
+
+
+do: see "do statement translation"

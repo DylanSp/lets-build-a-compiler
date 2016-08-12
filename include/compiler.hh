@@ -24,9 +24,23 @@ public:
     void compile_full (const std::vector<std::string> source, const std::string class_name);         //compiles a full C++ program
     
     static const size_t NUM_REGISTERS;          //number of registers available to the compiled code
-    static const std::string ERR_STRING;
+    static const char ERR_CHAR;
+    
+    //language keywords
     static const std::unordered_set<char> ADD_OPS;
     static const std::unordered_set<char> MULT_OPS;
+    static const char END_CHAR;
+    static const std::unordered_set<char> BLOCK_ENDS;
+    static const char IF_CHAR;
+    static const char ELSE_CHAR;
+    static const char WHILE_CHAR;
+    static const char LOOP_CHAR;
+    static const char REPEAT_CHAR;
+    static const char UNTIL_CHAR;
+    static const char FOR_CHAR;
+    static const char DO_CHAR;
+    static const char BREAK_CHAR;
+    static const std::string ERR_LABEL;
     static const std::unordered_set<char> WHITESPACE;
     static const char TRUE_CHAR;
     static const char FALSE_CHAR;
@@ -53,7 +67,7 @@ public:
     void define_getters() const;
     void define_is_stack_empty() const;
     void define_dump() const;
-    void define_function (const std::string ident) const;
+    void define_function (char ident) const;
     
     //parsing methods
     void start_symbol();
@@ -65,6 +79,15 @@ public:
     void boolean_xor();
 
     void assignment();
+    void program();
+    void block(const std::string exit_label);
+    void if_statement(const std::string exit_label);
+    void while_statement();
+    void loop_statement();
+    void repeat_statement();
+    void for_statement();
+    void do_statement();
+    void break_statement(const std::string exit_label);
     void expression();
     void term();
     void factor();
@@ -79,10 +102,20 @@ public:
     void not_equals();
     void less_than();
     void greater_than();
+    void condition();
+    void branch_on_cond(const std::string label);
+    void branch_on_not_cond(const std::string label);
+    void jump(const std::string label);
+    void other();
     
     //boolean handling
     bool get_boolean();
     static bool is_boolean (const char c);
+
+    //label handling
+    size_t label_count;
+    std::string new_label();
+    void post_label(const std::string label) const;
 
     //cradle methods
     void report_error(const std::string err) const;
@@ -91,8 +124,8 @@ public:
     void expected(const char c) const;
     void skip_whitespace();
     void match(const char c);
-    std::string get_name ();
-    std::string get_num ();
+    char get_name ();
+    char get_num ();
     void emit (std::string s) const;
     void emit_line (std::string s) const;
     

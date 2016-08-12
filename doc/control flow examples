@@ -1,0 +1,211 @@
+aigece: (expected: agc)
+    a
+    if (true)
+        g
+    endif
+    c 
+    END
+    
+aijicegehe: (expected: ajcgh)
+    a
+    if (true)
+        j
+        if (true)
+            c
+        endif
+        g
+    endif
+    h
+    END
+    
+    
+aijlcege: (expected: ajg)
+    a
+    if (true)
+        j
+    else
+        c
+    endif
+    g
+    END
+    
+aiiplceminelgehjiiikeeee (expected: apmnhjk)
+    a
+    if (true)
+        if (true)
+            p
+        else
+            c
+        endif
+        m
+        if (true)
+            n
+        endif
+    else
+        g
+    endif
+    h
+    j
+    if (true)
+        if (true)
+            if (true)
+                k
+            endif
+        endif
+    endif
+    END
+        
+        
+awjee (expected: ajjjjj...)
+    a
+    while (true)
+        j
+    endwhile
+    END
+    
+aijlwcegee (expected: aj)
+    a
+    if (true)
+        j
+    else
+        while (true)
+            c
+        endwhile
+        g
+    endif
+    END
+    
+arjue (expected: aj)
+    a
+    repeat
+        j
+    until (true)
+    END
+    
+arjiceue (expected: ajc)
+    a
+    repeat
+        j
+        if (true)
+            c
+        endif
+    until (true)
+    END
+    
+arjrcuue (expected: ajc)
+    a
+    repeat
+        j
+        repeat
+            c
+        until (true)
+    until (true)
+    END
+    
+afc=jege (expected: ajg, c = 1)
+    a
+    for c = (0) to (0)
+        j
+    endfor
+    g
+    END
+    
+adjece (expected: ac)
+    a
+    do (0)
+        j
+    enddo
+    c
+    END
+    
+apcege (expected: acccc...)
+    a 
+    loop
+        c
+    endloop
+    g
+    END
+    
+awjbece (expected: ajc)
+    a
+    while (true)
+        j
+        break
+    endwhile
+    c
+    END
+    
+aicrbguhljee (expected: ach)
+    a
+    if (true)
+        c
+        repeat
+            break
+            g
+        until (true)
+        h
+    else
+        j
+    endif
+    END
+    
+apjrcbguhbmeke (expected: ajchk)
+    a
+    loop
+        j
+        repeat
+            c
+            break
+            g
+        until (true)
+        h
+        break
+        m
+    endloop
+    k
+    END
+    
+adjbece (expected: ac, stack should be empty)
+    a
+    do (0)
+        j
+        break
+    enddo
+    c
+    END
+    
+    
+adcdgbhekbmene (expected: acgkn, stack should be empty)
+    a
+    do (1)
+        c
+        do (1)
+            g
+            break
+            h
+        enddo
+        k
+        break
+        m
+    enddo
+    n
+    END
+    
+    
+adcdgdhbdkeenee (expected: acghn, stack should be empty)
+    a
+    do (1)
+        c
+        do (1)
+            g
+            do (1)
+                h
+                break
+                do (1)
+                    k
+                enddo
+            enddo
+            n
+        enddo
+    enddo
+    END
