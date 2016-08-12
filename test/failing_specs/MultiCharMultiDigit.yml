@@ -1,5 +1,5 @@
 class_name: MultiCharMultiDigit
 program_source:
-  - test=34
+  - var=34
 expected_values:
-  TEST: 34
+  VAR: 34
