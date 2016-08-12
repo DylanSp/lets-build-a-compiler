@@ -102,6 +102,7 @@ void Compiler::define_member_variables() const {
     emit_line("std::stack<int> cpu_stack;");
     emit_line("std::vector<int> cpu_registers;");
     emit_line("std::unordered_map<std::string, int> cpu_variables;");
+    emit_line("bool cond;");
 }
 
 void Compiler::define_constructor(const std::string class_name) const {
@@ -157,13 +158,13 @@ void Compiler::define_dump() const {
 
 
 void Compiler::start_symbol () {
-    assignment();
+    boolean_expression();
 }
 
 void Compiler::assignment () {
     std::string name = get_name();
     match('=');
-    expression();
+    boolean_expression();
     emit_line("cpu_variables[\"" + name + "\"] = cpu_registers.at(0);");
 }
 
@@ -279,10 +280,6 @@ void Compiler::relation() {
                 break;
         }
     }
-    
-    
-    emit_line("std::cout << \"<relation>\" << '\\n';");
-    m_input_stream.get();
 }
 
 void Compiler::equals() {
@@ -348,6 +345,8 @@ void Compiler::factor () {
         match('(');
         expression();
         match(')');
+    //} else if (is_boolean(m_input_stream.peek())) {
+    //    boolean_expression();
     } else if (std::isalpha(m_input_stream.peek())) {
         ident();
     } else {
