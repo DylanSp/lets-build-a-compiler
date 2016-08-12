@@ -176,8 +176,8 @@ void Compiler::start_symbol () {
 void Compiler::assignment () {
     char name = get_name();
     match('=');
-    expression();
-    emit_line(std::string("cpu_variables[\"") + name + "\"] = cpu_registers.at(0);");
+    boolean_expression();
+    emit_line(std::string("cpu_variables[\'") + name + "\'] = cpu_registers.at(0);");
 }
     
 void Compiler::program () {
@@ -400,7 +400,7 @@ void Compiler::block (const std::string exit_label) {
                 break_statement(exit_label);
                 break;
             default:
-                other();
+                assignment();
                 break;
         }
     }
