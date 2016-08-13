@@ -1,5 +1,5 @@
 class_name: BoolNotAnd
 program_source:
-  - "!t&t"
+  - "x=!t&te"
 expected_values:
-  0: 0
+  X: 0

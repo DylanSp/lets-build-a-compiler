@@ -1,5 +1,5 @@
 class_name: BoolNotF
 program_source:
-  - "!f"
+  - "x=!fe"
 expected_values:
-  0: 1
+  X: 1

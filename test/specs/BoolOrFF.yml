@@ -1,5 +1,5 @@
 class_name: BoolOrFF
 program_source:
-  - "f|f"
+  - "x=f|fe"
 expected_values:
-  0: 0
+  X: 0

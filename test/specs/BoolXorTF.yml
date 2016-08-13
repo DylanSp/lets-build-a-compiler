@@ -1,5 +1,5 @@
 class_name: BoolXorTF
 program_source:
-  - "t~f"
+  - "x=t~fe"
 expected_values:
-  0: 1
+  X: 1

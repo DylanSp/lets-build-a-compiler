@@ -1,5 +1,5 @@
 class_name: BoolDoubleNot
 program_source:
-  - "!!t"
+  - "x=!!te"
 expected_values:
-  0: 1
+  X: 1

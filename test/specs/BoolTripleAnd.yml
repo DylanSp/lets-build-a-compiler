@@ -1,5 +1,5 @@
 class_name: BoolTripleAnd
 program_source:
-  - "t&t&f"
+  - "x=t&t&fe"
 expected_values:
-  0: 0
+  X: 0

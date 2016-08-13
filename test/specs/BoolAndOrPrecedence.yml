@@ -1,5 +1,5 @@
 class_name: BoolAndOrPrecedence
 program_source:
-  - "t&t|f&f"
+  - "x=t&t|f&fe"
 expected_values:
-  0: 1
+  X: 1

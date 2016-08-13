@@ -1,5 +1,5 @@
 class_name: BoolAndTF
 program_source:
-  - "t&f"
+  - "x=t&fe"
 expected_values:
-  0: 0
+  X: 0

@@ -32,6 +32,7 @@ Block processing/control flow:
 -for statement uses cpu_variables[counter_name] instead of LEA-addressed memory
 -reworked do statement completely, avoiding dbra instruction and associated bugs
 -Note: loop statements with no break will produce a compiler warning for an unused label
+-program must end with an END_CHAR (which gets match()'d by program())
 
 Chapter 5's other() function produces code echoing get_name() to std::cout
 Chapter 5's condition() statement sets cond = true

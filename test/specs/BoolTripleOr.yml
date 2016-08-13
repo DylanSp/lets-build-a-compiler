@@ -1,5 +1,5 @@
 class_name: BoolTripleOr
 program_source:
-  - "f|f|t"
+  - "x=f|f|te"
 expected_values:
-  0: 1
+  X: 1

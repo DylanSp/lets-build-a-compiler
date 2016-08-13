@@ -1,5 +1,5 @@
 class_name: BoolOrTT
 program_source:
-  - "t|t"
+  - "x=t|te"
 expected_values:
-  0: 1
+  X: 1
