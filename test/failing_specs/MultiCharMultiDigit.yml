@@ -1,5 +1,0 @@
-class_name: MultiCharMultiDigit
-program_source:
-  - var=34
-expected_values:
-  VAR: 34
