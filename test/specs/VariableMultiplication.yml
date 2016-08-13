@@ -1,7 +1,7 @@
 class_name: VariableMultiplication
 program_source:
-  - x=4
-  - y=5*x
+  - "x=4e"
+  - "y=5*xe"
 expected_values:
   X: 4
   Y: 20

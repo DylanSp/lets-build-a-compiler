@@ -185,7 +185,6 @@ void Compiler::program () {
     if (m_input_stream.peek() != END_CHAR) {
         expected("End");
     }
-    emit_line("return;");
     match(END_CHAR);
 }
 
@@ -521,6 +520,8 @@ void Compiler::ident () {
             match(')');
             define_function(name);
             emit_line(std::string(1,name) + "();");
+            //note that this doesn't put anything in cpu_registers[0], which following functions expect
+            //in other words, this parses function calls, but doesn't behave appropriately.
         } else {
             emit_line(std::string("cpu_registers.at(0) = cpu_variables.at(\'") + name + "\');");
         }

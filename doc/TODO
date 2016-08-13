@@ -1,4 +1,9 @@
-Chapter 6 - Relations
+Add additional, more comprehensive tests
+-mix arithmetic, variable assignment, control flow, boolean
+
+Rearrange order of functions into logical units
+
+then start chapter 7.
 
 -CompilerReader class, handles batch processing of a file - ONLY IF NECESSARY
 -uses while(getline) to parse file into vector<string>, calls compile_full

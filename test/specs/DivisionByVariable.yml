@@ -1,7 +1,7 @@
 class_name: DivisionByVariable
 program_source:
-  - x=4
-  - y=8/x
+  - "x=4e"
+  - "y=8/xe"
 expected_values:
   X: 4
   Y: 2
