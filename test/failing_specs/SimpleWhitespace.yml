@@ -1,5 +1,0 @@
-class_name: SimpleWhitespace
-program_source:
-  - test = 5 + 6
-expected_values:
-  TEST: 11
