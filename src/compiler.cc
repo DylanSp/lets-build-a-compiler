@@ -520,7 +520,7 @@ void Compiler::ident () {
             match('(');
             match(')');
             define_function(name);
-            emit_line(name + "();");
+            emit_line(std::string(1,name) + "();");
         } else {
             emit_line(std::string("cpu_registers.at(0) = cpu_variables.at(\'") + name + "\');");
         }
