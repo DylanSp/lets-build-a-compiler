@@ -1,5 +1,5 @@
 class_name: SimpleMultiplication
 program_source:
-  - x=2*2
+  - "x=2*2e"
 expected_values:
   X: 4

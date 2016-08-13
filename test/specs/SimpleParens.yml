@@ -1,5 +1,5 @@
 class_name: SimpleParens
 program_source:
-  - x=(1+2)
+  - "x=(1+2)e"
 expected_values:
   X: 3

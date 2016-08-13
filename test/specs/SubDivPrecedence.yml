@@ -1,5 +1,5 @@
 class_name: SubDivPrecedence
 program_source:
-  - x=4-6/3
+  - "x=4-6/3e"
 expected_values:
   X: 2

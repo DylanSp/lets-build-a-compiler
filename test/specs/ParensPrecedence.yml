@@ -1,5 +1,5 @@
 class_name: ParensPrecedence
 program_source:
-  - x=2*(3+1)
+  - "x=2*(3+1)e"
 expected_values:
   X: 8

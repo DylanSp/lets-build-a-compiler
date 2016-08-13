@@ -1,5 +1,5 @@
 class_name: SubtractUnaryMinus
 program_source:
-  - x=-1-1
+  - "x=-1-1e"
 expected_values:
   X: -2

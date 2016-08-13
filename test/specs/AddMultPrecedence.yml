@@ -1,5 +1,5 @@
 class_name: AddMultPrecedence
 program_source:
-  - x=1+2*3
+  - "x=1+2*3e"
 expected_values:
   X: 7

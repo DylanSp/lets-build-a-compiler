@@ -1,5 +1,5 @@
 class_name: SingleConstant
 program_source:
-  - x=1
+  - "x=1e"
 expected_values:
   X: 1

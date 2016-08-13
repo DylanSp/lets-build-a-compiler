@@ -1,5 +1,5 @@
 class_name: SimpleUnaryMinus
 program_source:
-  - x=-2
+  - "x=-2e"
 expected_values:
   X: -2

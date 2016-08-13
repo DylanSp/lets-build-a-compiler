@@ -1,5 +1,5 @@
 class_name: AddUnaryMinus
 program_source:
-  - x=-1+2
+  - "x=-1+2e"
 expected_values:
   X: 1
