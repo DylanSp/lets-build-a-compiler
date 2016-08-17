@@ -173,151 +173,17 @@ void Compiler::start_symbol () {
     program();
 }
 
+
+
+//arithmetic expression handling
+
 void Compiler::assignment () {
     char name = get_name();
     match('=');
     boolean_expression();
     emit_line(std::string("cpu_variables[\'") + name + "\'] = cpu_registers.at(0);");
 }
-    
-void Compiler::program () {
-    block(ERR_LABEL);
-    if (m_input_stream.peek() != END_CHAR) {
-        expected("End");
-    }
-    match(END_CHAR);
-}
 
-void Compiler::boolean_expression () {
-    boolean_term();
-    while (is_in(m_input_stream.peek(), OR_OPS)) {
-        emit_line("cpu_stack.push(cpu_registers.at(0));");
-        switch (m_input_stream.peek()) {
-            case OR_CHAR:
-                boolean_or();
-                break;
-            case XOR_CHAR:
-                boolean_xor();
-                break;
-            default: //should never be reached!
-                assert(false);
-                break;
-        }
-    }
-}
-
-void Compiler::boolean_term() {
-    boolean_not_factor();
-    while (m_input_stream.peek() == AND_CHAR) {
-        emit_line("cpu_stack.push(cpu_registers.at(0));");
-        match(AND_CHAR);
-        boolean_not_factor();
-        emit_line("cpu_registers.at(0) = cpu_registers.at(0) & cpu_pop();");
-    }
-    
-}
-
-void Compiler::boolean_not_factor() {
-    if (m_input_stream.peek() == NOT_CHAR) {
-        match(NOT_CHAR);
-        boolean_not_factor();
-        emit_line("cpu_registers.at(0) = !cpu_registers.at(0);");
-    } else {
-        boolean_factor();
-    }
-}
-
-void Compiler::boolean_factor() {
-    if (is_boolean(m_input_stream.peek())) {
-        bool boolean_value = get_boolean();
-        if (boolean_value) {
-            emit_line("cpu_registers.at(0) = 1;");
-        } else {
-            emit_line("cpu_registers.at(0) = 0;");
-        }
-    } else {
-        relation();
-    }
-    
-    
-}
-
-void Compiler::boolean_or() {
-    match(OR_CHAR);
-    boolean_term();
-    emit_line("cpu_registers.at(0) = cpu_registers.at(0) | cpu_pop();");
-}
-
-void Compiler::boolean_xor() {
-    match(XOR_CHAR);
-    boolean_term();
-    emit_line("cpu_registers.at(0) = !cpu_registers.at(0) != !cpu_pop();"); //extra ! to coerce to bool
-}
-
-void Compiler::relation() {
-    expression();
-    if (is_in(m_input_stream.peek(), REL_OPS)) {
-        emit_line("cpu_stack.push(cpu_registers.at(0));");
-        switch (m_input_stream.peek()) {
-            case EQ_CHAR:
-                equals();
-                break;
-            case NEQ_CHAR:
-                not_equals();
-                break;
-            case LT_CHAR:
-                less_than();
-                break;
-            case GT_CHAR:
-                greater_than();
-                break;
-            default:
-                assert(false); //should never be reached!
-                break;
-        }
-    }
-}
-
-void Compiler::equals() {
-    match(EQ_CHAR);
-    expression();
-    emit_line("cond = cpu_pop() == cpu_registers.at(0);");
-    emit_line("cpu_registers.at(0) = cond;");
-}
-
-void Compiler::not_equals() {
-    match(NEQ_CHAR);
-    expression();
-    emit_line("cond = cpu_pop() != cpu_registers.at(0);");
-    emit_line("cpu_registers.at(0) = cond;");
-}
-
-void Compiler::less_than() {
-    match(LT_CHAR);
-    expression();
-    emit_line("cond = cpu_pop() < cpu_registers.at(0);");
-    emit_line("cpu_registers.at(0) = cond;");
-}
-
-void Compiler::greater_than() {
-    match(GT_CHAR);
-    expression();
-    emit_line("cond = cpu_pop() > cpu_registers.at(0);");
-    emit_line("cpu_registers.at(0) = cond;");
-}
-
-//boolean handling
-
-bool Compiler::get_boolean () {
-    if (!is_boolean(m_input_stream.peek())) {
-        expected("Boolean literal");    //will throw exception
-    } 
-    
-    bool boolean_value = std::toupper(m_input_stream.peek()) == TRUE_CHAR;
-    m_input_stream.get();
-    return boolean_value;
-}
-    
 void Compiler::expression () {
     
     if (is_in(m_input_stream.peek(), ADD_OPS)) {
@@ -372,6 +238,205 @@ void Compiler::factor () {
             emit_line(std::string("cpu_registers.at(0) = ") + expr + ";");
         } 
     }
+}
+
+void Compiler::ident () {
+    char name = get_name();
+    
+    if (name != ERR_CHAR) { 
+        if (m_input_stream.peek() == '(') {//function call
+            match('(');
+            match(')');
+            define_function(name);
+            emit_line(std::string(1,name) + "();");
+            //note that this doesn't put anything in cpu_registers[0], which following functions expect
+            //in other words, this parses function calls, but doesn't behave appropriately.
+        } else {
+            emit_line(std::string("cpu_registers.at(0) = cpu_variables.at(\'") + name + "\');");
+        }
+    } 
+}
+
+void Compiler::add () {
+    match('+');
+    term();
+    emit_line("cpu_registers.at(0) = cpu_stack.top() + cpu_registers.at(0);");
+    emit_line("cpu_stack.pop();");
+}
+
+void Compiler::subtract () {
+    match('-');
+    term();
+    emit_line("cpu_registers.at(0) = cpu_stack.top() - cpu_registers.at(0);");
+    emit_line("cpu_stack.pop();");
+}
+
+void Compiler::multiply() {
+    match('*');
+    factor();
+    emit_line("cpu_registers.at(0) = cpu_stack.top() * cpu_registers.at(0);");
+    emit_line("cpu_stack.pop();");
+}
+
+void Compiler::divide() {
+    match('/');
+    factor();
+    emit_line("cpu_registers.at(0) = cpu_stack.top() / cpu_registers.at(0);");
+    emit_line("cpu_stack.pop();");
+}
+
+
+
+//boolean expression handling
+
+void Compiler::boolean_expression () {
+    boolean_term();
+    while (is_in(m_input_stream.peek(), OR_OPS)) {
+        emit_line("cpu_stack.push(cpu_registers.at(0));");
+        switch (m_input_stream.peek()) {
+            case OR_CHAR:
+                boolean_or();
+                break;
+            case XOR_CHAR:
+                boolean_xor();
+                break;
+            default: //should never be reached!
+                assert(false);
+                break;
+        }
+    }
+}
+
+void Compiler::boolean_term() {
+    boolean_not_factor();
+    while (m_input_stream.peek() == AND_CHAR) {
+        emit_line("cpu_stack.push(cpu_registers.at(0));");
+        match(AND_CHAR);
+        boolean_not_factor();
+        emit_line("cpu_registers.at(0) = cpu_registers.at(0) & cpu_pop();");
+    }
+    
+}
+
+void Compiler::boolean_not_factor() {
+    if (m_input_stream.peek() == NOT_CHAR) {
+        match(NOT_CHAR);
+        boolean_not_factor();
+        emit_line("cpu_registers.at(0) = !cpu_registers.at(0);");
+    } else {
+        boolean_factor();
+    }
+}
+
+void Compiler::boolean_factor() {
+    if (is_boolean(m_input_stream.peek())) {
+        bool boolean_value = get_boolean();
+        if (boolean_value) {
+            emit_line("cpu_registers.at(0) = 1;");
+        } else {
+            emit_line("cpu_registers.at(0) = 0;");
+        }
+    } else {
+        relation();
+    }
+}
+
+void Compiler::boolean_or() {
+    match(OR_CHAR);
+    boolean_term();
+    emit_line("cpu_registers.at(0) = cpu_registers.at(0) | cpu_pop();");
+}
+
+void Compiler::boolean_xor() {
+    match(XOR_CHAR);
+    boolean_term();
+    emit_line("cpu_registers.at(0) = !cpu_registers.at(0) != !cpu_pop();"); //extra ! to coerce to bool
+}
+
+
+
+//relation handling
+
+void Compiler::relation() {
+    expression();
+    if (is_in(m_input_stream.peek(), REL_OPS)) {
+        emit_line("cpu_stack.push(cpu_registers.at(0));");
+        switch (m_input_stream.peek()) {
+            case EQ_CHAR:
+                equals();
+                break;
+            case NEQ_CHAR:
+                not_equals();
+                break;
+            case LT_CHAR:
+                less_than();
+                break;
+            case GT_CHAR:
+                greater_than();
+                break;
+            default:
+                assert(false); //should never be reached!
+                break;
+        }
+    }
+}
+
+void Compiler::equals() {
+    match(EQ_CHAR);
+    expression();
+    emit_line("cond = cpu_pop() == cpu_registers.at(0);");
+    emit_line("cpu_registers.at(0) = cond;");
+}
+
+void Compiler::not_equals() {
+    match(NEQ_CHAR);
+    expression();
+    emit_line("cond = cpu_pop() != cpu_registers.at(0);");
+    emit_line("cpu_registers.at(0) = cond;");
+}
+
+void Compiler::less_than() {
+    match(LT_CHAR);
+    expression();
+    emit_line("cond = cpu_pop() < cpu_registers.at(0);");
+    emit_line("cpu_registers.at(0) = cond;");
+}
+
+void Compiler::greater_than() {
+    match(GT_CHAR);
+    expression();
+    emit_line("cond = cpu_pop() > cpu_registers.at(0);");
+    emit_line("cpu_registers.at(0) = cond;");
+}
+
+
+
+//boolean utility functions
+
+bool Compiler::get_boolean () {
+    if (!is_boolean(m_input_stream.peek())) {
+        expected("Boolean literal");    //will throw exception
+    } 
+    
+    bool boolean_value = std::toupper(m_input_stream.peek()) == TRUE_CHAR;
+    m_input_stream.get();
+    return boolean_value;
+}
+
+bool Compiler::is_boolean (const char c) {
+    return is_in(std::toupper(c), BOOLEAN_LITERALS);
+}
+
+
+    
+//control flow
+
+void Compiler::program () {
+    block(ERR_LABEL);
+    if (m_input_stream.peek() != END_CHAR) {
+        expected("End");
+    }
+    match(END_CHAR);
 }
                 
 void Compiler::block (const std::string exit_label) {
@@ -511,51 +576,6 @@ void Compiler::break_statement(const std::string exit_label) {
     }
 }
 
-void Compiler::ident () {
-    char name = get_name();
-    
-    if (name != ERR_CHAR) { 
-        if (m_input_stream.peek() == '(') {//function call
-            match('(');
-            match(')');
-            define_function(name);
-            emit_line(std::string(1,name) + "();");
-            //note that this doesn't put anything in cpu_registers[0], which following functions expect
-            //in other words, this parses function calls, but doesn't behave appropriately.
-        } else {
-            emit_line(std::string("cpu_registers.at(0) = cpu_variables.at(\'") + name + "\');");
-        }
-    } 
-}
-
-void Compiler::add () {
-    match('+');
-    term();
-    emit_line("cpu_registers.at(0) = cpu_stack.top() + cpu_registers.at(0);");
-    emit_line("cpu_stack.pop();");
-}
-
-void Compiler::subtract () {
-    match('-');
-    term();
-    emit_line("cpu_registers.at(0) = cpu_stack.top() - cpu_registers.at(0);");
-    emit_line("cpu_stack.pop();");
-}
-
-void Compiler::multiply() {
-    match('*');
-    factor();
-    emit_line("cpu_registers.at(0) = cpu_stack.top() * cpu_registers.at(0);");
-    emit_line("cpu_stack.pop();");
-}
-
-void Compiler::divide() {
-    match('/');
-    factor();
-    emit_line("cpu_registers.at(0) = cpu_stack.top() / cpu_registers.at(0);");
-    emit_line("cpu_stack.pop();");
-}
-
 //equivalent of assembly's BNE
 void Compiler::branch_on_cond(const std::string label) {
     emit_line({"if (cond) { goto " + label + "; }"});
@@ -571,12 +591,10 @@ void Compiler::jump (const std::string label) {
     emit_line({"goto " + label + ";"});
 }
 
-void Compiler::other () {
-    emit_line(std::string("std::cout << \"") + get_name() + "\" << '\\n';");
-}
 
 
 //label handling
+
 std::string Compiler::new_label() {
     std::string label{'L' + std::to_string(label_count)};
     ++label_count;
@@ -592,9 +610,7 @@ void Compiler::define_function (char ident) const {
     emit_line(std::string("auto ") + ident + " = [](){};");
 }
 
-bool Compiler::is_boolean (const char c) {
-    return is_in(std::toupper(c), BOOLEAN_LITERALS);
-}
+
 
 //cradle methods
 

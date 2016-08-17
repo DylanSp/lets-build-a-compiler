@@ -71,14 +71,38 @@ public:
     
     //parsing methods
     void start_symbol();
+    
+    //arithmetic expression handling
+    void assignment();
+    void expression();
+    void term();
+    void factor();
+    void ident();
+    void add();
+    void subtract();
+    void multiply();
+    void divide();
+    
+    //boolean expression handling
     void boolean_expression();
     void boolean_term();
     void boolean_not_factor();
     void boolean_factor();
     void boolean_or();
     void boolean_xor();
+    
+    //relation handling
+    void relation();
+    void equals();
+    void not_equals();
+    void less_than();
+    void greater_than();
+    
+    //boolean utility functions
+    bool get_boolean();
+    static bool is_boolean (const char c);
 
-    void assignment();
+    //control flow 
     void program();
     void block(const std::string exit_label);
     void if_statement(const std::string exit_label);
@@ -88,30 +112,10 @@ public:
     void for_statement();
     void do_statement();
     void break_statement(const std::string exit_label);
-    void expression();
-    void term();
-    void factor();
-    void ident();
-    void add();
-    void subtract();
-    void multiply();
-    void divide();
-
-    void relation();
-    void equals();
-    void not_equals();
-    void less_than();
-    void greater_than();
-    void condition();
     void branch_on_cond(const std::string label);
     void branch_on_not_cond(const std::string label);
     void jump(const std::string label);
-    void other();
     
-    //boolean handling
-    bool get_boolean();
-    static bool is_boolean (const char c);
-
     //label handling
     size_t label_count;
     std::string new_label();
