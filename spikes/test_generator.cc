@@ -13,6 +13,10 @@ void generate_correct_functionality_test (const std::string class_name,
                                           std::ofstream& ofs) {
     std::string test_class_name = class_name + "Class";
     ofs << "TEST_F(" << test_class_name << ", GetsCorrectResults ) {" << '\n';
+    
+    //note - these tests are fragile, stoi doesn't do adequate error checking
+    //yaml-cpp can catch non-alphanumeric keys, but don't rely on this
+    //just make sure keys under expected_values in spec are valid register numbers or variable names
     for (auto test : expected_values) {
         if (std::isalpha(test.first.at(0))) {
             ofs << "EXPECT_EQ(" << test.second << ", " << "tested_object.get_variable(\'" << test.first << "\'));";
