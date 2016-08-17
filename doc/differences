@@ -24,6 +24,7 @@ Grammar:
 
 Chapter 6:
 -boolean true is encoded as 1 in registers
+-boolean_factor sets cond based on cpu_registers[0] in case of boolean literals
 
 Block processing/control flow:
 -instead of END statement, have "return;"
@@ -34,6 +35,7 @@ Block processing/control flow:
 -Note: loop statements with no break will produce a compiler warning for an unused label
 -each line must end with an END_CHAR (which gets match()'d by program())
 -fin() for skipping newlines isn't needed; compile_full loops through lines, supplies each line to compile_intermediate
+-post_label emits a label followed by a semicolon to make a complete statement; necessary when label is at end of a block (test with "i1=2x=1lx=2ee")
 
 Chapter 5's other() function produces code echoing get_name() to std::cout
 Chapter 5's condition() statement sets cond = true

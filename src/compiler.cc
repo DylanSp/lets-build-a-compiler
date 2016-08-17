@@ -602,7 +602,7 @@ std::string Compiler::new_label() {
 }
 
 void Compiler::post_label(const std::string label) const {
-    emit_line({label + ":"});
+    emit_line({label + ": ;"}); //semicolon needed to make this a statement, in case there are no statements afterward
 }
 
 //defines an empty lambda so output compiles
