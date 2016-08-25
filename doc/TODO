@@ -1,9 +1,19 @@
 Add additional, more comprehensive tests
 -mix arithmetic, variable assignment, control flow, boolean
+-work from control flow examples
+-nested if: not workng (see test/failing_specs), probably due to breaking things across multiple lines
 
-Rearrange order of functions into logical units
+Very fragile - each statement has to be assignment or control flow expression
+-can't use boolean literals in relations - but shouldn't have to.
+-CAN assign values of boolean literals to variable, then test those
+-grammar has factor -> (b-expression) production, this isn't reflected in program
+-should boolean_factor() set cond for boolean literals, or should it let equals()/not_equals()/less_than()/greater_than() handle that?
+-rework to deal with whitespace, newlines properly?
+
 
 then start chapter 7.
+
+
 
 -CompilerReader class, handles batch processing of a file - ONLY IF NECESSARY
 -uses while(getline) to parse file into vector<string>, calls compile_full

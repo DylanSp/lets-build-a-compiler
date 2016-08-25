@@ -336,6 +336,7 @@ void Compiler::boolean_factor() {
         } else {
             emit_line("cpu_registers.at(0) = 0;");
         }
+        //emit_line("cond = cpu_registers.at(0);");
     } else {
         relation();
     }

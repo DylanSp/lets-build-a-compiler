@@ -1,21 +1,34 @@
-aigece: (expected: agc)
-    a
-    if (true)
-        g
+x=1e
+i1=1y=2ee
+z=3e: 
+(expected: x=1, y=2, z=3)
+    x=1
+    if (1=1)
+        y=2
     endif
-    c 
+    z=3 
     END
     
-aijicegehe: (expected: ajcgh)
-    a
-    if (true)
-        j
-        if (true)
-            c
+x=1e
+i1=1
+y=2
+i2=2
+z=3
+e
+m=4
+e
+n=5
+e
+(expected: x=1, y=2, z=3, m=4, n=5)
+    x=1
+    if (1=1)
+        y=2
+        if (2=2)
+            z=3
         endif
-        g
+        m=4
     endif
-    h
+    n=5
     END
     
     

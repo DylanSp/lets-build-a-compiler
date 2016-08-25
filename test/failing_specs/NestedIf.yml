@@ -1,0 +1,15 @@
+class_name: NestedIf
+program_source:
+  - "x=1e"
+  - "i1=1"
+  - "y=2"
+  - "i2=2"
+  - "z=3e"
+  - "m=4e"
+  - "n=5e"
+expected_values:
+  X: 1
+  Y: 2
+  Z: 3
+  M: 4
+  N: 5

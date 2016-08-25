@@ -1,0 +1,5 @@
+class_name: SimpleIfElse
+program_source:
+  - "i1=2x=1lx=2ee"
+expected_values:
+  X: 2
