@@ -1,8 +1,9 @@
 class_name: RepeatOnce
 program_source:
-  - "x=0e"
-  - "rx=x+1u1=1e"
-  - "y=1e"
+  - "x=0"
+  - "rx=x+1u1=1"
+  - "y=1"
+  - "e"
 expected_values:
   X: 1
   Y: 1

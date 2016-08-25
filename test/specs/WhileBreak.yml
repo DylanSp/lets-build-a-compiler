@@ -1,8 +1,9 @@
 class_name: WhileBreak
 program_source:
-  - "x=0e"
-  - "w1=1x=x+1bee"
-  - "y=1e"
+  - "x=0"
+  - "w1=1x=x+1be"
+  - "y=1"
+  - "e"
 expected_values:
   X: 1
   Y: 1

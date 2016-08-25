@@ -1,8 +1,9 @@
 class_name: LoopBreak
 program_source:
-  - "x=0e"
-  - "px=x+1bee"
-  - "y=1e"
+  - "x=0"
+  - "px=x+1be"
+  - "y=1"
+  - "e"
 expected_values:
   X: 1
   Y: 1

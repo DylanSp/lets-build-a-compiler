@@ -1,8 +1,9 @@
 class_name: DeadWhile
 program_source:
-  - "x=0e"
-  - "w1=2x=x+1ee"
-  - "y=1e"
+  - "x=0"
+  - "w1=2x=x+1e"
+  - "y=1"
+  - "e"
 expected_values:
   X: 0
   Y: 1

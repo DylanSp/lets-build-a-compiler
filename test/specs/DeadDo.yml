@@ -1,8 +1,9 @@
 class_name: DeadDo
 program_source:
-  - "x=0e"
-  - "d0x=x+1ee"
-  - "y=1e"
+  - "x=0"
+  - "d0x=x+1e"
+  - "y=1"
+  - "e"
 expected_values:
   X: 0
   Y: 1

@@ -1,7 +1,8 @@
 class_name: VariableAddition
 program_source:
-  - "x=2e"
-  - "y=x+1e"
+  - "x=2"
+  - "y=x+1"
+  - "e"
 expected_values:
   X: 2
   Y: 3

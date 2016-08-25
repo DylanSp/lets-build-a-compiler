@@ -1,8 +1,9 @@
 class_name: SimpleWhile
 program_source:
-  - "x=0e"
-  - "wx<3x=x+1ee"
-  - "y=1e"
+  - "x=0"
+  - "wx<3x=x+1e"
+  - "y=1"
+  - "e"
 expected_values:
   X: 3
   Y: 1

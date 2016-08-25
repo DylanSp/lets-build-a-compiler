@@ -1,8 +1,9 @@
 class_name: SimpleIf
 program_source:
-  - "x=1e"
-  - "i1=1y=2ee"
-  - "z=3e"
+  - "x=1"
+  - "i1=1y=2e"
+  - "z=3"
+  - "e"
 expected_values:
   X: 1
   Y: 2

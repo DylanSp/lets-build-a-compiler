@@ -20,8 +20,8 @@ public:
     Compiler(std::ostream& output = std::cout);
     
     //"main" methods, compile from is to os
-    void compile_intermediate(const std::string input_line);  //compiles a single line of input
-    void compile_full (const std::vector<std::string> source, const std::string class_name);         //compiles a full C++ program
+    void compile_intermediate(const std::string source);  //compiles a single line of input
+    void compile_full (const std::string source, const std::string class_name);         //compiles a full C++ program
     
     static const size_t NUM_REGISTERS;          //number of registers available to the compiled code
     static const char ERR_CHAR;
@@ -120,6 +120,8 @@ public:
     size_t label_count;
     std::string new_label();
     void post_label(const std::string label) const;
+    
+    void line_end();
 
     //cradle methods
     void report_error(const std::string err) const;

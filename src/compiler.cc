@@ -51,13 +51,13 @@ Compiler::Compiler (std::ostream& output)
 
 
 
-void Compiler::compile_intermediate (const std::string input_line) {
+void Compiler::compile_intermediate (const std::string source) {
     
     //clear contents and error flags on m_input_stream
     m_input_stream.str("");
     m_input_stream.clear();
     
-    m_input_stream << input_line;
+    m_input_stream << source;
     
     try {
         start_symbol();
@@ -68,12 +68,10 @@ void Compiler::compile_intermediate (const std::string input_line) {
     }
 }
     
-void Compiler::compile_full (const std::vector<std::string> source, const std::string class_name) {
+void Compiler::compile_full (const std::string source, const std::string class_name) {
     
     compile_start(class_name);
-    for (auto line : source) {
-        compile_intermediate(line);
-    }    
+    compile_intermediate(source);
     compile_end();
     
 }
@@ -442,6 +440,7 @@ void Compiler::program () {
                 
 void Compiler::block (const std::string exit_label) {
     while (!is_in(m_input_stream.peek(), BLOCK_ENDS)) {
+        line_end();
         switch (m_input_stream.peek()) {
             case IF_CHAR:
                 if_statement(exit_label);
@@ -612,6 +611,16 @@ void Compiler::define_function (char ident) const {
 }
 
 
+//skip over line endings
+void Compiler::line_end () {
+    if (m_input_stream.peek() == '\r') {
+        m_input_stream.get();
+    }
+    
+    if (m_input_stream.peek() == '\n') {
+        m_input_stream.get();
+    }
+}
 
 //cradle methods
 

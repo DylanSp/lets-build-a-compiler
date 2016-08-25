@@ -1,8 +1,9 @@
 class_name: BoolVariables
 program_source:
-  - "x=te"
-  - "y=fe"
-  - "ix=yz=1lz=2ee"
+  - "x=t"
+  - "y=f"
+  - "ix=yz=1lz=2e"
+  - "e"
 expected_values:
   X: 1
   Y: 0

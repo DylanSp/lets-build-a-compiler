@@ -6,8 +6,6 @@ Stream processing:
 
 Char/string processing:
 -No separate isNum(), isAlpha(), isAlNum() functions; use native functions from cctype
--compile_intermediate() handles a single line (read into a stringstream), compile_full() handles a vector of lines. 
--Separation by newlines is handled by a driver program (interactive_compiler, full_compiler, test_generator).
 
 Special characters are recognized by membership in std::unordered_set, with aid of the is_in() helper method.
 

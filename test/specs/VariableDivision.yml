@@ -1,7 +1,8 @@
 class_name: VariableDivision
 program_source:
-  - "x=6e"
-  - "y=x/2e"
+  - "x=6"
+  - "y=x/2"
+  - "e"
 expected_values:
   X: 6
   Y: 3

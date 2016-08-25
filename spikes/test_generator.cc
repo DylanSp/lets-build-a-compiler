@@ -61,7 +61,7 @@ void generate_test_fixture (const std::string class_name, std::ofstream& ofs) {
 }
 
 void create_testable_class (const std::string class_name,
-                            const std::vector<std::string> program,
+                            const std::string program,
                             std::ofstream& ofs) {
     ds_compiler::Compiler my_compiler(ofs);
     my_compiler.compile_full(program, class_name);
@@ -69,7 +69,7 @@ void create_testable_class (const std::string class_name,
 
 struct test_input_params {
     std::string class_name;
-    std::vector<std::string> program_source;
+    std::string program_source;
     std::map<std::string, int> expected_values;
 };
 
@@ -93,7 +93,8 @@ int main (int argc, char *argv[]) {
         params.class_name = test_spec["class_name"].as<std::string>();
         
         for (auto line : test_spec["program_source"]) {
-            params.program_source.push_back(line.as<std::string>());
+            //params.program_source.push_back(line.as<std::string>());
+            params.program_source += line.as<std::string>();
         }
         
         for (auto value_pair : test_spec["expected_values"]) {
