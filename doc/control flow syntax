@@ -76,6 +76,11 @@ UNTIL
             
             
 for: see "for statement translation"
+FOR <ident> = <expr1> TO <expr2> <block> ENDFOR
+fj=12x=x+1e: 
+for j = 1 TO 2
+    x = x + 1
+endfor
 
 
 do: see "do statement translation"

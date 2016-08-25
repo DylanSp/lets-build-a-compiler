@@ -1,0 +1,8 @@
+class_name: SimpleRepeat
+program_source:
+  - "x=0e"
+  - "rx=x+1ux=5e"
+  - "y=1e"
+expected_values:
+  X: 5
+  Y: 1

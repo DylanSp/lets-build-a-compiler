@@ -1,0 +1,8 @@
+class_name: SimpleDo
+program_source:
+  - "x=0e"
+  - "d2x=x+1ee"
+  - "y=1e"
+expected_values:
+  X: 2
+  Y: 1
