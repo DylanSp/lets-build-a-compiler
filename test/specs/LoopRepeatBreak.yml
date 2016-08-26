@@ -1,0 +1,36 @@
+class_name: LoopRepeatBreak
+apjrcbguhbmeke (expected: ajchk)
+    a
+    loop
+        j
+        repeat
+            c
+            break
+            g
+        until (true)
+        h
+        break
+        m
+    endloop
+    k
+    END
+program_source:
+  - "x = 0"
+  - "y = 0"
+  - "p"
+  - "  x = x + 1"
+  - "  r"
+  - "    y = y + 1"
+  - "    b"
+  - "    y = y + 1"
+  - "  u 1=1"
+  - "  x = x + 1"
+  - "  b"
+  - "  x = x + 1"
+  - "e"
+  - "z = 1"
+  - "e"
+expected_values:
+  X: 2
+  Y: 1
+  Z: 1

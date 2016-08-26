@@ -1,8 +1,9 @@
 class_name: SimpleFor
 program_source:
-  - "x=0e"
-  - "fj=12x=x+1ee"
-  - "y=1e"
+  - "x=0"
+  - "fj=12x=x+1e"
+  - "y=1"
+  - "e"
 expected_values:
   X: 2
   Y: 1

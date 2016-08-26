@@ -1,0 +1,12 @@
+class_name: NestedRepeat
+program_source:
+  - "x=1"
+  - "r"
+  - "  x = x + 1"
+  - "  r"
+  - "    x = x + 1"
+  - "  u 0 = 0"
+  - "u 0 # 1"
+  - "e"
+expected_values:
+  X: 3

@@ -1,7 +1,6 @@
 Add additional, more comprehensive tests
 -mix arithmetic, variable assignment, control flow, boolean
 -work from control flow examples
--nested if: not workng (see test/failing_specs), probably due to breaking things across multiple lines
 
 Very fragile - each statement has to be assignment or control flow expression
 -can't use boolean literals in relations - but shouldn't have to.
