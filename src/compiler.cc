@@ -667,23 +667,28 @@ void Compiler::match(const char c) {
 
 // gets a valid identifier from input stream
 char Compiler::get_name () {
+    char name;
     if (!std::isalpha(m_input_stream.peek())) {
         expected("Name");
-        return ERR_CHAR;
+        name = ERR_CHAR;
     } else {
-        return std::toupper(m_input_stream.get());
+        name = std::toupper(m_input_stream.get());
+        skip_whitespace();
     }
-    
+    return name;
 }
 
 //gets a number
 char Compiler::get_num () {
+    char num;
     if (!std::isdigit(m_input_stream.peek())) {
         expected("Integer");
-        return ERR_CHAR;
+        num = ERR_CHAR;
     } else {
-        return m_input_stream.get();
+        num = m_input_stream.get();
     }
+    skip_whitespace();
+    return num;
 }
 
 
