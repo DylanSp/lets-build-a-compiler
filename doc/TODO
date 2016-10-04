@@ -22,7 +22,8 @@ then start chapter 7.
 -create test battery to check handling of input with bad syntax.
 --create a custom Exception class deriving std::runtime_error, use google test's EXPECT_THROW
 
-Potentially rename *_CHAR to *_SYMBOL; use a typedef to switch between char and string?
+Potentially rename *_CHAR to *_SYMBOL; use a type alias to switch between char and string?
+-type alias: http://stackoverflow.com/questions/10747810/what-is-the-difference-between-typedef-and-using-in-c11
 
 Re-examine using boost for some things like filesystem paths, just to gain familiarity
 
