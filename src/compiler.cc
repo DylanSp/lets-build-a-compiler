@@ -12,7 +12,7 @@
 namespace ds_compiler {
     
 const size_t Compiler::NUM_REGISTERS = 8;
-const char Compiler::ERR_CHAR = '\0';
+const std::string Compiler::ERR_STRING = "ERR";
 const std::unordered_set<char> Compiler::ADD_OPS({'+', '-'});
 const std::unordered_set<char> Compiler::MULT_OPS({'*', '/'});
 const char Compiler::TRUE_CHAR = 'T';
@@ -144,7 +144,8 @@ void Compiler::define_dump() const {
 
 
 void Compiler::start_symbol () {
-    get_boolean() ? emit_line("true") : emit_line("false");
+    //std::cout << get_name();
+    std::cout << get_num();
 }
 
 
@@ -201,24 +202,35 @@ void Compiler::match(const char c) {
 }
 
 // gets a valid identifier from input stream
-char Compiler::get_name () {
+std::string Compiler::get_name () {
+    std::string name;
+    
     if (!std::isalpha(m_input_stream.peek())) {
         expected("Name");
-        return ERR_CHAR;
-    } else {
-        return std::toupper(m_input_stream.get());
+        return ERR_STRING;
+    } 
+    
+    while (std::isalnum(m_input_stream.peek())) {
+        name += std::toupper(m_input_stream.get());
     }
     
+    return name;
 }
 
 //gets a number
-char Compiler::get_num () {
+std::string Compiler::get_num () {
+    std::string num;
+    
     if (!std::isdigit(m_input_stream.peek())) {
         expected("Integer");
-        return ERR_CHAR;
-    } else {
-        return m_input_stream.get();
+        return ERR_STRING;
+    } 
+    
+    while (std::isdigit(m_input_stream.peek())) {
+        num += m_input_stream.get();
     }
+    
+    return num;
 }
 
 

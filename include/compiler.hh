@@ -28,7 +28,7 @@ public:
     
 private:
 
-    static const char ERR_CHAR;
+    static const std::string ERR_STRING;
     static const std::unordered_set<char> ADD_OPS;
     static const std::unordered_set<char> MULT_OPS;
     static const char TRUE_CHAR;
@@ -60,8 +60,8 @@ private:
     void expected(const std::string expect) const;
     void expected(const char c) const;
     void match(const char c);
-    char get_name ();
-    char get_num ();
+    std::string get_name ();
+    std::string get_num ();
     void emit (std::string s) const;
     void emit_line (std::string s) const;
     
