@@ -1,8 +1,7 @@
-Look over tutorial notes - do I want to do chap4? merge chap3 with master? 
--don't do chap4.
+merge whitespace, multi-line stuff to master?
+-whitespace handling: https://github.com/DylanSp/lets-build-a-compiler/commit/edb9c2f195d4b1a7b455aa6dc4fa6f28143f92ec
+-multi-line: https://github.com/DylanSp/lets-build-a-compiler/commit/b2dbf8364fe036ec1a1a6148d7ea577aff7ee045
 
-Decide whether to allow multi-char tokens going forward.
--don't, complicates things with conditionals.
 
 -CompilerReader class, handles batch processing of a file - ONLY IF NECESSARY
 -uses while(getline) to parse file into vector<string>, calls compile_full

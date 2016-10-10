@@ -21,7 +21,7 @@ public:
     
     //"main" methods, compile from is to os
     void compile_intermediate(const std::string input_line);  //compiles a single line of input
-    void compile_full (const std::vector<std::string> source, const std::string class_name);         //compiles a full C++ program
+    void compile_full (const std::string source, const std::string class_name);         //compiles a full C++ program
     
     static const size_t NUM_REGISTERS;          //number of registers available to the compiled code
                                                 //public so test generation code can reference it
@@ -34,6 +34,7 @@ private:
     static const char TRUE_CHAR;
     static const char FALSE_CHAR;
     static const std::unordered_set<char> BOOLEAN_LITERALS;
+    static const std::unordered_set<char> WHITESPACE;
 
     void compile_start(const std::string class_name) const;
     void compile_end() const;
@@ -47,18 +48,24 @@ private:
     void define_is_stack_empty() const;
     void define_dump() const;
     
+    //lexing methods
+    std::string scan();
+    
     //parsing methods
     void start_symbol();
-    
+
     //boolean handling
     bool get_boolean();
     static bool is_boolean (const char c);
+
+    void line_end();
 
     //cradle methods
     void report_error(const std::string err) const;
     void abort(const std::string err) const;
     void expected(const std::string expect) const;
     void expected(const char c) const;
+    void skip_whitespace();
     void match(const char c);
     std::string get_name ();
     std::string get_num ();

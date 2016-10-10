@@ -18,6 +18,7 @@ const std::unordered_set<char> Compiler::MULT_OPS({'*', '/'});
 const char Compiler::TRUE_CHAR = 'T';
 const char Compiler::FALSE_CHAR = 'F';
 const std::unordered_set<char> Compiler::BOOLEAN_LITERALS({TRUE_CHAR, FALSE_CHAR});
+const std::unordered_set<char> Compiler::WHITESPACE({' ', '\t'});
     
 //constructors
 Compiler::Compiler (std::ostream& output) 
@@ -37,19 +38,25 @@ void Compiler::compile_intermediate (const std::string input_line) {
     m_input_stream << input_line;
     
     try {
-        start_symbol();
+        //start_symbol();
+        
+        std::string token;
+        do {
+            token = scan();
+            std::cout << token << '\n';
+        } while (token != "\n" && token != "\r");
+        
+        
     } catch (std::exception &ex) {
         std::cerr << ex.what() << '\n';
         throw std::runtime_error("Compilation failed.\n");
     }
 }
     
-void Compiler::compile_full (const std::vector<std::string> source, const std::string class_name) {
+void Compiler::compile_full (const std::string source, const std::string class_name) {
     
     compile_start(class_name);
-    for (auto line : source) {
-        compile_intermediate(line);
-    }    
+    compile_intermediate(source);
     compile_end();
     
 }
@@ -142,6 +149,20 @@ void Compiler::define_dump() const {
     emit_line("}");
 }
 
+std::string Compiler::scan () {
+    std::string token;
+    char look = m_input_stream.peek();
+    
+    if (std::isalpha(m_input_stream.peek())) {
+        token = get_name();
+    } else if (std::isdigit(m_input_stream.peek())) {
+        token = get_num();
+    } else {
+        token = m_input_stream.get();
+    }
+    skip_whitespace();
+    return token;
+}
 
 void Compiler::start_symbol () {
     //std::cout << get_name();
@@ -163,6 +184,17 @@ bool Compiler::get_boolean () {
 
 bool Compiler::is_boolean (const char c) {
     return is_in(std::toupper(c), BOOLEAN_LITERALS);
+}
+
+//skip over line endings
+void Compiler::line_end () {
+    if (m_input_stream.peek() == '\r') {
+        m_input_stream.get();
+    }
+  
+    if (m_input_stream.peek() == '\n') {
+        m_input_stream.get();
+    }
 }
 
 //cradle methods
@@ -191,6 +223,13 @@ void Compiler::expected(const char c) const {
     expected(std::string(1, c));
 }
 
+void Compiler::skip_whitespace () {
+    while (is_in(m_input_stream.peek(), WHITESPACE)) {
+        m_input_stream.get();  //intentionally discard result 
+    }
+}
+
+
 //checks if next character matches; if so, consume that character
 void Compiler::match(const char c) {
     
@@ -203,17 +242,21 @@ void Compiler::match(const char c) {
 
 // gets a valid identifier from input stream
 std::string Compiler::get_name () {
-    std::string name;
+    std::string name = "";
+    char look = m_input_stream.peek();
     
     if (!std::isalpha(m_input_stream.peek())) {
         expected("Name");
         return ERR_STRING;
     } 
     
-    while (std::isalnum(m_input_stream.peek())) {
+    //while (std::isalnum(m_input_stream.peek())) {
+    while (std::isalnum(look)) {
         name += std::toupper(m_input_stream.get());
+        look = m_input_stream.peek();
     }
     
+    skip_whitespace();
     return name;
 }
 
@@ -230,6 +273,7 @@ std::string Compiler::get_num () {
         num += m_input_stream.get();
     }
     
+    skip_whitespace();
     return num;
 }
 
