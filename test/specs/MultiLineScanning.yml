@@ -1,0 +1,4 @@
+class_name: MultiLineScanning
+program_source: 
+  - "this is "
+  - "a tokenized text."

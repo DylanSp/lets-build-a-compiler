@@ -21,3 +21,7 @@ Functions:
 
 Grammar:
 -Numeric literals can't begin with 0, to avoid inadvertent use of C++ octal literals.
+
+Scanner:
+-As well as stopping on ., stops on end of input stream
+-handles multiple lines without Fin()

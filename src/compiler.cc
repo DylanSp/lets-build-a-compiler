@@ -18,7 +18,7 @@ const std::unordered_set<char> Compiler::MULT_OPS({'*', '/'});
 const char Compiler::TRUE_CHAR = 'T';
 const char Compiler::FALSE_CHAR = 'F';
 const std::unordered_set<char> Compiler::BOOLEAN_LITERALS({TRUE_CHAR, FALSE_CHAR});
-const std::unordered_set<char> Compiler::WHITESPACE({' ', '\t'});
+const std::unordered_set<char> Compiler::WHITESPACE({' ', '\t', '\r', '\n'});
     
 //constructors
 Compiler::Compiler (std::ostream& output) 
@@ -44,7 +44,7 @@ void Compiler::compile_intermediate (const std::string input_line) {
         do {
             token = scan();
             std::cout << token << '\n';
-        } while (token != "\n" && token != "\r");
+        } while (token != "." && m_input_stream.peek() != std::char_traits<char>::eof());
         
         
     } catch (std::exception &ex) {
