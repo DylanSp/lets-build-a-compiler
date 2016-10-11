@@ -19,6 +19,7 @@ const char Compiler::TRUE_CHAR = 'T';
 const char Compiler::FALSE_CHAR = 'F';
 const std::unordered_set<char> Compiler::BOOLEAN_LITERALS({TRUE_CHAR, FALSE_CHAR});
 const std::unordered_set<char> Compiler::WHITESPACE({' ', '\t', '\r', '\n'});
+const std::unordered_set<char> Compiler::OPERATORS({'+', '-', '*', '/', '<', '>', ':', '='});
     
 //constructors
 Compiler::Compiler (std::ostream& output) 
@@ -157,11 +158,32 @@ std::string Compiler::scan () {
         token = get_name();
     } else if (std::isdigit(m_input_stream.peek())) {
         token = get_num();
+    } else if (is_in(m_input_stream.peek(), OPERATORS)) {
+        token = get_op();
     } else {
         token = m_input_stream.get();
     }
     skip_whitespace();
     return token;
+}
+
+std::string Compiler::get_op () {
+    std::string op = "";
+    char look = m_input_stream.peek();
+    
+    if (!is_in(look, OPERATORS)) {
+        expected("Operator");
+        return ERR_STRING;
+    } 
+    
+    while (is_in(look, OPERATORS)) {
+        op += m_input_stream.get();
+        look = m_input_stream.peek();
+    }
+    
+    skip_whitespace();
+    return op;
+    
 }
 
 void Compiler::start_symbol () {

@@ -35,6 +35,7 @@ private:
     static const char FALSE_CHAR;
     static const std::unordered_set<char> BOOLEAN_LITERALS;
     static const std::unordered_set<char> WHITESPACE;
+    static const std::unordered_set<char> OPERATORS;
 
     void compile_start(const std::string class_name) const;
     void compile_end() const;
@@ -50,6 +51,7 @@ private:
     
     //lexing methods
     std::string scan();
+    std::string get_op();
     
     //parsing methods
     void start_symbol();
