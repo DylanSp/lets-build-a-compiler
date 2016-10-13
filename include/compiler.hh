@@ -11,12 +11,24 @@
 #include <unordered_set>
 #include <vector>
 #include <sstream>
+#include <set>
+#include <map>
 
 namespace ds_compiler {
-
+    
 class Compiler {
   
 public:
+    using Symbol = std::string;
+    enum SymbolType {IF_SYM, ELSE_SYM, ENDIF_SYM, END_SYM, IDENT, NUMBER, OPERATOR_SYM };
+    static const std::map<std::string, SymbolType> SymbolTypeNames;
+
+    struct Token {
+        SymbolType type;
+        std::string value;
+    }; 
+
+
     Compiler(std::ostream& output = std::cout);
     
     //"main" methods, compile from is to os
@@ -36,6 +48,7 @@ private:
     static const std::unordered_set<char> BOOLEAN_LITERALS;
     static const std::unordered_set<char> WHITESPACE;
     static const std::unordered_set<char> OPERATORS;
+    static const std::map<Symbol, std::string> KEYWORDS;
 
     void compile_start(const std::string class_name) const;
     void compile_end() const;
@@ -50,7 +63,7 @@ private:
     void define_dump() const;
     
     //lexing methods
-    std::string scan();
+    Token scan();
     std::string get_op();
     
     //parsing methods
@@ -78,6 +91,7 @@ private:
     
     std::stringstream m_input_stream;
     std::ostream& m_output_stream;
+    std::set<Symbol> m_symbol_table;
     
 };
 

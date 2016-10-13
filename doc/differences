@@ -25,3 +25,5 @@ Grammar:
 Scanner:
 -As well as stopping on ., stops on end of input stream
 -handles multiple lines without Fin()
+-Operator changed to OPERATOR_SYM due to "operator" being a reserved word
+-instead of global Token, Value variables, defined a Token struct with type and value

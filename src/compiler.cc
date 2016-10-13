@@ -7,10 +7,17 @@
 #include <cctype>       //character comparison functions
 #include <stdexcept>
 #include <assert.h>
+#include <utility>      //std::pair
 #include "compiler.hh"
 
 namespace ds_compiler {
-    
+
+
+const std::map<std::string, Compiler::SymbolType> Compiler::SymbolTypeNames {{"IfSym", IF_SYM}, {"ElseSym", ELSE_SYM}, 
+                                                                             {"EndifSym", ENDIF_SYM}, {"EndSym", END_SYM},
+                                                                             {"Ident", IDENT}, {"Number", NUMBER},
+                                                                             {"OperatorSym", OPERATOR_SYM}};
+                                                                             
 const size_t Compiler::NUM_REGISTERS = 8;
 const std::string Compiler::ERR_STRING = "ERR";
 const std::unordered_set<char> Compiler::ADD_OPS({'+', '-'});
@@ -20,10 +27,11 @@ const char Compiler::FALSE_CHAR = 'F';
 const std::unordered_set<char> Compiler::BOOLEAN_LITERALS({TRUE_CHAR, FALSE_CHAR});
 const std::unordered_set<char> Compiler::WHITESPACE({' ', '\t', '\r', '\n'});
 const std::unordered_set<char> Compiler::OPERATORS({'+', '-', '*', '/', '<', '>', ':', '='});
+const std::map<Compiler::Symbol, std::string> Compiler::KEYWORDS{{"IF", "IfSym"}, {"ELSE", "ElseSym"}, {"ENDIF", "EndifSym"}, {"END", "EndSym"}};
     
 //constructors
 Compiler::Compiler (std::ostream& output) 
-    : m_input_stream (std::ios::in|std::ios::out), m_output_stream(output)
+    : m_input_stream (std::ios::in|std::ios::out), m_output_stream(output), m_symbol_table()
 {
     
 }
@@ -41,11 +49,31 @@ void Compiler::compile_intermediate (const std::string input_line) {
     try {
         //start_symbol();
         
-        std::string token;
+        Token token;
         do {
             token = scan();
-            std::cout << token << '\n';
-        } while (token != "." && m_input_stream.peek() != std::char_traits<char>::eof());
+            switch (token.type) {
+                case IDENT:
+                    std::cout << "Ident ";
+                    break;
+                case NUMBER:
+                    std::cout << "Number ";
+                    break;
+                case OPERATOR_SYM:
+                    std::cout << "Operator ";
+                    break;
+                case IF_SYM:
+                case ELSE_SYM:
+                case ENDIF_SYM:
+                case END_SYM:
+                    std::cout << "Keyword ";
+                    break;
+                default:
+                    assert(false);  //should never be reached!
+                    break;
+            }
+            std::cout << token.value << '\n';
+        } while (token.type != END_SYM && m_input_stream.peek() != std::char_traits<char>::eof());
         
         
     } catch (std::exception &ex) {
@@ -150,18 +178,26 @@ void Compiler::define_dump() const {
     emit_line("}");
 }
 
-std::string Compiler::scan () {
-    std::string token;
+Compiler::Token Compiler::scan () {
+    Compiler::Token token;
     char look = m_input_stream.peek();
     
     if (std::isalpha(m_input_stream.peek())) {
-        token = get_name();
+        token.value = get_name();
+        if (KEYWORDS.find(token.value) != KEYWORDS.end()) {
+            token.type = SymbolTypeNames.at(KEYWORDS.at(token.value));
+        } else {
+            token.type = IDENT;
+        }
     } else if (std::isdigit(m_input_stream.peek())) {
-        token = get_num();
+        token.value = get_num();
+        token.type = NUMBER;
     } else if (is_in(m_input_stream.peek(), OPERATORS)) {
-        token = get_op();
+        token.value = get_op();
+        token.type = OPERATOR_SYM;
     } else {
-        token = m_input_stream.get();
+        token.value = m_input_stream.get();
+        token.type = OPERATOR_SYM;
     }
     skip_whitespace();
     return token;

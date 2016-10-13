@@ -3,6 +3,9 @@ merge whitespace, multi-line stuff to master?
 -multi-line: https://github.com/DylanSp/lets-build-a-compiler/commit/b2dbf8364fe036ec1a1a6148d7ea577aff7ee045
 
 
+
+Generic version of is_in(), so it handles both char and string?
+
 -CompilerReader class, handles batch processing of a file - ONLY IF NECESSARY
 -uses while(getline) to parse file into vector<string>, calls compile_full
 
@@ -17,6 +20,7 @@ For pretty-printing STL containers
 -http://louisdx.github.io/cxx-prettyprint/
 
 Re-examine using boost for some things like filesystem paths, just to gain familiarity
+-Use boost for Symbol -> string map? see http://stackoverflow.com/a/7163222/5847190
 
 
 Change Compiler to take another ostream as error output.
