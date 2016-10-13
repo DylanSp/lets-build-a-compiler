@@ -20,7 +20,7 @@ class Compiler {
   
 public:
     using Symbol = std::string;
-    enum SymbolType {IF_SYM, ELSE_SYM, ENDIF_SYM, END_SYM, IDENT, NUMBER, OPERATOR_SYM };
+    enum SymbolType {IF_SYM, ELSE_SYM, ENDIF_SYM, END_SYM, IDENT, NUMBER, OPERATOR_SYM, FAILURE };
     static const std::map<std::string, SymbolType> SymbolTypeNames;
 
     struct Token {
@@ -64,7 +64,7 @@ private:
     
     //lexing methods
     Token scan();
-    std::string get_op();
+    Token get_op();
     
     //parsing methods
     void start_symbol();
@@ -82,8 +82,8 @@ private:
     void expected(const char c) const;
     void skip_whitespace();
     void match(const char c);
-    std::string get_name ();
-    std::string get_num ();
+    Token get_name ();
+    Token get_num ();
     void emit (std::string s) const;
     void emit_line (std::string s) const;
     

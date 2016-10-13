@@ -183,18 +183,11 @@ Compiler::Token Compiler::scan () {
     char look = m_input_stream.peek();
     
     if (std::isalpha(m_input_stream.peek())) {
-        token.value = get_name();
-        if (KEYWORDS.find(token.value) != KEYWORDS.end()) {
-            token.type = SymbolTypeNames.at(KEYWORDS.at(token.value));
-        } else {
-            token.type = IDENT;
-        }
+        token = get_name();
     } else if (std::isdigit(m_input_stream.peek())) {
-        token.value = get_num();
-        token.type = NUMBER;
+        token = get_num();
     } else if (is_in(m_input_stream.peek(), OPERATORS)) {
-        token.value = get_op();
-        token.type = OPERATOR_SYM;
+        token = get_op();
     } else {
         token.value = m_input_stream.get();
         token.type = OPERATOR_SYM;
@@ -203,20 +196,22 @@ Compiler::Token Compiler::scan () {
     return token;
 }
 
-std::string Compiler::get_op () {
-    std::string op = "";
+Compiler::Token Compiler::get_op () {
+    Token op;
+    op.value = "";
     char look = m_input_stream.peek();
     
     if (!is_in(look, OPERATORS)) {
         expected("Operator");
-        return ERR_STRING;
+        return op; //shouldn't return; expected() will abort program
     } 
     
     while (is_in(look, OPERATORS)) {
-        op += m_input_stream.get();
+        op.value += m_input_stream.get();
         look = m_input_stream.peek();
     }
     
+    op.type = OPERATOR_SYM;
     skip_whitespace();
     return op;
     
@@ -224,7 +219,7 @@ std::string Compiler::get_op () {
 
 void Compiler::start_symbol () {
     //std::cout << get_name();
-    std::cout << get_num();
+    //std::cout << get_num();
 }
 
 
@@ -299,19 +294,26 @@ void Compiler::match(const char c) {
 }
 
 // gets a valid identifier from input stream
-std::string Compiler::get_name () {
-    std::string name = "";
+Compiler::Token Compiler::get_name () {
+    Token name;
+    name.value = "";
     char look = m_input_stream.peek();
     
     if (!std::isalpha(m_input_stream.peek())) {
         expected("Name");
-        return ERR_STRING;
+        return name; //shouldn't return; expected() will abort program
     } 
     
     //while (std::isalnum(m_input_stream.peek())) {
     while (std::isalnum(look)) {
-        name += std::toupper(m_input_stream.get());
+        name.value += std::toupper(m_input_stream.get());
         look = m_input_stream.peek();
+    }
+    
+    if (KEYWORDS.find(name.value) != KEYWORDS.end()) {
+        name.type = SymbolTypeNames.at(KEYWORDS.at(name.value));
+    } else {
+        name.type = IDENT;
     }
     
     skip_whitespace();
@@ -319,18 +321,20 @@ std::string Compiler::get_name () {
 }
 
 //gets a number
-std::string Compiler::get_num () {
-    std::string num;
+Compiler::Token Compiler::get_num () {
+    Token num;
+    num.value = "";
     
     if (!std::isdigit(m_input_stream.peek())) {
         expected("Integer");
-        return ERR_STRING;
+        return num; //shouldn't return; expected() will abort program
     } 
     
     while (std::isdigit(m_input_stream.peek())) {
-        num += m_input_stream.get();
+        num.value += m_input_stream.get();
     }
     
+    num.type = NUMBER;
     skip_whitespace();
     return num;
 }
