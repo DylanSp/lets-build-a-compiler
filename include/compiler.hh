@@ -51,7 +51,14 @@ private:
     
     //parsing methods
     void start_symbol();
+    
     void program();
+    void block(const char name);
+    void declarations();
+    void statements();
+    
+    //label handling
+    void post_label(const char label) const;
     
     //boolean handling
     bool get_boolean();

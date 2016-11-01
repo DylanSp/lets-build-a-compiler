@@ -152,8 +152,30 @@ void Compiler::start_symbol () {
 void Compiler::program () {
     match(PROGRAM_START_CHAR);
     char program_name = get_name();
+    block(program_name);
     match(PROGRAM_END_CHAR);
     
+}
+
+void Compiler::block (const char name) {
+    declarations();
+    post_label(name);
+    statements();
+}
+
+void Compiler::declarations() {
+    
+}
+
+void Compiler::statements() {
+    
+}
+
+
+//label handling
+
+void Compiler::post_label(const char label) const {
+    emit_line(std::string(1, label) + ": ;"); //semicolon needed to make this a statement, in case there are no statements afterward
 }
 
 //boolean handling

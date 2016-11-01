@@ -21,3 +21,6 @@ Functions:
 
 Grammar:
 -Numeric literals can't begin with 0, to avoid inadvertent use of C++ octal literals.
+
+Pseudo-pascal:
+-don't need Prolog, Epilog; handled by compile_start and compile_end.
