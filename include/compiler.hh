@@ -36,6 +36,15 @@ private:
     static const std::unordered_set<char> BOOLEAN_LITERALS;
     static const char PROGRAM_START_CHAR;
     static const char PROGRAM_END_CHAR;
+    static const char LABELS_DECL_CHAR;
+    static const char CONSTS_DECL_CHAR;
+    static const char TYPES_DECL_CHAR;
+    static const char VARS_DECL_CHAR;
+    static const char PROC_DECL_CHAR;
+    static const char FUNC_DECL_CHAR;
+    static const std::unordered_set<char> DECLARATION_CHARS;
+    static const char BEGIN_CHAR;
+    static const char END_CHAR;
 
     void compile_start(const std::string class_name) const;
     void compile_end() const;
@@ -56,6 +65,13 @@ private:
     void block(const char name);
     void declarations();
     void statements();
+    
+    void labels();
+    void constants();
+    void types();
+    void variables();
+    void procedure();
+    void function();
     
     //label handling
     void post_label(const char label) const;

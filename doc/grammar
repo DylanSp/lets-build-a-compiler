@@ -5,3 +5,14 @@ Pascal grammar:
 <program-header> ::= PROGRAM <ident>
 
 <block> ::= <declarations> <statements>
+
+ <declarations> ::= ( <label list>    |
+                      <constant list> |
+                      <type list>     |
+                      <variable list> |
+                      <procedure>     |
+                      <function>        )*
+                      
+<statements> ::= <compound statement>
+
+<compound statement> ::= BEGIN <statement> (';' <statement>)* END

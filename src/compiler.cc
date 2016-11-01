@@ -20,6 +20,16 @@ const char Compiler::FALSE_CHAR = 'F';
 const std::unordered_set<char> Compiler::BOOLEAN_LITERALS({TRUE_CHAR, FALSE_CHAR});
 const char Compiler::PROGRAM_START_CHAR = 'p';
 const char Compiler::PROGRAM_END_CHAR = '.';
+const char Compiler::LABELS_DECL_CHAR = 'l';
+const char Compiler::CONSTS_DECL_CHAR = 'c';
+const char Compiler::TYPES_DECL_CHAR = 't';
+const char Compiler::VARS_DECL_CHAR = 'v';
+const char Compiler::PROC_DECL_CHAR = 'p';
+const char Compiler::FUNC_DECL_CHAR = 'f';
+const std::unordered_set<char> Compiler::DECLARATION_CHARS{LABELS_DECL_CHAR, CONSTS_DECL_CHAR, TYPES_DECL_CHAR,
+                                                           VARS_DECL_CHAR, PROC_DECL_CHAR, FUNC_DECL_CHAR};
+const char Compiler::BEGIN_CHAR = 'b';
+const char Compiler::END_CHAR = 'e';
     
 //constructors
 Compiler::Compiler (std::ostream& output) 
@@ -165,16 +175,69 @@ void Compiler::block (const char name) {
 
 void Compiler::declarations() {
     
+    while (is_in(m_input_stream.peek(), DECLARATION_CHARS)) {
+        switch (m_input_stream.peek()) {
+            case LABELS_DECL_CHAR:
+                labels();
+                break;
+            case CONSTS_DECL_CHAR:
+                constants();
+                break;
+            case TYPES_DECL_CHAR:
+                types();
+                break;
+            case VARS_DECL_CHAR:
+                variables();
+                break;
+            case PROC_DECL_CHAR:
+                procedure();
+                break;
+            case FUNC_DECL_CHAR:
+                function();
+                break;
+            default:
+                assert(false);  //should never be reached!
+                break;
+        }
+    }
 }
 
-void Compiler::statements() {
-    
+void Compiler::labels () {
+    match(LABELS_DECL_CHAR);
+}
+
+void Compiler::constants () {
+    match(CONSTS_DECL_CHAR);
+}
+
+void Compiler::types () {
+    match(TYPES_DECL_CHAR);
+}
+
+void Compiler::variables () {
+    match(VARS_DECL_CHAR);
+}
+
+void Compiler::procedure () {
+    match(PROC_DECL_CHAR);
+}
+
+void Compiler::function () {
+    match(FUNC_DECL_CHAR);
+}
+
+void Compiler::statements () {
+    match(BEGIN_CHAR);
+    while (m_input_stream.peek() != END_CHAR) {
+        m_input_stream.get(); //intentionally discarded
+    }
+    match(END_CHAR);
 }
 
 
 //label handling
 
-void Compiler::post_label(const char label) const {
+void Compiler::post_label (const char label) const {
     emit_line(std::string(1, label) + ": ;"); //semicolon needed to make this a statement, in case there are no statements afterward
 }
 
