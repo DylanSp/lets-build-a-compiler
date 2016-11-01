@@ -18,6 +18,8 @@ const std::unordered_set<char> Compiler::MULT_OPS({'*', '/'});
 const char Compiler::TRUE_CHAR = 'T';
 const char Compiler::FALSE_CHAR = 'F';
 const std::unordered_set<char> Compiler::BOOLEAN_LITERALS({TRUE_CHAR, FALSE_CHAR});
+const char Compiler::PROGRAM_START_CHAR = 'p';
+const char Compiler::PROGRAM_END_CHAR = '.';
     
 //constructors
 Compiler::Compiler (std::ostream& output) 
@@ -144,9 +146,15 @@ void Compiler::define_dump() const {
 
 
 void Compiler::start_symbol () {
-    get_boolean() ? emit_line("true") : emit_line("false");
+    program();
 }
 
+void Compiler::program () {
+    match(PROGRAM_START_CHAR);
+    char program_name = get_name();
+    match(PROGRAM_END_CHAR);
+    
+}
 
 //boolean handling
 

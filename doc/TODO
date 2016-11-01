@@ -1,9 +1,3 @@
-Look over tutorial notes - do I want to do chap4? merge chap3 with master? 
--don't do chap4.
-
-Decide whether to allow multi-char tokens going forward.
--don't, complicates things with conditionals.
-
 -CompilerReader class, handles batch processing of a file - ONLY IF NECESSARY
 -uses while(getline) to parse file into vector<string>, calls compile_full
 
